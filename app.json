@@ -8,16 +8,16 @@
     "userInterfaceStyle": "light",
     "plugins": [
       [
-        "expo-camera",
+        "expo-barcode-scanner",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ]
     ],
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-new2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#EAEAEA"
     },
     "assetBundlePatterns": [
       "**/*"

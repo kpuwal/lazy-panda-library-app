@@ -1,29 +1,42 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useFonts, CourierPrime_400Regular, CourierPrime_700Bold } from '@expo-google-fonts/courier-prime';
 import * as SplashScreen from 'expo-splash-screen';
 import CameraScanner from './components/CameraScanner';
+import { Provider } from "react-redux";
+import { store } from './redux/store';
+import * as Font from 'expo-font';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [fontsLoaded] = useFonts({
-    CourierPrime_400Regular,
-    CourierPrime_700Bold
-  });
+
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      'Courier Prime': {
+        uri: require('./assets/Courier_Prime/CourierPrime-Regular.ttf'),
+        display: Font.FontDisplay.FALLBACK,
+      },
+      'Courier Prime Bold': {
+        uri: require('./assets/Courier_Prime/CourierPrime-Bold.ttf'),
+        display: Font.FontDisplay.FALLBACK,
+      },
+    });
+  }
 
   useEffect(() => {
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
-        await Promise.all([fontsLoaded]);
+        await loadFonts();
+        
       } catch (e) {
         console.warn(e);
       } finally {
         // Tell the application to render
-        setAppIsReady(true);
+        // setAppIsReady(true);
+        
       }
     }
 
@@ -41,9 +54,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-      <CameraScanner />
-    </View>
+    <Provider store={store}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
+        <CameraScanner />
+      </View>
+    </Provider>
   );
 }
 

@@ -1,53 +1,66 @@
-import { Camera } from 'expo-camera';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
+import { useState, useRef, useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import ScannerBackground from './scanner/ScannerBackground';
+import BookInfo from './book/BookInfo';
+
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from '../redux/store';
+import { fetchPicker } from '../redux/slices/pickerSlice';
+import { fetchBook, cleanBook } from '../redux/slices/bookSlice';
+import { isDisabled, isScanned } from '../redux/slices/appSlice';
 
 export default function App() {
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [hasPermission, setHasPermission] = useState(null);
+  const scanned = useSelector((state: RootState) => state.app.scanned);
+  const dispatch = useAppDispatch();
+  const cameraRef = useRef(null);
 
-  if (!permission) {
-    return <View />;
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    };
+
+    getBarCodeScannerPermissions();
+    dispatch(fetchPicker());
+  }, []);
+
+  const handleBarcodeScan = ({ data, type }: BarCodeScannerResult) => {
+    dispatch(isScanned(true));
+    dispatch(cleanBook());
+    dispatch(fetchBook(data));
+    dispatch(isDisabled(false));
   }
 
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
+  if (hasPermission === null) { return <View /> };
+  if (hasPermission === false) { return <Text>No access to camera</Text> };  
+
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} />
+      <BarCodeScanner
+        ref={cameraRef}
+        style={styles.camera}
+        onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
+      />
+      <ScannerBackground />
+      <BookInfo />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    width: '100%',
+    height: '100%'
   },
   camera: {
     flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+    position: 'absolute',
+    width: '100%',
+    height: '100%'
   },
 });

@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { cleanPickerData } from '../../helpers/api';
+import { cleanPickerData } from './../../helpers/api';
 import { GOOGLE_API_PICKER_URL } from '@env';
 import axios from 'axios';
 

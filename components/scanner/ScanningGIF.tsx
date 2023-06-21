@@ -5,7 +5,7 @@ export class ScanningGIF extends Component {
   render() {
     return (
       <Image 
-        source={require('./../../assets/panda.gif')}  
+        source={require('../../assets/panda.gif')}  
         style={{ width: 150, height: 150 }}
       />
     )

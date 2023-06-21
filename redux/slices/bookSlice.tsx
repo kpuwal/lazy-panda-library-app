@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { cleanData } from '../../helpers/api';
+import { cleanData } from './../../helpers/api';
 import { Alert } from 'react-native';
-import { GOOGLE_BOOKS_URL, APP_SHEETBEST_URL } from '@env';
+import { GOOGLE_BOOKS_URL } from '@env';
 import axios from 'axios';
 
 type bookType = {
@@ -72,7 +72,7 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType,
       }
 
     try {
-      await axios.post(APP_SHEETBEST_URL, config)
+      // await axios.post(APP_SHEETBEST_URL, config)
     } catch (err) {
       return rejectWithValue(err);
     }
