@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { cleanData } from './../../helpers/api';
 import { Alert } from 'react-native';
-import { GOOGLE_BOOKS_URL } from '@env';
+import { API_URL, TOKEN, API_URL_LOCAL } from '@env';
 import axios from 'axios';
 
 type bookType = {
@@ -41,16 +40,37 @@ const initialState = {
 };
 
 export const fetchBook = createAsyncThunk(
-  'fetchBook',
+  '/api/book',
   async (isbn: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(GOOGLE_BOOKS_URL + isbn)
-      const cleanedData = cleanData(response.data);
-      return cleanedData;
-    } catch(err) {
-      Alert.alert('api is not working properly')
-      return rejectWithValue(err)
-    }   
+      const response = await axios.post(`/api/book`,
+      { isbn },
+      {
+        headers: { Authorization: `Bearer ${TOKEN}`}
+      })
+      console.log('response ', response)
+      // const cleanedData = cleanData(response.data);
+      // return cleanedData;
+      return response.data
+    } catch(err: any) {
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+        return rejectWithValue(err.response.data);
+      } else if (err.request) {
+        // The request was made but no response was received
+        // `err.request` is an instance of XMLHttpRequest in the browser
+        console.log(err.request);
+        return rejectWithValue('No response received from the server');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', err.message);
+        return rejectWithValue('Error occurred while making the request');
+      }
+    } 
   }
 )
 
@@ -72,7 +92,9 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType,
       }
 
     try {
-      // await axios.post(APP_SHEETBEST_URL, config)
+      await axios.post(`${API_URL}/api/add-book`, config, {
+        headers: { Authorization: `Bearer ${TOKEN}`}
+      })
     } catch (err) {
       return rejectWithValue(err);
     }

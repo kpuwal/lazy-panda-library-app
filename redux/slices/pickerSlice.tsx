@@ -1,7 +1,6 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { cleanPickerData } from './../../helpers/api';
-import { GOOGLE_API_PICKER_URL } from '@env';
+import { API_URL, TOKEN } from '@env';
 import axios from 'axios';
 
 type pickerTypes = {label: string, value: string};
@@ -28,8 +27,10 @@ export const fetchPicker = createAsyncThunk(
   '/api/picker',
   async (_, { rejectWithValue }) => {  
     try {
-      const data = await axios.get(GOOGLE_API_PICKER_URL);
-      return cleanPickerData(data.data);
+      const response = await axios.get(`${API_URL}/api/picker`, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+      });
+      return response.data;
     } catch(err) {
       return rejectWithValue(err)
     }
@@ -44,9 +45,10 @@ export const pickerSlice = createSlice({
     builder
     .addCase(fetchPicker.fulfilled, (state, action) => {
       Object.assign(state, action.payload);
+      state.pickerError = '';
     })
     .addCase(fetchPicker.rejected, (state, action) => {
-      state.pickerError = "Server is not connected";
+      state.pickerError = "Error fetching tags from the picker sheet";
     })
   },
 })

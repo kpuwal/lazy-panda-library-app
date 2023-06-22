@@ -1,5 +1,5 @@
 declare module '@env' {
-  export const GOOGLE_BOOKS_URL: string;
-  export const APP_SHEETBEST_URL: string;
-  export const GOOGLE_API_PICKER_URL: string;
+  export const API_URL_LOCAL: string;
+  export const API_URL: string;
+  export const TOKEN: string;
 }
