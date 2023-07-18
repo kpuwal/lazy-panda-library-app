@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Alert } from 'react-native';
-import { API_URL, TOKEN, API_URL_LOCAL } from '@env';
+import { TOKEN } from '@env';
+import { mainUrl } from '../../server-location';
 import axios from 'axios';
+const URL = mainUrl();
 
 type bookType = {
   title: string,
@@ -43,31 +45,28 @@ export const fetchBook = createAsyncThunk(
   '/api/book',
   async (isbn: string, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/api/book`,
+      const response = await axios.post(`${URL}/api/book`,
       { isbn },
       {
         headers: { Authorization: `Bearer ${TOKEN}`}
       })
-      console.log('response ', response)
-      // const cleanedData = cleanData(response.data);
-      // return cleanedData;
       return response.data
     } catch(err: any) {
       if (err.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // console.log(err.response.data);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
         return rejectWithValue(err.response.data);
       } else if (err.request) {
         // The request was made but no response was received
         // `err.request` is an instance of XMLHttpRequest in the browser
-        console.log(err.request);
+        // console.log(err.request);
         return rejectWithValue('No response received from the server');
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', err.message);
+        // console.log('Error', err.message);
         return rejectWithValue('Error occurred while making the request');
       }
     } 
@@ -92,7 +91,7 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType,
       }
 
     try {
-      await axios.post(`${API_URL}/api/add-book`, config, {
+      await axios.post(`${URL}/api/add-book`, config, {
         headers: { Authorization: `Bearer ${TOKEN}`}
       })
     } catch (err) {

@@ -6,7 +6,7 @@ import BookInfo from './book/BookInfo';
 
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../redux/store';
-// import { fetchPicker } from '../redux/slices/pickerSlice';
+import { fetchPicker } from '../redux/slices/pickerSlice';
 import { fetchBook, cleanBook } from '../redux/slices/bookSlice';
 import { isDisabled, isScanned } from '../redux/slices/appSlice';
 
@@ -23,7 +23,7 @@ export default function App() {
     };
 
     getBarCodeScannerPermissions();
-    // dispatch(fetchPicker());
+    dispatch(fetchPicker());
   }, []);
 
   const handleBarcodeScan = ({ data, type }: BarCodeScannerResult) => {

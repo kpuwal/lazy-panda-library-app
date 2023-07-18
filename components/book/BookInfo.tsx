@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, ScrollView, Modal, Image, Text, TouchableWithoutFeedback, KeyboardAvoidingView , Keyboard, Platform} from 'react-native';
+import { StyleSheet, View, ScrollView, Modal, Text, TouchableWithoutFeedback, KeyboardAvoidingView , Keyboard, Platform } from 'react-native';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { updateBook, saveBook } from '../../redux/slices/bookSlice';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image } from 'expo-image';
 
 export const genreIcon = <Image
   source={require('./../../../assets/genre.png')}  

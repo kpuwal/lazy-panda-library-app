@@ -1,7 +1,8 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { API_URL, TOKEN } from '@env';
+import { TOKEN } from '@env';
+import { mainUrl } from '../../server-location';
 import axios from 'axios';
+const URL = mainUrl();
 
 type pickerTypes = {label: string, value: string};
 
@@ -25,9 +26,9 @@ const initialState: pickerDataTypes = {
 
 export const fetchPicker = createAsyncThunk(
   '/api/picker',
-  async (_, { rejectWithValue }) => {  
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/picker`, {
+      const response = await axios.get(`${URL}/api/picker`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
       return response.data;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Pressable, View, Text, Image } from 'react-native';
+import { StyleSheet, Pressable, View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type HeaderTypes = {
