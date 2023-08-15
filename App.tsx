@@ -43,7 +43,7 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        await getPingMessage();
+        // await getPingMessage();
         await loadFonts();
       } catch (e) {
         console.warn(e);

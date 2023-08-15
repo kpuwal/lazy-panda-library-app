@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ScannerBackground from './scanner/ScannerBackground';
 import BookInfo from './book/BookInfo';
+import ScannerBG from './scanner/ScannerBG';
 
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../redux/store';
@@ -45,6 +46,7 @@ export default function App() {
         onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
       />
       <ScannerBackground />
+      {/* <ScannerBG /> */}
       <BookInfo />
     </View>
   )
