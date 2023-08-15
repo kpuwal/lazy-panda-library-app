@@ -34,6 +34,11 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#89b09b"
       },
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#89b09b"
+      },
       "permissions": [
         "android.permission.CAMERA"
       ],
