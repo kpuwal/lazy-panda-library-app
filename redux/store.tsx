@@ -4,12 +4,14 @@ import { useDispatch } from 'react-redux';
 import bookReducer from './slices/bookSlice';
 import pickerReducer from './slices/pickerSlice';
 import appReducer from './slices/appSlice';
+import navigationSlice from './slices/navigationSlice';
 
 export const store = configureStore({
   reducer: {
     book: bookReducer,
     pickers: pickerReducer,
-    app: appReducer
+    app: appReducer,
+    navigate: navigationSlice
   }
 })
 

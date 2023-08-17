@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import CameraScanner from './components/CameraScanner';
 import { Provider } from "react-redux";
 import { store } from './redux/store';
 import { mainUrl } from './server-location';
 import * as Font from 'expo-font';
 import axios from 'axios';
+import Navigation from './components/Navigation';
 
 const URL = mainUrl();
 SplashScreen.preventAutoHideAsync();
@@ -43,13 +43,12 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        // await getPingMessage();
         await loadFonts();
       } catch (e) {
         console.warn(e);
       } finally {
         setAppIsReady(true);
-        
+        await getPingMessage();
       }
     }
 
@@ -69,7 +68,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <View style={styles.container} onLayout={onLayoutRootView}>
-        <CameraScanner />
+        <Navigation />
       </View>
     </Provider>
   );
