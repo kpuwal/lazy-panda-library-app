@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Text, Animated } from 'react-native';
-import { useDispatch } from 'react-redux';  
+import { useSelector } from 'react-redux'; 
+import { RootState, useAppDispatch } from '../redux/store';
+import { setCameraPermission } from '../redux/slices/appSlice';
 import { navigate } from '../redux/slices/navigationSlice';
 import ButtonTmp from '../components/main/ButtonTmp';
+import { fetchPicker } from '../redux/slices/pickerSlice';
+
 
 const Home = () => {
   const imageHi = require('./../assets/icon.png');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const [isAnimating, setIsAnimating] = useState(true);
   const opacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      console.log('status ', status)
+      if (status === 'granted') {
+        dispatch(setCameraPermission(true))
+      }
+    };
     Animated.timing(opacity, {
       toValue: 1,
       duration: 800,
@@ -18,6 +31,10 @@ const Home = () => {
     }).start(() => {
       setIsAnimating(false);
     });
+
+    getBarCodeScannerPermissions();
+    console.log('camera permision ', cameraPermission)
+    dispatch(fetchPicker());
   }, []);
 
   return (

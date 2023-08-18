@@ -15,14 +15,14 @@ const Scanner = () => {
   const cameraRef = useRef(null);
 
   useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      dispatch(setCameraPermission(status === 'granted'));
-    };
-
-    getBarCodeScannerPermissions();
-    dispatch(fetchPicker());
-  }, [dispatch]);
+    // const getBarCodeScannerPermissions = async () => {
+    //   const { status } = await BarCodeScanner.requestPermissionsAsync();
+    //   dispatch(setCameraPermission(status === 'granted'));
+    // };
+console.log('permision from camera component ', cameraPermission)
+    // getBarCodeScannerPermissions();
+    // dispatch(fetchPicker());
+  }, []);
 
   const handleBarcodeScan = ({ data }: BarCodeScannerResult) => {
     dispatch(isScanned(true));
@@ -31,7 +31,7 @@ const Scanner = () => {
     dispatch(isDisabled(false));
   }
 
-  if (!cameraPermission) { return <Text>No access to camera</Text> }; 
+  // if (!cameraPermission) { return <Text>No access to camera</Text> }; 
 
   return (
     <BarCodeScanner
