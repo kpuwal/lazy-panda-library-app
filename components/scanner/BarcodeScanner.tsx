@@ -1,28 +1,17 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
-import { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useRef } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
-import { fetchPicker } from '../../redux/slices/pickerSlice';
 import { fetchBook, cleanBook } from '../../redux/slices/bookSlice';
 import { isDisabled, isScanned, setCameraPermission } from '../../redux/slices/appSlice';
 
 const Scanner = () => {
-  const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
+  // const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const scanned = useSelector((state: RootState) => state.app.scanned);
   const dispatch = useAppDispatch();
   const cameraRef = useRef(null);
-
-  useEffect(() => {
-    // const getBarCodeScannerPermissions = async () => {
-    //   const { status } = await BarCodeScanner.requestPermissionsAsync();
-    //   dispatch(setCameraPermission(status === 'granted'));
-    // };
-console.log('permision from camera component ', cameraPermission)
-    // getBarCodeScannerPermissions();
-    // dispatch(fetchPicker());
-  }, []);
 
   const handleBarcodeScan = ({ data }: BarCodeScannerResult) => {
     dispatch(isScanned(true));

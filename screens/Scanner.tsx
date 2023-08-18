@@ -57,20 +57,20 @@ const Scanner = () => {
     dispatch(isDisabled(false));
   }
 
-  if (hasPermission === null) { return <View /> };
-  if (hasPermission === false) { return <Text>No access to camera</Text> };  
+  // if (hasPermission === null) { return <View /> };
+  // if (hasPermission === false) { return <Text>No access to camera</Text> };  
 
 
   return (
-    // <GestureHandlerRootView style={{flex: 1}}>
-    //   <PanGestureHandler
-    //     onGestureEvent={onSwipeRight}
-    //     onHandlerStateChange={({ nativeEvent }) => {
-    //       if (nativeEvent.state === State.END) {
-    //         onSwipeRight({ nativeEvent });
-    //       }
-    //     }}
-    //   >
+    <GestureHandlerRootView style={{flex: 1}}>
+      <PanGestureHandler
+        onGestureEvent={onSwipeRight}
+        onHandlerStateChange={({ nativeEvent }) => {
+          if (nativeEvent.state === State.END) {
+            onSwipeRight({ nativeEvent });
+          }
+        }}
+      >
         <Animated.View style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}>
           <BarcodeScanner />
           <ScannerOverlay />
@@ -79,8 +79,8 @@ const Scanner = () => {
             <Text>back</Text>
           </Pressable> */}
         </Animated.View>
-    //   {/* </PanGestureHandler>
-    // </GestureHandlerRootView> */}
+    </PanGestureHandler>
+    </GestureHandlerRootView>
   )
 }
 

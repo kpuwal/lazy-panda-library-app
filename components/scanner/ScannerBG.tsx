@@ -1,6 +1,8 @@
-// import React, { useEffect, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { Svg, Path, Line } from 'react-native-svg';
+
+const COLOUR = 'white';
+const WIDTH = 2;
 
 const HollowRectangle = () => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
@@ -63,8 +65,8 @@ const HollowRectangle = () => {
           Q ${innerRectX + innerRectWidth} ${innerRectY} ${innerRectX + innerRectWidth} ${innerRectY + cornerRadius}
         `}
         fill="none"
-        stroke="black"
-        strokeWidth={4}
+        stroke={COLOUR}
+        strokeWidth={WIDTH}
       />
       {/* Individual cornerLineExtension paths */}
       {/* Top Left */}
@@ -76,8 +78,8 @@ const HollowRectangle = () => {
         L ${innerRectX} ${innerRectY + cornerRadius + cornerLineExtension}
       `}
       fill="none"
-      stroke="black"
-      strokeWidth={4}
+      stroke={COLOUR}
+      strokeWidth={WIDTH}
     />
     {/* Top Right */}
     <Path
@@ -88,8 +90,8 @@ const HollowRectangle = () => {
         L ${innerRectX + innerRectWidth} ${innerRectY + cornerRadius + cornerLineExtension}
       `}
       fill="none"
-      stroke="black"
-      strokeWidth={4}
+      stroke={COLOUR}
+      strokeWidth={WIDTH}
     />
     {/* Bottom Right */}
     <Path
@@ -100,8 +102,8 @@ const HollowRectangle = () => {
         L ${innerRectX + innerRectWidth - cornerRadius - cornerLineExtension} ${innerRectY + innerRectHeight}
       `}
       fill="none"
-      stroke="black"
-      strokeWidth={4}
+      stroke={COLOUR}
+      strokeWidth={WIDTH}
     />
     {/* Bottom Left */}
     <Path
@@ -112,8 +114,8 @@ const HollowRectangle = () => {
         L ${innerRectX} ${innerRectY + innerRectHeight - cornerRadius}
       `}
       fill="none"
-      stroke="black"
-      strokeWidth={4}
+      stroke={COLOUR}
+      strokeWidth={WIDTH}
     />
     </Svg>
   );

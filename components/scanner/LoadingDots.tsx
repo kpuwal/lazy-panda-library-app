@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 
+const SIZE = 6;
+const COLOUR = 'white';
+
 const LoadingDots = () => {
   const [dot1Scale] = useState(new Animated.Value(1));
   const [dot2Scale] = useState(new Animated.Value(1));
@@ -55,15 +58,15 @@ const LoadingDots = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    // paddingTop: '25%'
     alignItems: 'center'
   },
   dot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    backgroundColor: 'white',
-    marginHorizontal: 5,
+    width: SIZE,
+    height: SIZE,
+    borderRadius: SIZE/2,
+    backgroundColor: COLOUR,
+    marginHorizontal: 4,
   },
 });
 

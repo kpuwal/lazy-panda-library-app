@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, Animated } from 'react-native';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
 import useSwipeToHomeGesture from '../hooks/useSwipeToHomeGesture';
+import ZigZagAnimation from '../components/scanner/ZigZagAnimation';
 
 const AddBookScreen: React.FC = () => {
   const handleSwipe = useSwipeToHomeGesture();
@@ -24,7 +25,7 @@ const AddBookScreen: React.FC = () => {
         <Animated.View
           style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}
         >
-          <Text>hello from the add book screen</Text>
+          <ZigZagAnimation />
         </Animated.View>
       </PanGestureHandler>
     </GestureHandlerRootView>

@@ -19,7 +19,6 @@ const Home = () => {
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      console.log('status ', status)
       if (status === 'granted') {
         dispatch(setCameraPermission(true))
       }
