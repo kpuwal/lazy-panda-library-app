@@ -1,6 +1,6 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import ScannerBackground from '../components/scanner/ScannerBackground';
 import BookInfo from '../components/book/BookInfo';
 import ScannerBG from '../components/scanner/ScannerBG';
@@ -11,14 +11,18 @@ import { RootState, useAppDispatch } from '../redux/store';
 import { fetchPicker } from '../redux/slices/pickerSlice';
 import { fetchBook, cleanBook } from '../redux/slices/bookSlice';
 import { isDisabled, isScanned } from '../redux/slices/appSlice';
-
+import { Animated } from 'react-native';
 import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-gesture-handler';
+import ScannerOverlay from '../components/scanner/ScannerOverlay';
+import BarcodeScanner from '../components/scanner/BarcodeScanner';
 
 const Scanner = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const scanned = useSelector((state: RootState) => state.app.scanned);
   const dispatch = useAppDispatch();
   const cameraRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const opacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -28,6 +32,15 @@ const Scanner = () => {
 
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
+    
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: false,
+    }).start(() => {
+      setIsAnimating(false);
+    });
+
   }, []);
 
   // Define gesture handler 
@@ -49,27 +62,33 @@ const Scanner = () => {
 
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <PanGestureHandler
-        onGestureEvent={onSwipeRight}
-        onHandlerStateChange={({ nativeEvent }) => {
-          if (nativeEvent.state === State.END) {
-            onSwipeRight({ nativeEvent });
-          }
-        }}
-      >
-        <View style={styles.container}>
-          <BarCodeScanner
+    // <GestureHandlerRootView style={{flex: 1}}>
+    //   <PanGestureHandler
+    //     onGestureEvent={onSwipeRight}
+    //     onHandlerStateChange={({ nativeEvent }) => {
+    //       if (nativeEvent.state === State.END) {
+    //         onSwipeRight({ nativeEvent });
+    //       }
+    //     }}
+    //   >
+        <Animated.View style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}>
+
+          <BarcodeScanner />
+          {/* <BarCodeScanner
             ref={cameraRef}
             style={styles.camera}
             onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
-          />
-          <ScannerBackground />
+          /> */}
+          <ScannerOverlay />
+          {/* <ScannerBackground /> */}
           {/* <ScannerBG /> */}
-          <BookInfo />
-        </View>
-      </PanGestureHandler>
-    </GestureHandlerRootView>
+          {/* <BookInfo /> */}
+          {/* <Pressable onPress={() => dispatch(navigate('home'))}>
+            <Text>back</Text>
+          </Pressable> */}
+        </Animated.View>
+    //   </PanGestureHandler>
+    // </GestureHandlerRootView>
   )
 }
 
@@ -82,10 +101,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  camera: {
-    flex: 1,
-    position: 'absolute',
-    width: '100%',
-    height: '100%'
-  },
+
 });

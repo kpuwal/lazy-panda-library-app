@@ -1,29 +1,29 @@
-import { View, StyleSheet, ImageBackground, Image, Animated } from "react-native";
-import ButtonTmp from "../components/main/ButtonTmp";
-
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ImageBackground, Image, Text, Animated } from 'react-native';
 import { useDispatch } from 'react-redux';  
 import { navigate } from '../redux/slices/navigationSlice';
-import { useEffect } from "react";
+import ButtonTmp from '../components/main/ButtonTmp';
 
 const Home = () => {
   const imageHi = require('./../assets/icon.png');
   const dispatch = useDispatch();
-  const opacity = new Animated.Value(0);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const opacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     Animated.timing(opacity, {
       toValue: 1,
       duration: 800,
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      setIsAnimating(false);
+    });
   }, []);
 
-  const animatedStyle = {
-    opacity: opacity,
-  };
-
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
+    <Animated.View 
+      style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}
+    >
       <ImageBackground
         source={require('./../assets/image_bg.png')}
         style={styles.image}
@@ -35,7 +35,7 @@ const Home = () => {
           />
           <ButtonTmp 
             onPress={() => dispatch(navigate('scanBook'))}
-            title="Scann a book"
+            title="Scan a book"
             imgSource={require('./../assets/scan.png')}
             imgCol={require('./../assets/scan-col.png')} />
           <ButtonTmp
@@ -51,7 +51,7 @@ const Home = () => {
         </View>
       </ImageBackground>
     </Animated.View>
-  )
+  );
 }
 
 export default Home;
@@ -71,5 +71,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  textContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 10,
+    borderRadius: 10,
   }
 });
