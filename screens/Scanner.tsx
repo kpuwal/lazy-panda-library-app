@@ -72,23 +72,15 @@ const Scanner = () => {
     //     }}
     //   >
         <Animated.View style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}>
-
           <BarcodeScanner />
-          {/* <BarCodeScanner
-            ref={cameraRef}
-            style={styles.camera}
-            onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
-          /> */}
           <ScannerOverlay />
-          {/* <ScannerBackground /> */}
-          {/* <ScannerBG /> */}
           {/* <BookInfo /> */}
           {/* <Pressable onPress={() => dispatch(navigate('home'))}>
             <Text>back</Text>
           </Pressable> */}
         </Animated.View>
-    //   </PanGestureHandler>
-    // </GestureHandlerRootView>
+    //   {/* </PanGestureHandler>
+    // </GestureHandlerRootView> */}
   )
 }
 

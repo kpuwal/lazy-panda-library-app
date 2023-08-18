@@ -6,10 +6,10 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { fetchPicker } from '../../redux/slices/pickerSlice';
 import { fetchBook, cleanBook } from '../../redux/slices/bookSlice';
-import { isDisabled, isScanned } from '../../redux/slices/appSlice';
+import { isDisabled, isScanned, setCameraPermission } from '../../redux/slices/appSlice';
 
 const Scanner = () => {
-  const [hasPermission, setHasPermission] = useState(false);
+  const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const scanned = useSelector((state: RootState) => state.app.scanned);
   const dispatch = useAppDispatch();
   const cameraRef = useRef(null);
@@ -17,12 +17,12 @@ const Scanner = () => {
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      dispatch(setCameraPermission(status === 'granted'));
     };
 
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
-  }, []);
+  }, [dispatch]);
 
   const handleBarcodeScan = ({ data }: BarCodeScannerResult) => {
     dispatch(isScanned(true));
@@ -31,9 +31,7 @@ const Scanner = () => {
     dispatch(isDisabled(false));
   }
 
-  if (hasPermission === null) { return <View /> };
-  if (hasPermission === false) { return <Text>No access to camera</Text> };  
-
+  if (!cameraPermission) { return <Text>No access to camera</Text> }; 
 
   return (
     <BarCodeScanner
