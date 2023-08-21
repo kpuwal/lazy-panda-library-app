@@ -34,7 +34,7 @@ const Home = () => {
     getBarCodeScannerPermissions();
     console.log('camera permision ', cameraPermission)
     dispatch(fetchPicker());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Animated.View 
@@ -60,7 +60,7 @@ const Home = () => {
             imgSource={require('./../assets/add-book.png')}
             imgCol={require('./../assets/add-book-col.png')} />
           <ButtonTmp
-            onPress={() => console.log('pressed library')}
+            onPress={() => dispatch(navigate('library'))}
             title="Library"
             imgSource={require('./../assets/library-books.png')}
             imgCol={require('./../assets/library-books-col.png')} />

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { fetchBook, cleanBook } from '../../redux/slices/bookSlice';
 import { isDisabled, isScanned, setCameraPermission } from '../../redux/slices/appSlice';
+import { navigate } from '../../redux/slices/navigationSlice';
 
 const Scanner = () => {
   // const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
@@ -18,6 +19,7 @@ const Scanner = () => {
     dispatch(cleanBook());
     dispatch(fetchBook(data));
     dispatch(isDisabled(false));
+    dispatch(navigate('infoBook'));
   }
 
   // if (!cameraPermission) { return <Text>No access to camera</Text> }; 
@@ -25,7 +27,7 @@ const Scanner = () => {
   return (
     <BarCodeScanner
       ref={cameraRef}
-      style={styles.camera}
+      style={[styles.camera, StyleSheet.absoluteFillObject]}
       onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
     />   
   )

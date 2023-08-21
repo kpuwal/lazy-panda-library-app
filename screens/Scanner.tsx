@@ -1,7 +1,6 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { useState, useRef, useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import ScannerBackground from '../components/scanner/ScannerBackground';
 import BookInfo from '../components/book/BookInfo';
 import ScannerBG from '../components/scanner/ScannerBG';
 import { navigate } from '../redux/slices/navigationSlice';
@@ -50,12 +49,12 @@ const Scanner = () => {
     }
   };
 
-  const handleBarcodeScan = ({ data, type }: BarCodeScannerResult) => {
-    dispatch(isScanned(true));
-    dispatch(cleanBook());
-    dispatch(fetchBook(data));
-    dispatch(isDisabled(false));
-  }
+  // const handleBarcodeScan = ({ data, type }: BarCodeScannerResult) => {
+  //   dispatch(isScanned(true));
+  //   dispatch(cleanBook());
+  //   dispatch(fetchBook(data));
+  //   dispatch(isDisabled(false));
+  // }
 
   // if (hasPermission === null) { return <View /> };
   // if (hasPermission === false) { return <Text>No access to camera</Text> };  

@@ -21,25 +21,46 @@ type bookType = {
   lastReadByKasia: string,
 }
 
+type LibraryType =  bookType[];
+
+
 const initialState = {
-  title: '',
-  subtitle: '',
-  author: '',
-  language: '',
-  publishedDate: '',
-  pageCount: 0,
-  genre: '',
-  series: '',
-  world: '',
-  readBy: '',
-  boughtGivenOn: '',
-  givenBy: '',
-  lastReadByJowie: '',
-  lastReadByKasia: '',
-  isFound: true,
-  isLoaded: false,
-  bookError: '',
+  book: {
+    title: '',
+    subtitle: '',
+    author: '',
+    language: '',
+    publishedDate: '',
+    pageCount: 0,
+    genre: '',
+    series: '',
+    world: '',
+    readBy: '',
+    boughtGivenOn: '',
+    givenBy: '',
+    lastReadByJowie: '',
+    lastReadByKasia: '',
+    isFound: true,
+    isLoaded: false,
+  },
+  library: {} as LibraryType,
+  bookError: ''
 };
+
+export const readLibrary = createAsyncThunk(
+  '/api/library',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${URL}/api/library`, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+      });
+      console.log(response.data)
+      return response.data;
+    } catch(err) {
+      return rejectWithValue(err)
+    }
+  }
+)
 
 export const fetchBook = createAsyncThunk(
   '/api/book',
@@ -116,12 +137,12 @@ const bookSlice = createSlice({
     .addCase(fetchBook.fulfilled, (state, action) => {
       if (action.payload.isFound) {
         const data = action.payload;
-        state.title = data.title === undefined ? '' : data.title;
-        state.author = data.author === undefined ? '' : data.author;
-        state.pageCount = data.pageCount === undefined ? '' : data.pageCount;
-        state.publishedDate = data.publishedDate === undefined ? '' : data.publishedDate;
-        state.language = data.language === undefined ? '' : data.language.toUpperCase();
-        state.isLoaded = true;
+        state.book.title = data.title === undefined ? '' : data.title;
+        state.book.author = data.author === undefined ? '' : data.author;
+        state.book.pageCount = data.pageCount === undefined ? '' : data.pageCount;
+        state.book.publishedDate = data.publishedDate === undefined ? '' : data.publishedDate;
+        state.book.language = data.language === undefined ? '' : data.language.toUpperCase();
+        state.book.isLoaded = true;
       } else {
         state.bookError = "Book has not been found in the database";
       }
@@ -131,6 +152,9 @@ const bookSlice = createSlice({
     })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
+    })
+    .addCase(readLibrary.fulfilled, (state, action) => {
+      state.library = action.payload;
     })
   },
 })

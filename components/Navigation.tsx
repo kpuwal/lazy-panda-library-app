@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 
 import Home from '../screens/Home';
 import Scanner from '../screens/Scanner';
-import AddBookScreen from '../screens/AddBook';
+import AddBook from '../screens/AddBook';
+import Library from '../screens/Library';
+import BookInfo from './book/BookInfo';
 
 const Navigation = () => {
 
@@ -13,11 +15,13 @@ const Navigation = () => {
     case 'home':
       return <Home />
     case 'addBook':
-      return <AddBookScreen /> 
+      return <AddBook /> 
     case 'scanBook':
       return <Scanner />
-    // case 'library':
-    //   return <LibraryScreen />
+    case 'bookInfo':
+      return <BookInfo/>
+    case 'library':
+      return <Library />
     default:
       return null;
   }
