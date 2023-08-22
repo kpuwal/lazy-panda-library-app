@@ -43,7 +43,7 @@ const initialState = {
     isFound: true,
     isLoaded: false,
   },
-  library: {} as LibraryType,
+  library: [] as LibraryType,
   bookError: ''
 };
 
@@ -54,7 +54,7 @@ export const readLibrary = createAsyncThunk(
       const response = await axios.get(`${URL}/api/library`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
-      console.log(response.data)
+      // console.log(response.data)
       return response.data;
     } catch(err) {
       return rejectWithValue(err)
@@ -154,6 +154,7 @@ const bookSlice = createSlice({
       state.bookError = "Error saving the book";
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
+      // console.log('action ', action.payload)
       state.library = action.payload;
     })
   },

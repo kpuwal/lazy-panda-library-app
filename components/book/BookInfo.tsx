@@ -14,7 +14,7 @@ import DateCard from './infoModules/DateCard';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 
 const BookInfo = () => {
-  const book = useSelector((state: RootState) => state.book);
+  const { book } = useSelector((state: RootState) => state.book);
   const picker = useSelector((state: RootState) => state.pickers);
   const app = useSelector((state: RootState) => state.app);
 

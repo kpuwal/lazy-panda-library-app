@@ -32,7 +32,6 @@ const Home = () => {
     });
 
     getBarCodeScannerPermissions();
-    console.log('camera permision ', cameraPermission)
     dispatch(fetchPicker());
   }, [dispatch]);
 
