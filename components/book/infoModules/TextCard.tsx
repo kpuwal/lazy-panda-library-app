@@ -14,12 +14,12 @@ const TextCard = ({size, item, isNumeric, editItem}: TextCardTypes) => {
       <TextInput
         style={[styles.input, {fontSize: size}]}
         onChangeText={editItem}
-        defaultValue={item}
+        // defaultValue={item}
+        value={item}
         editable
         multiline
         selectionColor='pink'
         numberOfLines={4}
-        value={item}
         keyboardType={isNumeric ? 'numeric' : 'default'}
       />
     </View>

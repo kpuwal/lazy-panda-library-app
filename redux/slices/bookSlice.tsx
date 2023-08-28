@@ -41,10 +41,10 @@ const initialState = {
     lastReadByJowie: '',
     lastReadByKasia: '',
     isFound: true,
-    isLoaded: false,
   },
   library: [] as LibraryType,
-  bookError: ''
+  bookError: '',
+  isLoaded: false,
 };
 
 export const readLibrary = createAsyncThunk(
@@ -126,7 +126,13 @@ const bookSlice = createSlice({
   initialState,
   reducers: {
     updateBook: (state, action) => {
-    Object.assign(state, action.payload);
+      return {
+        ...state,
+        book: {
+          ...state.book,
+          ...action.payload,
+        },
+      };
     },
     cleanBook: () => {
       return initialState;
@@ -137,12 +143,14 @@ const bookSlice = createSlice({
     .addCase(fetchBook.fulfilled, (state, action) => {
       if (action.payload.isFound) {
         const data = action.payload;
+        console.log('data from google books: ', data)
         state.book.title = data.title === undefined ? '' : data.title;
         state.book.author = data.author === undefined ? '' : data.author;
         state.book.pageCount = data.pageCount === undefined ? '' : data.pageCount;
         state.book.publishedDate = data.publishedDate === undefined ? '' : data.publishedDate;
         state.book.language = data.language === undefined ? '' : data.language.toUpperCase();
-        state.book.isLoaded = true;
+        state.isLoaded = true;
+        console.log('is loaded? ', state.isLoaded)
       } else {
         state.bookError = "Book has not been found in the database";
       }

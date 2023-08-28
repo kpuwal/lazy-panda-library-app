@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, ScrollView, Modal, Text, TouchableWithoutFeedback, KeyboardAvoidingView , Keyboard, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, Modal, Text, TouchableWithoutFeedback, KeyboardAvoidingView , Keyboard, Platform, ActivityIndicator } from 'react-native';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { updateBook, saveBook } from '../../redux/slices/bookSlice';
@@ -15,10 +15,20 @@ import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenBy
 
 const BookInfo = () => {
   const { book } = useSelector((state: RootState) => state.book);
+  const isLoaded = useSelector((state: RootState) => state.book.isLoaded);
   const picker = useSelector((state: RootState) => state.pickers);
   const app = useSelector((state: RootState) => state.app);
 
   const dispatch = useAppDispatch();
+
+  if (!isLoaded) {
+    // Data is not loaded yet, you can display a loading indicator or any other content
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#000000" />
+      </View>
+    );
+  }
 
   const handleSaveBook = () => {
     dispatch(saveBook(book));
@@ -31,15 +41,11 @@ const BookInfo = () => {
   }
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={book.isLoaded}
-    >
+    <View>
       <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
-    >
+      >
         <Header 
           handleClose={() => handleScanAgain()}
           isDisabled={app.disabled}
@@ -123,7 +129,7 @@ const BookInfo = () => {
           handleScan={() => handleScanAgain()}
           handleSave={() => handleSaveBook()}
         />
-    </Modal>
+    </View>
   )
 }
 
@@ -146,7 +152,7 @@ const TitleHeader = ({icon, title}: TitleHeaderTypes) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '10%',
+    // marginTop: '10%',
     backgroundColor: '#f1f1f1',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -217,5 +223,11 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#9d9d9d',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f1f1f1',
   },
 })

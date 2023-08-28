@@ -53,11 +53,11 @@ const Home = () => {
             title="Scan a book"
             imgSource={require('./../assets/scan.png')}
             imgCol={require('./../assets/scan-col.png')} />
-          <ButtonTmp
+          {/* <ButtonTmp
             onPress={() => dispatch(navigate('addBook'))}
             title="Add a book"
             imgSource={require('./../assets/add-book.png')}
-            imgCol={require('./../assets/add-book-col.png')} />
+            imgCol={require('./../assets/add-book-col.png')} /> */}
           <ButtonTmp
             onPress={() => dispatch(navigate('library'))}
             title="Library"

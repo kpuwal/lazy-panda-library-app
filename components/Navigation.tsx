@@ -6,6 +6,7 @@ import Scanner from '../screens/Scanner';
 import AddBook from '../screens/AddBook';
 import Library from '../screens/Library';
 import BookInfo from './book/BookInfo';
+import Book from './book/Book';
 
 const Navigation = () => {
 
@@ -19,7 +20,7 @@ const Navigation = () => {
     case 'scanBook':
       return <Scanner />
     case 'bookInfo':
-      return <BookInfo/>
+      return <Book />
     case 'library':
       return <Library />
     default:

@@ -42,7 +42,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 15,
-    marginTop: 10,
+    marginTop: 30,
   },
   alertContainer: {
     height: 40,

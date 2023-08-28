@@ -1,22 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, StatusBar } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, StatusBar, Image, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { readLibrary } from '../redux/slices/bookSlice';
 const SPACING = 15;
+const ITEM_HEIGHT = 40
 
 // Memoized BookItem component using React.memo
 const BookItem = React.memo(({ item }: any) => (
-  <View style={styles.textContainer}>
-    <Text style={styles.textTitle}>{item.title}</Text>
-    <Text style={styles.textAuthor}>{item.author}</Text>
+  <View style={styles.container}>
+    {/* <Image source={require('./../assets/open-book.png')} style={styles.image} /> */}
+    <View style={styles.textContainer}>
+      <Text style={styles.textTitle}>{item.title}</Text>
+      <Text style={styles.textAuthor}>{item.author}</Text>
+    </View>
+    <View style={styles.editContainer}>
+      <TouchableOpacity>
+        <Text style={styles.editTxt}>Edit</Text>
+      </TouchableOpacity>
+    </View>
   </View>
 ));
+interface AlphabetListProps {
+  onLetterPress: (letter: string) => void;
+}
+
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress }) => {
+  return (
+    <View style={styles.alphabetContainer}>
+      {ALPHABET.split('').map((letter) => (
+        <TouchableOpacity
+          key={letter}
+          onPress={() => onLetterPress(letter)}
+          style={styles.alphabetButton}
+        >
+          <Text style={styles.alphabetButtonText}>{letter}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
 
 const Library = () => {
   const { library } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const flatListRef = useRef<FlatList | null>(null);
+
+  const scrollToLetter = (letter: string) => {
+    const index = library.findIndex((item) => item.author.charAt(0).toUpperCase() === letter);
+    console.log('index: ', index)
+    if (index !== -1 && flatListRef.current) {
+      flatListRef.current.scrollToIndex({ animated: true, index });
+    }
+  };
 
   useEffect(() => {
     // Fetch the library data when the component mounts
@@ -43,16 +82,31 @@ const Library = () => {
   }
 
   return (
-    <View>
+    <View style={{backgroundColor: '#89b09b', paddingTop: 40}}>
       <StatusBar />
-      <Text>Library</Text>
+      <Image source={require('./../assets/image_bg.png')} style={StyleSheet.absoluteFillObject} />
+      <View style={styles.headerContainer}>
+        <Text>Library</Text>
+        <AlphabetList onLetterPress={scrollToLetter} />
+      </View>
+      
+      
       <FlatList
+        ref={flatListRef}
         data={library}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
           padding: SPACING,
           paddingTop: 42,
-          backgroundColor: 'white'
+        }}
+        getItemLayout={(_, index) => ({
+          length: ITEM_HEIGHT, // Replace with the actual height of your items
+          offset: ITEM_HEIGHT * index,
+          index,
+        })}
+        onScrollToIndexFailed={(info) => {
+          console.warn("Scroll to index failed:", info);
+          // Handle the failed scrolling gracefully here
         }}
         renderItem={({ item }) => <BookItem item={item} />}
       />
@@ -63,11 +117,11 @@ const Library = () => {
 export default Library;
 
 const styles = StyleSheet.create({
-  textContainer: {
+  container: {
+    flexDirection: 'row',
     padding: SPACING,
     marginBottom: SPACING,
     borderRadius: 12,
-    // backgroundColor: 'rgba(255, 255, 255, 0.8)',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -75,18 +129,70 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: .1,
     shadowRadius: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+  },
+  headerContainer: {
+    flexDirection: 'row', // Set to 'column' if needed
+    flexWrap: 'wrap',
+    paddingTop: 50,
+  },
+  editContainer: {
+    height: '100%',
+    width: '20%',
+    paddingRight: 5
+  },
+  editTxt: {
+    color: 'red'
+  },
+  alphabetContainer: {
+    flex: 1,
+    flexWrap: 'wrap',
+    // paddingLeft: 20,
+    // maxWidth: '100%', // Add this line to limit the widt
+    flexDirection: 'row', // Arrange children horizontally
+    // justifyContent: 'center', // Center children horizontally
+    // alignItems: 'center', // Center children vertically
+    // paddingVertical: 5,
+  },
+  textContainer: {
+    // padding: SPACING,
+    textAlign: 'auto',
+    // backgroundColor: 'yellow',
+    maxWidth: '100%',
   },
   textTitle: {
     color: '#000000',
     fontFamily:  'Courier Prime',
     fontWeight: 'bold',
     fontSize: 18,
+    // maxWidth: '96%',
+    // maxHeight: '100%',
+    // backgroundColor: 'pink'
   },
   textAuthor: {
     color: '#808080',
     fontFamily:  'Courier Prime',
     fontWeight: 'bold',
     fontSize: 14,
-  }
+    // maxWidth: '96%', // Ensure the text doesn't exceed the view's width
+    // maxHeight: '100%'
+  },
+  image: {
+    width: 20,
+    height: 20,
+    // borderRadius: 20,
+    marginRight: SPACING / 2
+  },
+  alphabetButton: {
+    paddingVertical: 2.5,
+    paddingHorizontal: 5,
+    margin: 3,
+    backgroundColor: 'white',
+    opacity: .7,
+    borderRadius: 3
+  },
+  alphabetButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });

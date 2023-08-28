@@ -11,15 +11,17 @@ import { navigate } from '../../redux/slices/navigationSlice';
 const Scanner = () => {
   // const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const scanned = useSelector((state: RootState) => state.app.scanned);
+  const isLoaded = useSelector((state: RootState) => state.book.isLoaded)
   const dispatch = useAppDispatch();
   const cameraRef = useRef(null);
 
   const handleBarcodeScan = ({ data }: BarCodeScannerResult) => {
     dispatch(isScanned(true));
     dispatch(cleanBook());
-    dispatch(fetchBook(data));
-    dispatch(isDisabled(false));
-    dispatch(navigate('infoBook'));
+    dispatch(fetchBook(data)).then(() => {
+      dispatch(isDisabled(false));
+      dispatch(navigate('bookInfo'));
+    });
   }
 
   // if (!cameraPermission) { return <Text>No access to camera</Text> }; 
