@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, StatusBar, Image, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
@@ -9,15 +9,9 @@ const ITEM_HEIGHT = 40
 // Memoized BookItem component using React.memo
 const BookItem = React.memo(({ item }: any) => (
   <View style={styles.container}>
-    {/* <Image source={require('./../assets/open-book.png')} style={styles.image} /> */}
     <View style={styles.textContainer}>
       <Text style={styles.textTitle}>{item.title}</Text>
       <Text style={styles.textAuthor}>{item.author}</Text>
-    </View>
-    <View style={styles.editContainer}>
-      <TouchableOpacity>
-        <Text style={styles.editTxt}>Edit</Text>
-      </TouchableOpacity>
     </View>
   </View>
 ));
@@ -48,10 +42,18 @@ const Library = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const flatListRef = useRef<FlatList | null>(null);
+  const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
+  const renderItem = useCallback((({ item }: any) => <BookItem item={item} />), []);
+
+  const getItemLayout = useCallback(((_: any, index: number) => ({
+    length: ITEM_HEIGHT, // Replace with the actual height of your items
+    offset: ITEM_HEIGHT * index,
+    index,
+  })), []);
 
   const scrollToLetter = (letter: string) => {
     const index = library.findIndex((item) => item.author.charAt(0).toUpperCase() === letter);
-    console.log('index: ', index)
+    
     if (index !== -1 && flatListRef.current) {
       flatListRef.current.scrollToIndex({ animated: true, index });
     }
@@ -94,21 +96,22 @@ const Library = () => {
       <FlatList
         ref={flatListRef}
         data={library}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{
-          padding: SPACING,
-          paddingTop: 42,
-        }}
-        getItemLayout={(_, index) => ({
-          length: ITEM_HEIGHT, // Replace with the actual height of your items
-          offset: ITEM_HEIGHT * index,
-          index,
-        })}
-        onScrollToIndexFailed={(info) => {
-          console.warn("Scroll to index failed:", info);
-          // Handle the failed scrolling gracefully here
-        }}
-        renderItem={({ item }) => <BookItem item={item} />}
+        keyExtractor={keyExtractor}
+        contentContainerStyle={styles.flatList}
+        getItemLayout={getItemLayout}
+
+        initialNumToRender={10}
+        windowSize={5}
+        maxToRenderPerBatch={5}
+        updateCellsBatchingPeriod={30}
+        removeClippedSubviews={false}
+        onEndReachedThreshold={0.1}
+
+        // onScrollToIndexFailed={(info) => {
+        //   console.warn("Scroll to index failed:", info);
+        //   // Handle the failed scrolling gracefully here
+        // }}
+        renderItem={renderItem}
       />
     </View>
   );
@@ -143,6 +146,10 @@ const styles = StyleSheet.create({
   },
   editTxt: {
     color: 'red'
+  },
+  flatList: {
+    padding: SPACING,
+    paddingTop: 42,
   },
   alphabetContainer: {
     flex: 1,

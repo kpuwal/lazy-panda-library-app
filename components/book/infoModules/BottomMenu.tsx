@@ -12,7 +12,7 @@ const BottomMenu = ({disabled, handleScan, handleSave}: BottomMenuTypes) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonSet}>
-        <Pressable
+        {/* <Pressable
           style={styles.button}
           onPress={handleScan}
         >
@@ -20,7 +20,7 @@ const BottomMenu = ({disabled, handleScan, handleSave}: BottomMenuTypes) => {
             <Text style={styles.buttonLabel}>Scan</Text>
             <MaterialCommunityIcons name="repeat" size={15} color="#000000" />
           </>
-        </Pressable>
+        </Pressable> */}
         <Pressable
           style={disabled ? [styles.button, styles.disabledButton] : styles.button}
           onPress={handleSave}
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 25,
-    borderWidth: .8,
-    borderColor: '#000000',
-    borderStyle: 'dashed',
+    // borderWidth: .8,
+    // borderColor: '#000000',
+    // borderStyle: 'dashed',
     backgroundColor: '#FFFFFF',
   },
   buttonLabel: {

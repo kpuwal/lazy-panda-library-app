@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { isScanned } from '../../redux/slices/appSlice';
 import { navigate } from '../../redux/slices/navigationSlice';
+import { StatusBar } from 'expo-status-bar';
 
 const ScannerOverlay = () => {
   const scanned = useSelector((state: RootState) => state.app.scanned);
@@ -23,6 +24,7 @@ const ScannerOverlay = () => {
 
   return (
     <>
+      <StatusBar style="light" />
       <View style={styles.container}>
         <ScannerBG />
       </View>

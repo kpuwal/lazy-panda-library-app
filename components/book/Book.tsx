@@ -12,6 +12,7 @@ import Header from "./infoModules/Header";
 import NumbersCard from './infoModules/NumbersCard';
 import SelectionCard from './infoModules/SelectionCard';
 import DateCard from './infoModules/DateCard';
+import BottomMenu from "./infoModules/BottomMenu";
 
 
 const Book = () => {
@@ -23,6 +24,11 @@ const Book = () => {
   const handleScanAgain = () => {
     dispatch(isScanned(false));
     dispatch(updateBook({isLoaded: false}));
+  }
+
+  const handleSaveBook = () => {
+    dispatch(saveBook(book));
+    dispatch(isDisabled(true));
   }
 
   return (
@@ -106,6 +112,11 @@ const Book = () => {
             </ScrollView>
           </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <BottomMenu
+          disabled={app.disabled}
+          handleScan={() => handleScanAgain()}
+          handleSave={() => handleSaveBook()}
+        />
     </View>
   )
 }

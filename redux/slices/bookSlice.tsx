@@ -96,19 +96,19 @@ export const fetchBook = createAsyncThunk(
 
 export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType, { rejectWithValue }) => {
     const config = {
-        "Title": book.title,
-        "Author": book.author,
-        "Language": book.language,
-        "Published Date": book.publishedDate,
-        "Page Count": book.pageCount,
-        "Genre": book.genre,
-        "Series": book.series,
-        "World": book.world,
-        "Read by": book.readBy,
-        "Bought/Given on": book.boughtGivenOn,
-        "Given by": book.givenBy,
-        "Last Read by Jowie": book.lastReadByJowie,
-        "Last Read by Kasia": book.lastReadByKasia,
+        "title": book.title,
+        "author": book.author,
+        "language": book.language,
+        "publishedDate": book.publishedDate,
+        "pageCount": book.pageCount,
+        "genre": book.genre,
+        "series": book.series,
+        "world": book.world,
+        "readBy": book.readBy,
+        "boughtGivenOn": book.boughtGivenOn,
+        "givenBy": book.givenBy,
+        "lastReadByJowie": book.lastReadByJowie,
+        "lastReadByKasia": book.lastReadByKasia,
       }
 
     try {

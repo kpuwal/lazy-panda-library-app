@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAppDispatch } from '../../../redux/store';
 import { updateBook } from '../../../redux/slices/bookSlice';
 
@@ -8,12 +8,31 @@ type DateCardTypes = {
   type: string,
 }
 
-const DateCard = ({type}: DateCardTypes) => {
+
+const DateCard = ({ type }: DateCardTypes) => {
   const [day, setDay] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
 
   const dispatch = useAppDispatch();
+
+  const dayInputRef = useRef<TextInput | null>(null);
+  const monthInputRef = useRef<TextInput | null>(null);
+  const yearInputRef = useRef<TextInput | null>(null);
+
+  const handleDayChange = (text: string) => {
+    setDay(text);
+    if (text.length === 2) {
+      monthInputRef.current?.focus();
+    }
+  };
+
+  const handleMonthChange = (text: string) => {
+    setMonth(text);
+    if (text.length === 2) {
+      yearInputRef.current?.focus();
+    }
+  };
 
   useEffect(() => {
     let date = '';
@@ -24,7 +43,7 @@ const DateCard = ({type}: DateCardTypes) => {
     } else {
       date = day + '/' + month + '/' + year;
     }
-    dispatch(updateBook({[type]: date}));
+    dispatch(updateBook({ [type]: date }));
   }, [day, month, year]);
 
   return (
@@ -36,36 +55,41 @@ const DateCard = ({type}: DateCardTypes) => {
       </View>
       <View style={styles.container}>
         <TextInput
+          ref={dayInputRef}
           style={styles.input}
           value={day}
-          onChangeText={setDay}
-          editable
-          selectionColor='pink'
+          onChangeText={handleDayChange}
+          maxLength={2}
           keyboardType='numeric'
-          // onEndEditing={handleDays}
+          returnKeyType='next'
+          onSubmitEditing={() => monthInputRef.current?.focus()}
         />
         <Text style={styles.slash}>/</Text>
         <TextInput
+          ref={monthInputRef}
           style={styles.input}
           value={month}
-          onChangeText={setMonth}
-          editable
-          selectionColor='pink'
+          onChangeText={handleMonthChange}
+          maxLength={2}
           keyboardType='numeric'
+          returnKeyType='next'
+          onSubmitEditing={() => yearInputRef.current?.focus()}
         />
         <Text style={styles.slash}>/</Text>
         <TextInput
+          ref={yearInputRef}
           style={styles.input}
           value={year}
           onChangeText={setYear}
-          editable
-          selectionColor='pink'
+          maxLength={4}
           keyboardType='numeric'
         />
       </View>
     </>
   );
 };
+
+
 
 export default DateCard;
 
