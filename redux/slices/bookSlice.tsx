@@ -134,6 +134,14 @@ const bookSlice = createSlice({
         },
       };
     },
+    displayBookData: (state, action) => {
+      const bookData = action.payload;
+      state.book = {
+        ...state.book,
+        ...bookData,
+      };
+      // state.book.isFound = true;
+    },
     cleanBook: () => {
       return initialState;
     },
@@ -168,5 +176,5 @@ const bookSlice = createSlice({
   },
 })
 
-export const { updateBook, cleanBook } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData } = bookSlice.actions;
 export default bookSlice.reducer;

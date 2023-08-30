@@ -3,21 +3,44 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet, StatusBar, Image, 
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { readLibrary } from '../redux/slices/bookSlice';
-const SPACING = 15;
-const ITEM_HEIGHT = 40
+import { displayBookData } from '../redux/slices/bookSlice';
+import { navigate } from '../redux/slices/navigationSlice';
 
-// Memoized BookItem component using React.memo
-const BookItem = React.memo(({ item }: any) => (
-  <View style={styles.container}>
-    <View style={styles.textContainer}>
-      <Text style={styles.textTitle}>{item.title}</Text>
-      <Text style={styles.textAuthor}>{item.author}</Text>
-    </View>
-  </View>
-));
+const SPACING = 15;
+const ITEM_HEIGHT = 125
+
 interface AlphabetListProps {
   onLetterPress: (letter: string) => void;
 }
+
+const BookItem = React.memo(({ item }: any) => {
+  const dispatch = useAppDispatch();
+
+  const titleLength = item.title.length;
+  let titleFontSize = 22; 
+
+  if (titleLength > 40) {
+    titleFontSize = 18;
+  } else if (titleLength > 10) {
+    titleFontSize = 20;
+  }
+
+  const handleBookPress = () => {
+    dispatch(displayBookData(item));
+    dispatch(navigate('bookInfo'));
+  };
+
+  return (
+    <TouchableOpacity onPress={handleBookPress}>
+      <View style={styles.container}>
+        <View style={styles.textContainer}>
+          <Text style={[styles.textTitle, { fontSize: titleFontSize }]}>{item.title}</Text>
+          <Text style={styles.textAuthor}>{item.author}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+});
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -60,7 +83,6 @@ const Library = () => {
   };
 
   useEffect(() => {
-    // Fetch the library data when the component mounts
     dispatch(readLibrary())
       .then(() => setIsLoading(false))
       .catch(error => {
@@ -68,12 +90,6 @@ const Library = () => {
         console.error("Error fetching library:", error);
       });
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     // console.log('Loaded library:', library);
-  //   }
-  // }, [isLoading, library]);
 
   if (isLoading) {
     return (
@@ -94,15 +110,15 @@ const Library = () => {
       
       
       <FlatList
-        ref={flatListRef}
+        // ref={flatListRef}
         data={library}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.flatList}
         getItemLayout={getItemLayout}
 
         initialNumToRender={10}
-        windowSize={5}
-        maxToRenderPerBatch={5}
+        windowSize={10}
+        maxToRenderPerBatch={15}
         updateCellsBatchingPeriod={30}
         removeClippedSubviews={false}
         onEndReachedThreshold={0.1}
@@ -124,6 +140,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: SPACING,
     marginBottom: SPACING,
+    height: 110,
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: {
@@ -171,10 +188,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily:  'Courier Prime',
     fontWeight: 'bold',
-    fontSize: 18,
-    // maxWidth: '96%',
-    // maxHeight: '100%',
-    // backgroundColor: 'pink'
+    // fontSize: 18,
   },
   textAuthor: {
     color: '#808080',
