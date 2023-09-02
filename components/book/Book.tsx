@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { useEffect } from "react";
 import TextCard from "./infoModules/TextCard";
-import { updateBook, saveBook } from '../../redux/slices/bookSlice';
+import { updateBook, saveBook, updateLibrary } from '../../redux/slices/bookSlice';
 import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 import { navigate } from '../../redux/slices/navigationSlice';
@@ -23,9 +23,6 @@ const Book = () => {
   const { navigationSource } = useSelector((state: RootState) => state.navigate)
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    console.log('navigation source: ', navigationSource)
-  }, [])
 
   const handleDismiss = () => {
     if (navigationSource === 'Library') {
@@ -33,13 +30,17 @@ const Book = () => {
     } else {
       dispatch(navigate('scanBook'))
     }
-    // dispatch(isScanned(false));
-    // dispatch(updateBook({isLoaded: false}));
+    dispatch(isScanned(false));
+    dispatch(updateBook({isLoaded: false}));
   }
 
   const handleSaveBook = () => {
     console.log("navigationSource: ", navigationSource)
-    dispatch(saveBook(book));
+    if (navigationSource === 'Library') {
+      dispatch(updateLibrary(book));
+    } else {
+      dispatch(saveBook(book));
+    }
     dispatch(savingBookIsDisabled(true));
   }
 

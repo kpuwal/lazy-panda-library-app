@@ -122,6 +122,34 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType,
   }
 )
 
+export const updateLibrary = createAsyncThunk('/api/update-library', async (book: bookType, { rejectWithValue }) => {
+  const config = {
+      "title": book.title,
+      "author": book.author,
+      "language": book.language,
+      "publishedDate": book.publishedDate,
+      "pageCount": book.pageCount,
+      "genre": book.genre,
+      "series": book.series,
+      "world": book.world,
+      "readBy": book.readBy,
+      "boughtGivenOn": book.boughtGivenOn,
+      "givenBy": book.givenBy,
+      "lastReadByJowie": book.lastReadByJowie,
+      "lastReadByKasia": book.lastReadByKasia,
+    }
+
+  try {
+    await axios.post(`${URL}/api/update-library`, config, {
+      headers: { Authorization: `Bearer ${TOKEN}`}
+    })
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+}
+)
+
+
 const bookSlice = createSlice({
   name: 'book',
   initialState,
@@ -183,6 +211,9 @@ const bookSlice = createSlice({
     })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
+    })
+    .addCase(updateLibrary.rejected, (state, action) => {
+      state.bookError = "Error updating the book";
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
       // console.log('action ', action.payload)

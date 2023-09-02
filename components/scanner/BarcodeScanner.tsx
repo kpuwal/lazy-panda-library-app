@@ -20,7 +20,7 @@ const Scanner = () => {
     dispatch(cleanBook());
     dispatch(fetchBook(data)).then(() => {
       dispatch(savingBookIsDisabled(false));
-      dispatch(setNavigationSource('Scanner'))
+      dispatch(setNavigationSource('Scanner'));
       dispatch(navigate('bookInfo'));
     });
   }

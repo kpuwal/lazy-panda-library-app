@@ -12,22 +12,22 @@ const BottomMenu = ({disabled, handleScan, handleSave}: BottomMenuTypes) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonSet}>
-        {/* <Pressable
+        <Pressable
           style={styles.button}
           onPress={handleScan}
         >
           <>
-            <Text style={styles.buttonLabel}>Scan</Text>
-            <MaterialCommunityIcons name="repeat" size={15} color="#000000" />
+            <Text style={styles.buttonLabel}>Back</Text>
+            <MaterialCommunityIcons name="repeat" size={15} color="#ffffff" />
           </>
-        </Pressable> */}
+        </Pressable>
         <Pressable
           style={disabled ? [styles.button, styles.disabledButton] : styles.button}
           onPress={handleSave}
           {...{disabled}}
         >
           <Text style={styles.buttonLabel}>Save</Text>
-          <MaterialCommunityIcons name="database-plus" size={15} color="#000000" />
+          <MaterialCommunityIcons name="database-plus" size={15} color="#ffffff" />
         </Pressable>
       </View>
     </View>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   container: {
     height: '10%',
     backgroundColor: '#fff',
-    opacity: .2,
+    // opacity: .2,
   },
   buttonSet: {
     marginTop: 8,
@@ -48,17 +48,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   button: {
-    width: '55%',
+    width: '35%',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 25,
+    backgroundColor: '#000',
+
     // borderWidth: .8,
     // borderColor: '#000000',
     // borderStyle: 'dashed',
-    backgroundColor: '#000',
   },
   buttonLabel: {
     color: '#fff',

@@ -92,7 +92,7 @@ const Library = () => {
         setIsLoading(false);
         console.error("Error fetching library:", error);
       });
-  }, [dispatch]);
+  }, []);
 
   if (isLoading) {
     return (
