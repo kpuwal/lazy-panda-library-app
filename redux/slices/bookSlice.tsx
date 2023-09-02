@@ -177,21 +177,6 @@ const bookSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    // .addCase(fetchBook.fulfilled, (state, action) => {
-    //   if (action.payload.isFound) {
-    //     const data = action.payload;
-    //     console.log('data from google books: ', data)
-    //     state.book.title = data.title === undefined ? '' : data.title;
-    //     state.book.author = data.author === undefined ? '' : data.author;
-    //     state.book.pageCount = data.pageCount === undefined ? '' : data.pageCount;
-    //     state.book.publishedDate = data.publishedDate === undefined ? '' : data.publishedDate;
-    //     state.book.language = data.language === undefined ? '' : data.language.toUpperCase();
-    //     state.isLoaded = true;
-    //     console.log('is loaded? ', state.isLoaded)
-    //   } else {
-    //     state.bookError = "Book has not been found in the database";
-    //   }
-    // })
     .addCase(fetchBook.fulfilled, (state, action) => {
       const { isFound, title, author, pageCount, publishedDate, language } = action.payload;
     
@@ -216,7 +201,7 @@ const bookSlice = createSlice({
       state.bookError = "Error updating the book";
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
-      // console.log('action ', action.payload)
+      console.log(action.payload[0])
       state.library = action.payload;
     })
   },

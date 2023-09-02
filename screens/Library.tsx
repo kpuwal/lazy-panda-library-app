@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, StatusBar, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { readLibrary } from '../redux/slices/bookSlice';
@@ -72,7 +73,7 @@ const Library = () => {
   const renderItem = useCallback((({ item }: any) => <BookItem item={item} />), []);
 
   const getItemLayout = useCallback(((_: any, index: number) => ({
-    length: ITEM_HEIGHT, // Replace with the actual height of your items
+    length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
     index,
   })), []);
@@ -104,7 +105,7 @@ const Library = () => {
 
   return (
     <View style={{backgroundColor: '#89b09b', paddingTop: 40}}>
-      <StatusBar />
+      <StatusBar style="light" />
       <Image source={require('./../assets/image_bg.png')} style={StyleSheet.absoluteFillObject} />
       <View style={styles.headerContainer}>
         <Text>Library</Text>
@@ -118,18 +119,12 @@ const Library = () => {
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.flatList}
         getItemLayout={getItemLayout}
-
         initialNumToRender={10}
         windowSize={10}
         maxToRenderPerBatch={15}
         updateCellsBatchingPeriod={30}
         removeClippedSubviews={false}
         onEndReachedThreshold={0.1}
-
-        // onScrollToIndexFailed={(info) => {
-        //   console.warn("Scroll to index failed:", info);
-        //   // Handle the failed scrolling gracefully here
-        // }}
         renderItem={renderItem}
       />
     </View>
@@ -155,7 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   headerContainer: {
-    flexDirection: 'row', // Set to 'column' if needed
+    flexDirection: 'row',
     flexWrap: 'wrap',
     paddingTop: 50,
   },
@@ -170,6 +165,7 @@ const styles = StyleSheet.create({
   flatList: {
     padding: SPACING,
     paddingTop: 42,
+    paddingBottom: 142,
   },
   alphabetContainer: {
     flex: 1,

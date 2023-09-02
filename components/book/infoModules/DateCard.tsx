@@ -6,10 +6,11 @@ import { updateBook } from '../../../redux/slices/bookSlice';
 
 type DateCardTypes = {
   type: string,
+  dateData: string,
 }
 
 
-const DateCard = ({ type }: DateCardTypes) => {
+const DateCard = ({ type, dateData }: DateCardTypes) => {
   const [day, setDay] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
@@ -19,6 +20,22 @@ const DateCard = ({ type }: DateCardTypes) => {
   const dayInputRef = useRef<TextInput | null>(null);
   const monthInputRef = useRef<TextInput | null>(null);
   const yearInputRef = useRef<TextInput | null>(null);
+
+  // Function to parse the date string and set day, month, and year
+  const parseDate = () => {
+    if (dateData.length > 0) {
+      const parts = dateData.split('/');
+      if (parts.length === 3) {
+        setDay(parts[0]);
+        setMonth(parts[1]);
+        setYear(parts[2]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    parseDate();
+  }, [dateData]);
 
   const handleDayChange = (text: string) => {
     setDay(text);

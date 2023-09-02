@@ -105,7 +105,7 @@ const Book = () => {
               />
 
               <TitleHeader icon={boughtGivenOnIcon} title="Bought/Given On:" />
-              <DateCard type={"boughtGivenOn"} />
+              <DateCard type={"boughtGivenOn"} dateData={book.boughtGivenOn} />
 
               <TitleHeader icon={givenByIcon} title="Given By:" />
               <TextCard
@@ -116,10 +116,10 @@ const Book = () => {
               />
 
               <TitleHeader icon={lastReadIcon} title="Last Read By Jowie On:" />
-              <DateCard type={"lastReadByJowie"} />
+              <DateCard type={"lastReadByJowie"} dateData={book.lastReadByJowie} />
 
               <TitleHeader icon={lastReadIcon} title="Last Read By Kasia On:" />
-              <DateCard type={"lastReadByKasia"} />
+              <DateCard type={"lastReadByKasia"} dateData={book.lastReadByKasia} />
 
               <View style={styles.dummy}/>
             </ScrollView>
