@@ -5,8 +5,8 @@ import { StyleSheet } from 'react-native';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { fetchBook, cleanBook } from '../../redux/slices/bookSlice';
-import { isDisabled, isScanned, setCameraPermission } from '../../redux/slices/appSlice';
-import { navigate } from '../../redux/slices/navigationSlice';
+import { savingBookIsDisabled, isScanned, setCameraPermission } from '../../redux/slices/appSlice';
+import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
 
 const Scanner = () => {
   // const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
@@ -19,7 +19,8 @@ const Scanner = () => {
     dispatch(isScanned(true));
     dispatch(cleanBook());
     dispatch(fetchBook(data)).then(() => {
-      dispatch(isDisabled(false));
+      dispatch(savingBookIsDisabled(false));
+      dispatch(setNavigationSource('Scanner'))
       dispatch(navigate('bookInfo'));
     });
   }

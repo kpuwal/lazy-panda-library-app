@@ -21,7 +21,7 @@ const appSlice = createSlice({
     isScanned: (state, action) => {
       state.scanned = action.payload; 
     },
-    isDisabled: (state, action) => {
+    savingBookIsDisabled: (state, action) => {
       state.disabled = action.payload;
     },
     setFlashMode: (state, action) => {
@@ -33,5 +33,5 @@ const appSlice = createSlice({
   },
 })
 
-export const { isScanned, isDisabled, setFlashMode, setCameraPermission } = appSlice.actions;
+export const { isScanned, savingBookIsDisabled, setFlashMode, setCameraPermission } = appSlice.actions;
 export default appSlice.reducer;

@@ -5,8 +5,9 @@ import { RootState, useAppDispatch } from '../../redux/store';
 import { useEffect } from "react";
 import TextCard from "./infoModules/TextCard";
 import { updateBook, saveBook } from '../../redux/slices/bookSlice';
-import { isScanned, isDisabled } from '../../redux/slices/appSlice';
+import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
+import { navigate } from '../../redux/slices/navigationSlice';
 
 import Header from "./infoModules/Header";
 import NumbersCard from './infoModules/NumbersCard';
@@ -19,16 +20,27 @@ const Book = () => {
   const { book } = useSelector((state: RootState) => state.book);
   const app = useSelector((state: RootState) => state.app);
   const picker = useSelector((state: RootState) => state.pickers);
+  const { navigationSource } = useSelector((state: RootState) => state.navigate)
   const dispatch = useAppDispatch();
 
-  const handleScanAgain = () => {
-    dispatch(isScanned(false));
-    dispatch(updateBook({isLoaded: false}));
+  useEffect(() => {
+    console.log('navigation source: ', navigationSource)
+  }, [])
+
+  const handleDismiss = () => {
+    if (navigationSource === 'Library') {
+      dispatch(navigate('library'))
+    } else {
+      dispatch(navigate('scanBook'))
+    }
+    // dispatch(isScanned(false));
+    // dispatch(updateBook({isLoaded: false}));
   }
 
   const handleSaveBook = () => {
+    console.log("navigationSource: ", navigationSource)
     dispatch(saveBook(book));
-    dispatch(isDisabled(true));
+    dispatch(savingBookIsDisabled(true));
   }
 
   return (
@@ -38,7 +50,7 @@ const Book = () => {
       style={styles.container}>
         <StatusBar style="dark" />
         <Header 
-          handleClose={() => handleScanAgain()}
+          handleClose={() => handleDismiss()}
           isDisabled={app.disabled} />
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView>
@@ -114,7 +126,7 @@ const Book = () => {
       </KeyboardAvoidingView>
       <BottomMenu
           disabled={app.disabled}
-          handleScan={() => handleScanAgain()}
+          handleScan={() => handleDismiss()}
           handleSave={() => handleSaveBook()}
         />
     </View>

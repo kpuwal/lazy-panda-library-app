@@ -19,6 +19,7 @@ type bookType = {
   givenBy: string,
   lastReadByJowie: string,
   lastReadByKasia: string,
+  isFound: boolean
 }
 
 type LibraryType =  bookType[];
@@ -140,7 +141,7 @@ const bookSlice = createSlice({
         ...state.book,
         ...bookData,
       };
-      // state.book.isFound = true;
+      state.book.isFound = true;
     },
     cleanBook: () => {
       return initialState;
@@ -148,21 +149,35 @@ const bookSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+    // .addCase(fetchBook.fulfilled, (state, action) => {
+    //   if (action.payload.isFound) {
+    //     const data = action.payload;
+    //     console.log('data from google books: ', data)
+    //     state.book.title = data.title === undefined ? '' : data.title;
+    //     state.book.author = data.author === undefined ? '' : data.author;
+    //     state.book.pageCount = data.pageCount === undefined ? '' : data.pageCount;
+    //     state.book.publishedDate = data.publishedDate === undefined ? '' : data.publishedDate;
+    //     state.book.language = data.language === undefined ? '' : data.language.toUpperCase();
+    //     state.isLoaded = true;
+    //     console.log('is loaded? ', state.isLoaded)
+    //   } else {
+    //     state.bookError = "Book has not been found in the database";
+    //   }
+    // })
     .addCase(fetchBook.fulfilled, (state, action) => {
-      if (action.payload.isFound) {
-        const data = action.payload;
-        console.log('data from google books: ', data)
-        state.book.title = data.title === undefined ? '' : data.title;
-        state.book.author = data.author === undefined ? '' : data.author;
-        state.book.pageCount = data.pageCount === undefined ? '' : data.pageCount;
-        state.book.publishedDate = data.publishedDate === undefined ? '' : data.publishedDate;
-        state.book.language = data.language === undefined ? '' : data.language.toUpperCase();
+      const { isFound, title, author, pageCount, publishedDate, language } = action.payload;
+    
+      if (isFound) {
+        state.book.title = title || '';
+        state.book.author = author || '';
+        state.book.pageCount = pageCount || '';
+        state.book.publishedDate = publishedDate || '';
+        state.book.language = (language || '').toUpperCase();
         state.isLoaded = true;
-        console.log('is loaded? ', state.isLoaded)
       } else {
         state.bookError = "Book has not been found in the database";
       }
-    })
+    })    
     .addCase(fetchBook.rejected, (state, action) => {
       state.bookError = "Server is not connected";
     })

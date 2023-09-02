@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { readLibrary } from '../redux/slices/bookSlice';
 import { displayBookData } from '../redux/slices/bookSlice';
-import { navigate } from '../redux/slices/navigationSlice';
+import { navigate, setNavigationSource } from '../redux/slices/navigationSlice';
+import { savingBookIsDisabled } from '../redux/slices/appSlice';
 
 const SPACING = 15;
 const ITEM_HEIGHT = 125
@@ -26,7 +27,9 @@ const BookItem = React.memo(({ item }: any) => {
   }
 
   const handleBookPress = () => {
+    dispatch(setNavigationSource('Library'));
     dispatch(displayBookData(item));
+    dispatch(savingBookIsDisabled(false));
     dispatch(navigate('bookInfo'));
   };
 

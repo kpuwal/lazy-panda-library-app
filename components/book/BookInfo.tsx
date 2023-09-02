@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Modal, Text, TouchableWithoutFeedback, Ke
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { updateBook, saveBook } from '../../redux/slices/bookSlice';
-import { isScanned, isDisabled } from '../../redux/slices/appSlice';
+import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 
 import Header from './infoModules/Header';
 import TextCard from './infoModules/TextCard';
@@ -32,7 +32,7 @@ const BookInfo = () => {
 
   const handleSaveBook = () => {
     dispatch(saveBook(book));
-    dispatch(isDisabled(true));
+    dispatch(savingBookIsDisabled(true));
   }
 
   const handleScanAgain = () => {

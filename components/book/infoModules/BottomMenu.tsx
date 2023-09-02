@@ -39,7 +39,8 @@ export default BottomMenu;
 const styles = StyleSheet.create({
   container: {
     height: '10%',
-    backgroundColor: '#000000',
+    backgroundColor: '#fff',
+    opacity: .2,
   },
   buttonSet: {
     marginTop: 8,
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   button: {
-    width: '35%',
+    width: '55%',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -57,10 +58,10 @@ const styles = StyleSheet.create({
     // borderWidth: .8,
     // borderColor: '#000000',
     // borderStyle: 'dashed',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#000',
   },
   buttonLabel: {
-    color: '#000000',
+    color: '#fff',
     fontWeight: 'bold',
     paddingHorizontal: 3,
   },

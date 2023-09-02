@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  route: 'home'
+  route: 'home',
+  navigationSource: ''
 };
 
 const navigationSlice = createSlice({
@@ -10,9 +11,15 @@ const navigationSlice = createSlice({
   reducers: {
     navigate(state, action) {
       state.route = action.payload;
-    }
+    },
+    setNavigationSource: (state, action) => {
+      return {
+        ...state,
+        navigationSource: action.payload,
+      };
+    },
   }
 });
 
-export const { navigate } = navigationSlice.actions;
+export const { navigate, setNavigationSource } = navigationSlice.actions;
 export default navigationSlice.reducer;
