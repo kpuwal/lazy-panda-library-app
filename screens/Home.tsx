@@ -7,6 +7,7 @@ import { setCameraPermission } from '../redux/slices/appSlice';
 import { navigate } from '../redux/slices/navigationSlice';
 import ButtonTmp from '../components/main/ButtonTmp';
 import { fetchPicker } from '../redux/slices/pickerSlice';
+import { readLibrary } from '../redux/slices/bookSlice';
 
 
 const Home = () => {
@@ -33,6 +34,12 @@ const Home = () => {
 
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
+    dispatch(readLibrary());
+      // .then(() => setIsLoading(false))
+      // .catch(error => {
+      //   setIsLoading(false);
+      //   console.error("Error fetching library:", error);
+      // });
   }, [dispatch]);
 
   return (

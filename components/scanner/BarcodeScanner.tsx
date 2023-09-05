@@ -11,7 +11,7 @@ import { navigate, setNavigationSource } from '../../redux/slices/navigationSlic
 const Scanner = () => {
   // const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const scanned = useSelector((state: RootState) => state.app.scanned);
-  const isLoaded = useSelector((state: RootState) => state.book.isLoaded)
+  // const { isLoaded } = useSelector((state: RootState) => state.book)
   const dispatch = useAppDispatch();
   const cameraRef = useRef(null);
 

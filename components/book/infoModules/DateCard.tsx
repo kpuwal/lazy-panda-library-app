@@ -22,7 +22,7 @@ const DateCard = ({ type, dateData }: DateCardTypes) => {
   const yearInputRef = useRef<TextInput | null>(null);
 
   // Function to parse the date string and set day, month, and year
-  const parseDate = () => {
+  const parseDateFromLibrary = () => {
     if (dateData.length > 0) {
       const parts = dateData.split('/');
       if (parts.length === 3) {
@@ -34,7 +34,7 @@ const DateCard = ({ type, dateData }: DateCardTypes) => {
   };
 
   useEffect(() => {
-    parseDate();
+    parseDateFromLibrary();
   }, [dateData]);
 
   const handleDayChange = (text: string) => {

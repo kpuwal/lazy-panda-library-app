@@ -5,7 +5,7 @@ import { mainUrl } from '../../server-location';
 import axios from 'axios';
 const URL = mainUrl();
 
-type bookType = {
+type BookType = {
   title: string,
   author: string,
   language: string,
@@ -19,10 +19,11 @@ type bookType = {
   givenBy: string,
   lastReadByJowie: string,
   lastReadByKasia: string,
-  isFound: boolean
+  isFound?: boolean,
+  isLoaded?: boolean
 }
 
-type LibraryType =  bookType[];
+type LibraryType =  BookType[];
 
 
 const initialState = {
@@ -41,11 +42,12 @@ const initialState = {
     givenBy: '',
     lastReadByJowie: '',
     lastReadByKasia: '',
-    isFound: true,
-  },
+    isFound: false,
+    isLoaded: false,
+  } as BookType,
   library: [] as LibraryType,
-  bookError: '',
-  isLoaded: false,
+  libraryIsLoaded: false as boolean,
+  bookError: '' as string,
 };
 
 export const readLibrary = createAsyncThunk(
@@ -55,7 +57,6 @@ export const readLibrary = createAsyncThunk(
       const response = await axios.get(`${URL}/api/library`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
-      // console.log(response.data)
       return response.data;
     } catch(err) {
       return rejectWithValue(err)
@@ -95,7 +96,7 @@ export const fetchBook = createAsyncThunk(
   }
 )
 
-export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType, { rejectWithValue }) => {
+export const saveBook = createAsyncThunk('/api/add-book', async (book: BookType, { rejectWithValue }) => {
     const config = {
         "title": book.title,
         "author": book.author,
@@ -122,7 +123,7 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: bookType,
   }
 )
 
-export const updateLibrary = createAsyncThunk('/api/update-library', async (book: bookType, { rejectWithValue }) => {
+export const updateLibrary = createAsyncThunk('/api/update-library', async (book: BookType, { rejectWithValue }) => {
   const config = {
       "title": book.title,
       "author": book.author,
@@ -174,6 +175,9 @@ const bookSlice = createSlice({
     cleanBook: () => {
       return initialState;
     },
+    sortLibrary: (state, action) => {
+      state.library = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -186,7 +190,7 @@ const bookSlice = createSlice({
         state.book.pageCount = pageCount || '';
         state.book.publishedDate = publishedDate || '';
         state.book.language = (language || '').toUpperCase();
-        state.isLoaded = true;
+        state.book.isLoaded = true;
       } else {
         state.bookError = "Book has not been found in the database";
       }
@@ -201,11 +205,11 @@ const bookSlice = createSlice({
       state.bookError = "Error updating the book";
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
-      console.log(action.payload[0])
       state.library = action.payload;
+      state.libraryIsLoaded = true;
     })
   },
 })
 
-export const { updateBook, cleanBook, displayBookData } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, sortLibrary } = bookSlice.actions;
 export default bookSlice.reducer;

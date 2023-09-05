@@ -35,3 +35,13 @@ export const lastReadIcon = <Image
   source={require('./../../../assets/glasses.png')}  
   style={{ width: 25, height: 25 }}
 />
+
+export const filter = <Image 
+  source={require('./../../../assets/filter.png')}  
+  style={{ width: 20, height: 20 }}
+/>
+
+export const sortAZ = <Image 
+  source={require('./../../../assets/sort-az.png')}  
+  style={{ width: 20, height: 20 }}
+/>
