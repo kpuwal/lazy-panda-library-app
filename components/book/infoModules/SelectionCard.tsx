@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 type SelectionCardTypes = {
   data: {label: string, value: string}[],
-  active: string,
+  active?: string,
   select: any,
   title: string,
   icon?: any,
@@ -12,7 +12,7 @@ type SelectionCardTypes = {
 type ItemTypes = {
   el: string,
   select: Function,
-  active: string,
+  active?: string,
 }
 
 const SelectionCard = ({data, select, active, title, icon}: SelectionCardTypes) => {

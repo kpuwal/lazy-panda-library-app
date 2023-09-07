@@ -5,7 +5,12 @@ import { mainUrl } from '../../server-location';
 import axios from 'axios';
 const URL = mainUrl();
 
-type BookType = {
+export type LibrarySectionType = {
+  title: string;
+  data:  BookType[]
+}
+
+export type BookType = {
   title: string,
   author: string,
   language: string,
@@ -20,7 +25,8 @@ type BookType = {
   lastReadByJowie: string,
   lastReadByKasia: string,
   isFound?: boolean,
-  isLoaded?: boolean
+  isLoaded?: boolean,
+  key?: number
 }
 
 type LibraryType =  BookType[];
@@ -44,8 +50,10 @@ const initialState = {
     lastReadByKasia: '',
     isFound: false,
     isLoaded: false,
+    key: 0
   } as BookType,
   library: [] as LibraryType,
+  sortedLibrary: [] as LibrarySectionType[],
   libraryIsLoaded: false as boolean,
   bookError: '' as string,
 };
@@ -55,6 +63,22 @@ export const readLibrary = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${URL}/api/library`, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+      });
+      return response.data;
+    } catch(err) {
+      return rejectWithValue(err)
+    }
+  }
+)
+
+export const filterLibrary = createAsyncThunk(
+  '/api/filter-library',
+  async (filter: {type: string, item: string}, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${URL}/api/filter-library`,
+      { filter }, 
+      {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
       return response.data;
@@ -176,7 +200,7 @@ const bookSlice = createSlice({
       return initialState;
     },
     sortLibrary: (state, action) => {
-      state.library = action.payload;
+      state.sortedLibrary = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -197,6 +221,10 @@ const bookSlice = createSlice({
     })    
     .addCase(fetchBook.rejected, (state, action) => {
       state.bookError = "Server is not connected";
+    })
+    .addCase(filterLibrary.fulfilled, (state, action) => {
+      state.library = action.payload;
+      state.libraryIsLoaded = true;
     })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
