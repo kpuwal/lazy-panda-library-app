@@ -3,7 +3,7 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, 
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
-import { sortLibrary, BookType, LibrarySectionType } from '../redux/slices/bookSlice';
+import { sortLibrary, BookType, LibrarySectionType, readLibrary } from '../redux/slices/bookSlice';
 import { filter, sortAZ } from '../components/book/infoModules/Icons';
 import FilterModal from '../components/library/FilterModal';
 import BookItem from '../components/library/BookItem';
@@ -30,6 +30,7 @@ const Library = forwardRef((props, ref) => {
 
   const [scrollToTop, setScrollToTop] = useState(false);
   const sectionListRef = useRef<SectionList | null>(null);
+  const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.book);
 
   useImperativeHandle(ref, () => ({
     scrollToLocation: (params: any) => {
@@ -41,7 +42,7 @@ const Library = forwardRef((props, ref) => {
 
   // Effect to scroll to the top when sorting changes
   useEffect(() => {
-    if (scrollToTop) {
+    if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
       sectionListRef.current?.scrollToLocation({
         sectionIndex: 0,
         itemIndex: 0,
@@ -51,7 +52,7 @@ const Library = forwardRef((props, ref) => {
       });
       setScrollToTop(false);
     }
-  }, [scrollToTop]);
+  }, [scrollToTop, sortedLibrary]);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -114,16 +115,75 @@ const Library = forwardRef((props, ref) => {
     setScrollToTop(true);
   };
 
+  const handleSortByAuthor = () => {
+    let sortedLibrary = sortByField(library, 'author');
+  
+    const sections: LibrarySectionType[] = [];
+  
+    sortedLibrary.forEach((item: BookType) => {
+      // Split the author's list into individual authors
+      const authorsList = item.author.split(',').map((author) => author.trim());
+      // Extract the first author's surname
+      const firstAuthor = authorsList[0].split(' ');
+      let surname = '';
+  
+      for (let i = 0; i < firstAuthor.length; i++) {
+        if (firstAuthor[i].startsWith('(')) {
+          // If a word starts with '(', use the previous word as the surname
+          if (i > 0) {
+            surname = firstAuthor[i - 1];
+          }
+          break;
+        }
+      }
+  
+      // If no word before '(', use the default behavior
+      if (!surname) {
+        surname = firstAuthor[firstAuthor.length - 1];
+      }
+  
+      const firstLetter = surname.charAt(0).toUpperCase();
+  
+      // Find the section corresponding to the first letter or create a new one
+      const sectionIndex = sections.findIndex((section) => section.title === firstLetter);
+      if (sectionIndex === -1) {
+        sections.push({ title: firstLetter, data: [item] });
+      } else {
+        sections[sectionIndex].data.push(item);
+      }
+    });
+
+  
+    setShowSectionList(true);
+  
+    // Sort sections alphabetically based on the section title
+    sections.sort((a, b) => a.title.localeCompare(b.title));
+    console.log('sections ', sections)
+  
+    dispatch(sortLibrary(sections));
+    setScrollToTop(true);
+  };
+  
+  
+  
+
   const handleSortByDefault = () => {
-    console.log('click')
+    setShowSectionList(false);
+    dispatch(readLibrary());
   };
 
   const renderSectionHeader = ({ section }: any) => (
     <Text style={styles.sectionHeader}>{section.title}</Text>
   );
 
-  const sectionKeyExtractor = (section: any) => section.key.toString();
-
+  // const sectionKeyExtractor = (section: any) => section.key.toString();
+  const sectionKeyExtractor = (section: any) => {
+    if (section && section.title) {
+      return section.title.toString(); // Convert title to string if it's not undefined
+    }
+    // Handle empty or undefined titles by returning a default value (e.g., 'Unknown')
+    return 'Unknown';
+  };
   if (!libraryIsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -138,7 +198,8 @@ const Library = forwardRef((props, ref) => {
       <StatusBar style="dark" />
       <View style={styles.headerContainer}>
         
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text>Sort by:</Text>
           <TouchableOpacity
             onPress={handleSortByDefault}
             style={styles.alphabetButtonBlk}>
@@ -147,22 +208,33 @@ const Library = forwardRef((props, ref) => {
           <TouchableOpacity
             onPress={() => handleSort('title')}
             style={styles.alphabetButton}>
-            <Text>by title</Text>
+            <Text>title</Text>
           </TouchableOpacity>
           <TouchableOpacity 
-            onPress={() => handleSort('author')}
+            onPress={() => handleSortByAuthor()}
             style={styles.alphabetButton}>
-            <Text>by author</Text>
+            <Text>author</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
           <TouchableOpacity
             onPress={toggleModal}
             style={styles.alphabetButton2}>
               {filter}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.alphabetButton2}>{sortAZ}</TouchableOpacity>
+          {/* <TouchableOpacity style={styles.alphabetButton2}>{sortAZ}</TouchableOpacity> */}
+          <Text>Filter</Text>{libraryIsFiltered ? (
+          <View>
+            <Text>: {selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)} - {selectedFilters.item}</Text>
+          </View>
+        ) : null}
         </View>
+        <View><Text>({library.length} items)</Text></View>
+        {/* {libraryIsFiltered ? (
+          <View>
+            <Text>Selected {selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
+          </View>
+        ) : null} */}
         {/* <AlphabetList onLetterPress={scrollToLetter} /> */}
       </View>
       {showSectionList ? (
@@ -204,7 +276,7 @@ export default Library;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
 
     backgroundColor: '#ffffff',
     paddingTop: 30,

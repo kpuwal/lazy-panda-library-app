@@ -1,24 +1,28 @@
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Pressable } from 'react-native';
-
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Pressable, TouchableWithoutFeedback } from 'react-native';
+import { sortAZ } from '../book/infoModules/Icons';
 
 interface AlphabetListProps {
   onLetterPress: (letter: string) => void;
+  floatStyles: any
 }
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress }) => {
+const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles }) => {
   return (
-    <View style={styles.alphabetContainer}>
-      {ALPHABET.split('').map((letter) => (
-        <TouchableOpacity
-          key={letter}
-          onPress={() => onLetterPress(letter)}
-          style={styles.alphabetButton}
-        >
-          <Text style={styles.alphabetButtonText}>{letter}</Text>
-        </TouchableOpacity>
-      ))}
+    // <View style={styles.alphabetContainer}>
+    //   {ALPHABET.split('').map((letter) => (
+    //     <TouchableOpacity
+    //       key={letter}
+    //       onPress={() => onLetterPress(letter)}
+    //       style={styles.alphabetButton}
+    //     >
+    //       <Text style={styles.alphabetButtonText}>{letter}</Text>
+    //     </TouchableOpacity>
+    //   ))}
+    // </View>
+    <View style={[styles.buttonContainer, floatStyles]}>
+      { sortAZ }
     </View>
   );
 };
@@ -26,6 +30,9 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress }) => {
 export default AlphabetList;
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    position: 'absolute'
+  },
   alphabetContainer: {
     flex: 1,
     flexWrap: 'wrap',

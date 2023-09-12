@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily:  'Courier Prime',
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 22,
   },
   textAuthor: {
     color: '#808080',

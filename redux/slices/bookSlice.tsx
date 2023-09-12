@@ -29,8 +29,10 @@ export type BookType = {
   key?: number
 }
 
-type LibraryType =  BookType[];
-
+type SelectedFilters = {
+  type: string,
+  item: string
+}
 
 const initialState = {
   book: {
@@ -52,10 +54,15 @@ const initialState = {
     isLoaded: false,
     key: 0
   } as BookType,
-  library: [] as LibraryType,
+  library: [] as  BookType[],
   sortedLibrary: [] as LibrarySectionType[],
   libraryIsLoaded: false as boolean,
+  libraryIsFiltered: false as boolean,
   bookError: '' as string,
+  selectedFilters: {
+    type: '',
+    item: '',
+  } as SelectedFilters,
 };
 
 export const readLibrary = createAsyncThunk(
@@ -201,7 +208,10 @@ const bookSlice = createSlice({
     },
     sortLibrary: (state, action) => {
       state.sortedLibrary = action.payload;
-    }
+    },
+    setSelectedFilters: (state, action) => {
+      state.selectedFilters = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -225,6 +235,7 @@ const bookSlice = createSlice({
     .addCase(filterLibrary.fulfilled, (state, action) => {
       state.library = action.payload;
       state.libraryIsLoaded = true;
+      state.libraryIsFiltered = true;
     })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
@@ -234,10 +245,11 @@ const bookSlice = createSlice({
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
       state.library = action.payload;
+      state.libraryIsFiltered = false;
       state.libraryIsLoaded = true;
     })
   },
 })
 
-export const { updateBook, cleanBook, displayBookData, sortLibrary } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, sortLibrary, setSelectedFilters } = bookSlice.actions;
 export default bookSlice.reducer;

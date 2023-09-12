@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { genreIcon, seriesIcon, worldIcon } from '../book/infoModules/Icons';
 import SelectionCard from '../book/infoModules/SelectionCard';
-import { filterLibrary } from '../../redux/slices/bookSlice'; // Import your Redux action
+import { filterLibrary, setSelectedFilters } from '../../redux/slices/bookSlice';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -17,10 +17,12 @@ const FilterModal = ({ visible, onClose }: any) => {
   const dispatch = useAppDispatch();
 
   // Use local state for selected filters
-  const [selectedFilters, setSelectedFilters] = useState({
-    type: '',
-    item: ''
-  });
+  // const [selectedFilters, setSelectedFilters] = useState({
+  //   type: '',
+  //   item: ''
+  // });
+
+  const { selectedFilters } = useSelector((state: RootState) => state.book);
 
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity value for the background overlay
 
@@ -41,7 +43,7 @@ const FilterModal = ({ visible, onClose }: any) => {
   const handleFilterUpdate = async () => {
     // Dispatch the action to update the Redux state with selected filters
     if (selectedFilters.type !== '') dispatch(filterLibrary(selectedFilters));
-    onClose(); // Close the modal
+    onClose();
   };
 
   const logSelectedValue = (filterName: string, value: string) => {
@@ -76,11 +78,13 @@ const FilterModal = ({ visible, onClose }: any) => {
                 data={picker.genre}
                 active={selectedFilters.item} // Use the selected value from local state
                 select={(el: string) => {
-                  setSelectedFilters({
-                    ...selectedFilters,
-                    type: 'genre',
-                    item: el,
-                  });
+                  dispatch(
+                    setSelectedFilters({
+                      ...selectedFilters,
+                      type: 'genre',
+                      item: el,
+                    })
+                  );
                   logSelectedValue('Genre', el); // Log the selected genre
                 }}
               />
@@ -90,12 +94,14 @@ const FilterModal = ({ visible, onClose }: any) => {
                 data={picker.series}
                 active={selectedFilters.item} // Use the selected value from local state
                 select={(el: string) => {
-                  setSelectedFilters({
-                    ...selectedFilters,
-                    type: 'series',
-                    item: el,
-                  });
-                  logSelectedValue('Series', el); // Log the selected series
+                  dispatch(
+                    setSelectedFilters({
+                      ...selectedFilters,
+                      type: 'series',
+                      item: el,
+                    })
+                  );
+                  logSelectedValue('Genre', el); // Log the selected genre
                 }}
               />
               <SelectionCard
@@ -104,12 +110,14 @@ const FilterModal = ({ visible, onClose }: any) => {
                 data={picker.world}
                 active={selectedFilters.item} // Use the selected value from local state
                 select={(el: string) => {
-                  setSelectedFilters({
-                    ...selectedFilters,
-                    type: 'world',
-                    item: el,
-                  });
-                  logSelectedValue('World', el); // Log the selected world
+                  dispatch(
+                    setSelectedFilters({
+                      ...selectedFilters,
+                      type: 'world',
+                      item: el,
+                    })
+                  );
+                  logSelectedValue('Genre', el); // Log the selected genre
                 }}
               />
             </ScrollView>
