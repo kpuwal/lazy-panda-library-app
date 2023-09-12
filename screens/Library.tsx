@@ -10,7 +10,7 @@ import BookItem from '../components/library/BookItem';
 import AlphabetList from '../components/library/AlphabetList';
 
 const SPACING = 15;
-const ITEM_HEIGHT = 80;
+const ITEM_HEIGHT = 65;
 // const MAX_TITLE_LENGTH = 30;
 
 const Library = forwardRef((props, ref) => {
@@ -27,7 +27,7 @@ const Library = forwardRef((props, ref) => {
   ), []);
   const [modalVisible, setModalVisible] = useState(false);
   const [showSectionList, setShowSectionList] = useState(false);
-
+  const [sectionLetters, setSectionLetters] = useState<string[]>([]);
   const [scrollToTop, setScrollToTop] = useState(false);
   const sectionListRef = useRef<SectionList | null>(null);
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.book);
@@ -94,7 +94,7 @@ const Library = forwardRef((props, ref) => {
 
   const handleSort = (field: string) => {
     const sortedLibrary = sortByField(library, field);
-  
+    const sortSectionLetters: string[] = [];
     const sections: LibrarySectionType[] = [];
     let currentLetter = '';
     let currentSection: LibrarySectionType = { title: '', data: [] };
@@ -105,12 +105,14 @@ const Library = forwardRef((props, ref) => {
         currentLetter = firstLetter;
         currentSection = { title: currentLetter, data: [] };
         sections.push(currentSection);
+        sortSectionLetters.push(currentLetter);
       }
   
       const uniqueKey = keyCounter++;
       currentSection.data.push({ ...item, key: uniqueKey });
     });
     setShowSectionList(true);
+    setSectionLetters(sortSectionLetters);
     dispatch(sortLibrary(sections));
     setScrollToTop(true);
   };
@@ -119,6 +121,7 @@ const Library = forwardRef((props, ref) => {
     let sortedLibrary = sortByField(library, 'author');
   
     const sections: LibrarySectionType[] = [];
+    const sortSectionLetters: string[] = [];
   
     sortedLibrary.forEach((item: BookType) => {
       // Split the author's list into individual authors
@@ -148,6 +151,8 @@ const Library = forwardRef((props, ref) => {
       const sectionIndex = sections.findIndex((section) => section.title === firstLetter);
       if (sectionIndex === -1) {
         sections.push({ title: firstLetter, data: [item] });
+        sortSectionLetters.push(firstLetter);
+
       } else {
         sections[sectionIndex].data.push(item);
       }
@@ -158,14 +163,40 @@ const Library = forwardRef((props, ref) => {
   
     // Sort sections alphabetically based on the section title
     sections.sort((a, b) => a.title.localeCompare(b.title));
-    console.log('sections ', sections)
+    sortSectionLetters.sort((a, b) => a.localeCompare(b));
+    // console.log('sections ', sections)
+    setSectionLetters(sortSectionLetters);
   
     dispatch(sortLibrary(sections));
     setScrollToTop(true);
   };
   
-  
-  
+  const scrollToLetter = (letter: string) => {
+    // Find the section index based on the letter
+    const sectionIndex = sortedLibrary.findIndex((section) => section.title === letter);
+
+    if (sectionIndex !== -1 && sectionListRef.current) {
+      // Scroll to the section with the specified letter
+      sectionListRef.current.scrollToLocation({
+        sectionIndex,
+        itemIndex: 0,
+        viewOffset: 0,
+        viewPosition: 0,
+        animated: true,
+      });
+    }
+  };
+
+  const scrollToSection = (letter: string) => {
+    const sectionIndex = sectionLetters.indexOf(letter);
+    if (sectionIndex !== -1 && sectionListRef.current) {
+      sectionListRef.current.scrollToLocation({
+        sectionIndex,
+        itemIndex: 0, // Scroll to the first item in the section
+        animated: true,
+      });
+    }
+  };
 
   const handleSortByDefault = () => {
     setShowSectionList(false);
@@ -235,7 +266,6 @@ const Library = forwardRef((props, ref) => {
             <Text>Selected {selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
           </View>
         ) : null} */}
-        {/* <AlphabetList onLetterPress={scrollToLetter} /> */}
       </View>
       {showSectionList ? (
           <SectionList
@@ -244,6 +274,7 @@ const Library = forwardRef((props, ref) => {
             keyExtractor={sectionKeyExtractor}
             renderItem={renderItem}
             renderSectionHeader={renderSectionHeader}
+            getItemLayout={getItemLayout}
           />
         ) : (
           <FlatList
@@ -261,7 +292,10 @@ const Library = forwardRef((props, ref) => {
             ItemSeparatorComponent={ItemSeparator}
           />
         )}
-
+      <AlphabetList
+        onLetterPress={scrollToSection}
+        floatStyles={{top: 60, right: 0}}
+        alphabet={sectionLetters} />
       <FilterModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
