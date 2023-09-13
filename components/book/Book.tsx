@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { useEffect } from "react";
 import TextCard from "./infoModules/TextCard";
-import { updateBook, saveBook, updateLibrary } from '../../redux/slices/bookSlice';
+import { updateBook, saveBook, updateLibrary, copyAndStoreTitle } from '../../redux/slices/bookSlice';
 import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 import { navigate } from '../../redux/slices/navigationSlice';
@@ -17,11 +17,15 @@ import BottomMenu from "./infoModules/BottomMenu";
 
 
 const Book = () => {
-  const { book } = useSelector((state: RootState) => state.book);
+  const { book, bookTitleForRowUpdate } = useSelector((state: RootState) => state.book);
   const app = useSelector((state: RootState) => state.app);
   const picker = useSelector((state: RootState) => state.pickers);
   const { navigationSource } = useSelector((state: RootState) => state.navigate)
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(copyAndStoreTitle(book.title));
+  }, []);
 
 
   const handleDismiss = () => {
@@ -37,7 +41,7 @@ const Book = () => {
   const handleSaveBook = () => {
     console.log("navigationSource: ", navigationSource)
     if (navigationSource === 'Library') {
-      dispatch(updateLibrary(book));
+      dispatch(updateLibrary({book, bookTitleForRowUpdate}));
     } else {
       dispatch(saveBook(book));
     }

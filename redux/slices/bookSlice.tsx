@@ -55,6 +55,7 @@ const initialState = {
     key: 0
   } as BookType,
   library: [] as  BookType[],
+  bookTitleForRowUpdate: '' as string,
   sortedLibrary: [] as LibrarySectionType[],
   libraryIsLoaded: false as boolean,
   libraryIsFiltered: false as boolean,
@@ -154,7 +155,7 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: BookType,
   }
 )
 
-export const updateLibrary = createAsyncThunk('/api/update-library', async (book: BookType, { rejectWithValue }) => {
+export const updateLibrary = createAsyncThunk('/api/update-library', async ({ book, bookTitleForRowUpdate }: { book: BookType; bookTitleForRowUpdate: string }, { rejectWithValue }) => {
   const config = {
       "title": book.title,
       "author": book.author,
@@ -169,6 +170,7 @@ export const updateLibrary = createAsyncThunk('/api/update-library', async (book
       "givenBy": book.givenBy,
       "lastReadByJowie": book.lastReadByJowie,
       "lastReadByKasia": book.lastReadByKasia,
+      "bookTitleForRowUpdate": bookTitleForRowUpdate
     }
 
   try {
@@ -212,6 +214,9 @@ const bookSlice = createSlice({
     setSelectedFilters: (state, action) => {
       state.selectedFilters = action.payload;
     },
+    copyAndStoreTitle: (state, action) => {
+      state.bookTitleForRowUpdate = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -251,5 +256,5 @@ const bookSlice = createSlice({
   },
 })
 
-export const { updateBook, cleanBook, displayBookData, sortLibrary, setSelectedFilters } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, sortLibrary, setSelectedFilters, copyAndStoreTitle } = bookSlice.actions;
 export default bookSlice.reducer;
