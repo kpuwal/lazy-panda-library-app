@@ -32,7 +32,7 @@ export default function ButtonTmp(props: any) {
               style={styles.image} 
             />
           </View>
-          <Text style={[styles.text, isPressed ? styles.textPressed : null]}>
+          <Text style={[styles.text, isPressed ? styles.textPressed : null]} numberOfLines={3} lineBreakMode="tail">
             {title}
           </Text>
         </Pressable>
@@ -56,9 +56,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 21,
+    width: 100,
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+    textAlign: 'center'
   },
   textPressed: {
     color: 'black'

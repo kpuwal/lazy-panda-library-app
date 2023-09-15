@@ -40,8 +40,3 @@ export const filter = <Image
   source={require('./../../../assets/filter.png')}  
   style={{ width: 20, height: 20 }}
 />
-
-export const sortAZ = <Image 
-  source={require('./../../../assets/sort-az.png')}  
-  style={{ width: 20, height: 20 }}
-/>

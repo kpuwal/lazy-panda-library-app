@@ -1,104 +1,68 @@
 import { View, Text, Animated, ActivityIndicator, StyleSheet, ScrollView, TouchableHighlight, TouchableOpacity, Pressable, TouchableWithoutFeedback, Dimensions, Easing } from 'react-native';
-import { sortAZ } from '../book/infoModules/Icons';
 import { useEffect, useRef, useState } from 'react';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+
 const { height } = Dimensions.get('window');
 
 interface AlphabetListProps {
   onLetterPress: (letter: string) => void;
   floatStyles: any,
-  alphabet: string[]
+  alphabet: string[],
+  isActive?: boolean
 }
 
 // const ALPHABET = '129ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles, alphabet }) => {
+const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles, alphabet, isActive }) => {
   const rotateValue = useRef(new Animated.Value(0)).current;
   const [isOpen, setIsOpen] = useState(false);
   const letterScale = useRef(new Animated.Value(0.5)).current;
+  const closingAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (isOpen) {
       // Animate the letters with a spring effect when the menu is opened
       Animated.spring(letterScale, {
         toValue: 1,
-        friction: 5, // Adjust the friction as needed
+        friction: 8,
         useNativeDriver: true,
       }).start();
     } else {
-      // Reset the scale when the menu is closed
-      letterScale.setValue(0.5);
+      // Start the closing animation
+      Animated.spring(closingAnimation, {
+        toValue: 0, // Set it to your desired closing scale value
+        friction: 8,
+        useNativeDriver: true,
+      }).start();
     }
   }, [isOpen]);
 
-  const rotation = {
-    transform: [
-      {
-        rotate: rotateValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: ['0deg', '180deg']
-        })
-      }
-    ]
-  };
-
-  // const toggleMenu = () => {
-  //   const toValue = isOpen ? 0 : 1;
-
-  //   Animated.timing(rotateValue, {
-  //     toValue,
-  //     duration: 300, // Adjust the duration as needed
-  //     easing: Easing.inOut(Easing.ease),
-  //     useNativeDriver: true
-  //   }).start();
-
-  //   setIsOpen(!isOpen);
-  // }
-
-
-  // const toggleMenu = () => {
-  //   const toValue = isOpen ? 0 : 1;
-
-  //   Animated.spring(rotateValue, {
-  //     toValue,
-  //     friction: 6,
-  //     tension: 60,
-  //     useNativeDriver: true,
-  //   }).start();
-
-  //   setIsOpen(!isOpen);
-
-  //   if (!isOpen) {
-  //     // Animate the opacity and scale of each letter sequentially using stagger
-  //     Animated.stagger(delay, [
-  //       ...letterOpacities.map((opacity) =>
-  //         Animated.timing(opacity, {
-  //           toValue: 1,
-  //           duration,
-  //           easing: Easing.inOut(Easing.ease),
-  //           useNativeDriver: true,
-  //         })
-  //       ),
-  //       ...letterScales.map((scale) =>
-  //         Animated.spring(scale, {
-  //           toValue: 1,
-  //           friction: 2, // Adjust the spring effect
-  //           useNativeDriver: true,
-  //         })
-  //       ),
-  //     ]).start();
-  //   }
+  // const rotation = {
+  //   transform: [
+  //     {
+  //       rotate: rotateValue.interpolate({
+  //         inputRange: [0, 1],
+  //         outputRange: ['0deg', '180deg']
+  //       })
+  //     }
+  //   ]
   // };
 
   return (
     <View style={[styles.buttonContainer, floatStyles]}>
-      <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
-        <Animated.View style={[styles.button, styles.menu, rotation
-            ]}>
-          { sortAZ }
+      <Pressable onPress={() => setIsOpen(!isOpen)} disabled={!isActive}>
+        <Animated.View style={[
+          styles.button,
+          {backgroundColor: isOpen ? 'black' : 'white'}]}>
+          {isOpen ? 
+            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={20} color="white" /> : 
+            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={24} color={isActive ? "black" : "white"} />}
         </Animated.View>
-      </TouchableWithoutFeedback>
+      </Pressable>
       {isOpen && (
-        <ScrollView style={styles.alphabetContainer}>
+        <ScrollView
+          style={styles.alphabetContainer}
+          showsVerticalScrollIndicator={false}>
         {alphabet.map((letter) => (
             <TouchableOpacity 
               onPress={() => onLetterPress(letter)} 
@@ -107,7 +71,7 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
                 style={[
                   styles.alphabetButton,
                   {
-                    transform: [{ scale: letterScale }],
+                    transform: [{ scale: isOpen ? letterScale : closingAnimation }],
                   },
                 ]}
               >
@@ -131,68 +95,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    // position: 'absolute',
-    width: 55,
-    height: 35,
-    // borderRadius: 20,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-    backgroundColor: '#fff',
-    // shadowRadius: 8,
-    // shadowColor: '#000',
-    // shadowOpacity: .2,
-    // shadowOffset: {height: 5, width: 0},
+    width: 45,
+    height: 25,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10
   },
-  menu: {
-
-  },
   alphabetContainer: {
-    // flex: 1,
-    // flexWrap: 'wrap',
-    // paddingLeft: 20,
     maxHeight: height * .8, // Add this line to limit the widt
     flexDirection: 'column', 
-    // marginBottom: 100
+    marginTop: 30
   },
   alphabetButton: {
     paddingVertical: 2.5,
     paddingHorizontal: 2.5,
     marginVertical: 3,
-    // backgroundColor: '#505359',
     backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
-    // opacity: .4,
     right: 0,
-    // borderRadius: 5,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    width: 30,
-  },
-  alphabetButtonBlk: {
-    paddingVertical: 2.5,
-    paddingHorizontal: 5,
-    margin: 3,
-    backgroundColor: 'black',
-    color: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // opacity: .7,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-    width: 65
-  },
-  alphabetButton2: {
-    paddingVertical: 5,
-    paddingHorizontal: 2,
-    margin: 3,
+    width: 25,
   },
   alphabetButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#fff',
+    fontFamily:  'Courier Prime',
+
   },
 })

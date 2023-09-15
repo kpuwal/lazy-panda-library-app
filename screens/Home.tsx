@@ -67,7 +67,7 @@ const Home = () => {
             imgCol={require('./../assets/add-book-col.png')} /> */}
           <ButtonTmp
             onPress={() => dispatch(navigate('library'))}
-            title="Library"
+            title="When in doubt, go to the Library"
             imgSource={require('./../assets/library-books.png')}
             imgCol={require('./../assets/library-books-col.png')} />
         </View>

@@ -1,13 +1,15 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Animated, Dimensions, SectionList, SectionListScrollParams } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Animated, Dimensions, SectionList, SectionListScrollParams, Pressable, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { sortLibrary, BookType, LibrarySectionType, readLibrary } from '../redux/slices/bookSlice';
-import { filter, sortAZ } from '../components/book/infoModules/Icons';
+import { filter } from '../components/book/infoModules/Icons';
 import FilterModal from '../components/library/FilterModal';
 import BookItem from '../components/library/BookItem';
 import AlphabetList from '../components/library/AlphabetList';
+import { navigate } from '../redux/slices/navigationSlice';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const SPACING = 15;
 const ITEM_HEIGHT = 65;
@@ -31,6 +33,8 @@ const Library = forwardRef((props, ref) => {
   const [scrollToTop, setScrollToTop] = useState(false);
   const sectionListRef = useRef<SectionList | null>(null);
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.book);
+  const [activeButton, setActiveButton] = useState('default');
+  const [activeList, setActiveList] = useState(false);
 
   useImperativeHandle(ref, () => ({
     scrollToLocation: (params: any) => {
@@ -93,6 +97,8 @@ const Library = forwardRef((props, ref) => {
   };
 
   const handleSort = (field: string) => {
+    setActiveButton('title');
+    setActiveList(true);
     const sortedLibrary = sortByField(library, field);
     const sortSectionLetters: string[] = [];
     const sections: LibrarySectionType[] = [];
@@ -118,6 +124,8 @@ const Library = forwardRef((props, ref) => {
   };
 
   const handleSortByAuthor = () => {
+    setActiveButton('author');
+    setActiveList(true);
     let sortedLibrary = sortByField(library, 'author');
   
     const sections: LibrarySectionType[] = [];
@@ -199,6 +207,8 @@ const Library = forwardRef((props, ref) => {
   };
 
   const handleSortByDefault = () => {
+    setActiveButton('default');
+    setActiveList(false);
     setShowSectionList(false);
     dispatch(readLibrary());
   };
@@ -224,49 +234,61 @@ const Library = forwardRef((props, ref) => {
   }
 // 71B460
   return (
-    <>
-    <View style={{flex: 1, backgroundColor: '#89b09b'}}>
+    <View style={{flex: 1, backgroundColor: '#D2D4D8'}}>
       <StatusBar style="dark" />
+
       <View style={styles.headerContainer}>
-        
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text>Sort by:</Text>
-          <TouchableOpacity
-            onPress={handleSortByDefault}
-            style={styles.alphabetButtonBlk}>
-            <Text style={{color: 'white'}}>default</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleSort('title')}
-            style={styles.alphabetButton}>
-            <Text>title</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={() => handleSortByAuthor()}
-            style={styles.alphabetButton}>
-            <Text>author</Text>
-          </TouchableOpacity>
+        <View style={styles.header}>
+          <Pressable
+            onPress={() => dispatch(navigate('home'))}
+            style={styles.backButton}>
+            <MaterialIcons name="arrow-back-ios" size={24} color="black" />
+          </Pressable>
+          <View style={styles.headerIcons}>
+            <Image 
+              source={require('../assets/library.png')}  
+              style={{ width: 30, height: 30 }}
+            />
+            <Text style={styles.infoLabel} numberOfLines={2} lineBreakMode="tail">Our Library</Text>
+          </View>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-          <TouchableOpacity
+        <View style={styles.subheader}>
+          <Pressable
             onPress={toggleModal}
-            style={styles.alphabetButton2}>
-              {filter}
-          </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.alphabetButton2}>{sortAZ}</TouchableOpacity> */}
-          <Text>Filter</Text>{libraryIsFiltered ? (
-          <View>
-            <Text>: {selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)} - {selectedFilters.item}</Text>
+            style={styles.subheaderFilter}>
+            <MaterialCommunityIcons name="filter-menu" size={28} color="black" />
+            <Text style={styles.sortButtonText}>Filter</Text>
+          </Pressable>
+
+          <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
+            <View><Text style={[styles.sortButtonText, {color: 'black'}]}>Sort by:</Text></View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={handleSortByDefault}
+                style={[styles.sortButton, activeButton === 'default' ? styles.bgBlack : styles.bgWhite]}>
+                  <Text style={[activeButton === 'default' ? styles.white : styles.black, styles.sortButtonText]}>default</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSort('title')}
+                style={[styles.sortButton, activeButton === 'title' ? styles.bgBlack : styles.bgWhite]}>
+                <Text style={[activeButton === 'title' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleSortByAuthor()}
+                style={[styles.sortButton, activeButton === 'author' ? styles.bgBlack : styles.bgWhite]}>
+                <Text style={[activeButton === 'author' ? styles.white : styles.black, styles.sortButtonText]}>author</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        ) : null}
         </View>
-        <View><Text>({library.length} items)</Text></View>
-        {/* {libraryIsFiltered ? (
-          <View>
-            <Text>Selected {selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
-          </View>
-        ) : null} */}
+        <View><Text style={styles.sortButtonText}>{library.length} items</Text></View>
+        <View>{libraryIsFiltered ? (
+              <View style={[ styles.filterButton]}>
+                <Text style={[styles.sortButtonText,  styles.black]}>{selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
+              </View>) : <View style={styles.filterButton} />}</View>
+        
       </View>
+
       {showSectionList ? (
           <SectionList
             ref={sectionListRef}
@@ -294,15 +316,15 @@ const Library = forwardRef((props, ref) => {
         )}
       <AlphabetList
         onLetterPress={scrollToSection}
-        floatStyles={{top: 60, right: 0}}
-        alphabet={sectionLetters} />
+        floatStyles={{top: 130, right: 0}}
+        alphabet={sectionLetters}
+        isActive={activeList}
+      />
       <FilterModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
       />
     </View>
-
-    </>
   );
 });
 
@@ -311,12 +333,10 @@ export default Library;
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
-
     backgroundColor: '#ffffff',
     paddingTop: 30,
-    justifyContent: 'space-between',
-    // alignItems: 'center',
-    paddingBottom: 10
+    paddingBottom: 10,
+    paddingHorizontal: 15,
   },
   editContainer: {
     height: '100%',
@@ -329,7 +349,7 @@ const styles = StyleSheet.create({
   flatList: {
     // padding: SPACING,
     // paddingTop: 42,
-    paddingBottom: 142,
+    // paddingBottom: 142,
   },
   image: {
     width: 20,
@@ -337,37 +357,46 @@ const styles = StyleSheet.create({
     // borderRadius: 20,
     marginRight: SPACING / 2
   },
-  alphabetButton: {
+  sortButton: {
     paddingVertical: 2.5,
-    paddingHorizontal: 5,
+    paddingHorizontal: 2.5,
     margin: 3,
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: .7,
-    borderRadius: 10,
-    width: 65
+    borderRadius: 5,
+    width: 60,
   },
-  alphabetButtonBlk: {
+  sortButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily:  'Courier Prime',
+  },
+  filterButton: {
     paddingVertical: 2.5,
-    paddingHorizontal: 5,
-    margin: 3,
-    backgroundColor: 'black',
-    color: 'white',
+    paddingHorizontal: 2.5,
+    marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    // opacity: .7,
-    borderRadius: 10,
-    width: 65
+    borderRadius: 5,
+    height: 20
+    // width: 160,
+  },
+  white: {
+    color: 'white'
+  },
+  bgWhite: {
+    backgroundColor: 'white'
+  },
+  black: {
+    color: 'black'
+  },
+  bgBlack: {
+    backgroundColor: 'black'
   },
   alphabetButton2: {
     paddingVertical: 5,
     paddingHorizontal: 2,
     margin: 3,
-  },
-  alphabetButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   separator: {
     height: 1, // Adjust the height of the separator as needed
@@ -378,5 +407,49 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  // subheader
+  subheader: {
+    flexDirection: 'row',
+    height: 50,
+  },
+  subheaderFilter: {
+    flex: 3,
+    flexDirection: 'row',
+    borderRightWidth: 1,
+    paddingRight: 10,
+    marginRight: 10,
+    borderColor: '#d2d4d6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  subheaderSort: {
+    flex: 7
+  },
+
+
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 25,
+    // height: 70,
+    // backgroundColor: 'pink'
+  },
+  backButton: {
+    flex: 1, // Take up 10% of the available space
+    alignItems: 'flex-start',
+    marginRight: 10
+  },
+  headerIcons: {
+    flex: 9, // Take up 90% of the available space
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  infoLabel: {
+    left: 8,
+    fontSize: 28,
+    fontFamily: 'Courier Prime',
+    textAlign: 'center',
   },
 });

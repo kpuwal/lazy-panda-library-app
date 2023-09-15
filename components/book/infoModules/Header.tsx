@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Pressable, View, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 type HeaderTypes = {
   handleClose: any,
@@ -12,19 +12,16 @@ const Header = ({handleClose, isDisabled}: HeaderTypes) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <Pressable onPress={handleClose} style={styles.backButton}>
+          <MaterialIcons name="arrow-back-ios" size={24} color="black" />
+        </Pressable>
         <View style={styles.headerIcons}>
           <Image 
             source={require('./../../../assets/book.png')}  
             style={{ width: 30, height: 30 }}
           />
-          <Text style={styles.infoLabel}>Book Info:</Text>
+          <Text style={styles.infoLabel}>Book Details</Text>
         </View>
-        <View>
-          <Pressable onPress={handleClose}>
-            <MaterialCommunityIcons name="close" size={24} color="black" />
-          </Pressable>
-        </View>
-        
       </View>
       <View style={styles.alertContainer}>
         {isDisabled && (
@@ -49,9 +46,15 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  backButton: {
+    flex: 1, // Take up 10% of the available space
+    alignItems: 'flex-start',
+    marginRight: 10
   },
   headerIcons: {
+    flex: 9, // Take up 90% of the available space
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
