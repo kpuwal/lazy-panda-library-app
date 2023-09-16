@@ -4,12 +4,13 @@ import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { sortLibrary, BookType, LibrarySectionType, readLibrary } from '../redux/slices/bookSlice';
-import { filter } from '../components/book/infoModules/Icons';
 import FilterModal from '../components/library/FilterModal';
 import BookItem from '../components/library/BookItem';
 import AlphabetList from '../components/library/AlphabetList';
 import { navigate } from '../redux/slices/navigationSlice';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Colours, Fonts } from '../styles/constants';
+import { headerContainer } from '../styles/styles';
 
 const SPACING = 15;
 const ITEM_HEIGHT = 65;
@@ -234,11 +235,11 @@ const Library = forwardRef((props, ref) => {
   }
 // 71B460
   return (
-    <View style={{flex: 1, backgroundColor: '#D2D4D8'}}>
+    <View style={{flex: 1, backgroundColor: Colours.quaternary}}>
       <StatusBar style="dark" />
 
       <View style={styles.headerContainer}>
-        <View style={styles.header}>
+        <View style={headerContainer}>
           <Pressable
             onPress={() => dispatch(navigate('home'))}
             style={styles.backButton}>
@@ -261,7 +262,7 @@ const Library = forwardRef((props, ref) => {
           </Pressable>
 
           <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
-            <View><Text style={[styles.sortButtonText, {color: 'black'}]}>Sort by:</Text></View>
+            <Text style={[styles.sortButtonText, {color: 'black', marginBottom: 10,}]}>Sort by:</Text>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
                 onPress={handleSortByDefault}
@@ -281,12 +282,13 @@ const Library = forwardRef((props, ref) => {
             </View>
           </View>
         </View>
-        <View><Text style={styles.sortButtonText}>{library.length} items</Text></View>
+        <View>
+          {/* <Text style={[styles.sortButtonText, {paddingTop: 10}]}>{library.length} items</Text> */}
+        </View>
         <View>{libraryIsFiltered ? (
-              <View style={[ styles.filterButton]}>
-                <Text style={[styles.sortButtonText,  styles.black]}>{selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
-              </View>) : <View style={styles.filterButton} />}</View>
-        
+          <View style={[ styles.filterButton]}>
+            <Text style={[styles.sortButtonText, styles.black]}>{selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
+          </View>) : <View style={styles.filterButton} />}</View>
       </View>
 
       {showSectionList ? (
@@ -316,7 +318,7 @@ const Library = forwardRef((props, ref) => {
         )}
       <AlphabetList
         onLetterPress={scrollToSection}
-        floatStyles={{top: 130, right: 0}}
+        floatStyles={{top: 75, right: 0}}
         alphabet={sectionLetters}
         isActive={activeList}
       />
@@ -333,10 +335,12 @@ export default Library;
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
-    backgroundColor: '#ffffff',
+    backgroundColor: Colours.primary,
     paddingTop: 30,
     paddingBottom: 10,
     paddingHorizontal: 15,
+    height: 160,
+    // backgroundColor: 'pink'
   },
   editContainer: {
     height: '100%',
@@ -367,7 +371,7 @@ const styles = StyleSheet.create({
     width: 60,
   },
   sortButtonText: {
-    fontSize: 16,
+    fontSize: Fonts.small,
     fontWeight: 'bold',
     fontFamily:  'Courier Prime',
   },
@@ -431,10 +435,11 @@ const styles = StyleSheet.create({
 
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 25,
-    // height: 70,
-    // backgroundColor: 'pink'
+    alignItems: 'flex-start',
+    // justifyContent: 'center',
+    // marginBottom: 15,
+    height: 50,
+    // backgroundColor: 'green'
   },
   backButton: {
     flex: 1, // Take up 10% of the available space
