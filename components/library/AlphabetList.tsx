@@ -1,6 +1,7 @@
 import { View, Text, Animated, ActivityIndicator, StyleSheet, ScrollView, TouchableHighlight, TouchableOpacity, Pressable, TouchableWithoutFeedback, Dimensions, Easing } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { Colours } from '../../styles/constants';
 
 const { height } = Dimensions.get('window');
 
@@ -19,23 +20,52 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
   const letterScale = useRef(new Animated.Value(0.5)).current;
   const closingAnimation = useRef(new Animated.Value(0)).current;
 
+
   useEffect(() => {
-    if (isOpen) {
-      // Animate the letters with a spring effect when the menu is opened
-      Animated.spring(letterScale, {
-        toValue: 1,
-        friction: 8,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      // Start the closing animation
-      Animated.spring(closingAnimation, {
-        toValue: 0, // Set it to your desired closing scale value
-        friction: 8,
-        useNativeDriver: true,
-      }).start();
+    return () => {
+      // Clean up animation values when the component unmounts
+      letterScale.setValue(0.5);
+      closingAnimation.setValue(0);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isActive) {
+      if (isOpen) {
+        // Animate the letters with a spring effect when the menu is opened
+        Animated.spring(letterScale, {
+          toValue: 1,
+          friction: 8,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        // Start the closing animation
+        Animated.spring(closingAnimation, {
+          toValue: 0, // Set it to your desired closing scale value
+          friction: 8,
+          useNativeDriver: true,
+        }).start();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, isActive]);
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     // Animate the letters with a spring effect when the menu is opened
+  //     Animated.spring(letterScale, {
+  //       toValue: 1,
+  //       friction: 8,
+  //       useNativeDriver: true,
+  //     }).start();
+  //   } else {
+  //     // Start the closing animation
+  //     Animated.spring(closingAnimation, {
+  //       toValue: 0, // Set it to your desired closing scale value
+  //       friction: 8,
+  //       useNativeDriver: true,
+  //     }).start();
+  //   }
+  // }, [isOpen]);
 
   // const rotation = {
   //   transform: [
@@ -50,23 +80,30 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
 
   return (
     <View style={[styles.buttonContainer, floatStyles]}>
-      <Pressable onPress={() => setIsOpen(!isOpen)} disabled={!isActive}>
-        <Animated.View style={[
-          styles.button,
-          {backgroundColor: isOpen ? 'black' : 'white'}]}>
-          {isOpen ? 
-            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={20} color="white" /> : 
-            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={24} color={isActive ? "black" : "white"} />}
+      <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)} disabled={!isActive}>
+        <Animated.View
+          style={[
+            styles.button,
+            { 
+              backgroundColor: isOpen ? Colours.secondary : Colours.primary
+            },
+          ]}
+        >
+          {isOpen ? (
+            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={20} color="white" />
+          ) : (
+            <MaterialCommunityIcons
+              name="sort-alphabetical-ascending"
+              size={24}
+              color={isActive ? Colours.secondary : 'white'}
+            />
+          )}
         </Animated.View>
-      </Pressable>
+      </TouchableWithoutFeedback>
       {isOpen && (
-        <ScrollView
-          style={styles.alphabetContainer}
-          showsVerticalScrollIndicator={false}>
-        {alphabet.map((letter) => (
-            <TouchableOpacity 
-              onPress={() => onLetterPress(letter)} 
-              key={letter}>
+        <ScrollView style={styles.alphabetContainer} showsVerticalScrollIndicator={false}>
+          {alphabet.map((letter) => (
+            <TouchableOpacity onPress={() => onLetterPress(letter)} key={letter}>
               <Animated.View
                 style={[
                   styles.alphabetButton,
@@ -75,12 +112,11 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
                   },
                 ]}
               >
-                  <Text style={styles.alphabetButtonText}>{letter}</Text>
+                <Text style={styles.alphabetButtonText}>{letter}</Text>
               </Animated.View>
-          </TouchableOpacity>
-
-        ))}
-      </ScrollView>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       )}
     </View>
   );
@@ -101,18 +137,22 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
+    // borderWidth: .5,
+    // borderColor: Colours.secondary
   },
   alphabetContainer: {
-    maxHeight: height * .8, // Add this line to limit the widt
+    maxHeight: height * .7, // Add this line to limit the widt
     flexDirection: 'column', 
-    marginTop: 30
+    marginTop: 90,
+    position: 'absolute',
+
   },
   alphabetButton: {
     paddingVertical: 2.5,
     paddingHorizontal: 2.5,
     marginVertical: 3,
-    backgroundColor: '#000',
+    backgroundColor: Colours.secondary,
     justifyContent: 'center',
     alignItems: 'center',
     right: 0,

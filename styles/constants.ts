@@ -3,7 +3,7 @@ export const Colours = {
   secondary: '#3B3E43',
   tertiary: '#D2D4D8',
   quaternary: '#C9CBCF',
-  quinary: '',
+  quinary: '#F0F0F0',
 } as const;
 
 export const Fonts = {

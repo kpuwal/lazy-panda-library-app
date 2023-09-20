@@ -4,6 +4,7 @@ import { navigate, setNavigationSource } from '../../redux/slices/navigationSlic
 import { displayBookData, sortLibrary } from '../../redux/slices/bookSlice';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Pressable } from 'react-native';
 import { savingBookIsDisabled } from '../../redux/slices/appSlice';
+import { Colours } from '../../styles/constants';
 const SPACING = 15;
 
 const BookItem = React.memo(({ item }: any) => {
@@ -34,7 +35,7 @@ const BookItem = React.memo(({ item }: any) => {
     <TouchableOpacity onPress={handleBookPress}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text style={styles.textTitle}>{truncatedTitle}</Text>
+          <Text style={styles.textTitle}>{item.title}</Text>
           <Text style={styles.textAuthor}>{item.author}</Text>
         </View>
       </View>
@@ -46,11 +47,13 @@ export default BookItem;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: SPACING,
     // marginBottom: SPACING,
     // height: 95,
     height: 80,
+    width: '100%',
+    // paddingHorizontal: 20,
     // borderRadius: 12,
     // shadowColor: '#000',
     // shadowOffset: {
@@ -59,16 +62,16 @@ const styles = StyleSheet.create({
     // },
     // shadowOpacity: .1,
     // shadowRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: Colours.primary
   },
   textContainer: {
     // padding: SPACING,
-    textAlign: 'auto',
+    // textAlign: 'auto',
     // backgroundColor: 'yellow',
     maxWidth: '100%',
   },
   textTitle: {
-    color: '#000000',
+    color: Colours.secondary,
     fontFamily:  'Courier Prime',
     fontWeight: 'bold',
     fontSize: 22,

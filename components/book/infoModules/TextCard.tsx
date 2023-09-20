@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
+import { Colours } from '../../../styles/constants';
 
 type TextCardTypes = {
   size: number,
@@ -31,13 +32,17 @@ export default TextCard;
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: '#f8f8f8',
+    justifyContent: 'center',
+    borderRadius: 5,
+    backgroundColor: Colours.quinary,
     marginBottom: '3%',
     marginHorizontal: 15,
+    height: 40,
+    padding: 5
   },
   input: {
-    lineHeight: 40,
+    // lineHeight: 40,
+    alignItems: 'center',
     // fontSize: 17,
     textAlign: 'center',
     fontFamily: 'Courier Prime Bold',

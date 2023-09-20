@@ -9,11 +9,14 @@ import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 import { navigate } from '../../redux/slices/navigationSlice';
 
-import Header from "./infoModules/Header";
+// import Header from "./infoModules/Header";
 import NumbersCard from './infoModules/NumbersCard';
 import SelectionCard from './infoModules/SelectionCard';
 import DateCard from './infoModules/DateCard';
 import BottomMenu from "./infoModules/BottomMenu";
+import Header from "../header/Header";
+import { headerContainer, headerInfoContainer } from "../../styles/styles";
+import { Colours } from "../../styles/constants";
 
 
 const Book = () => {
@@ -54,80 +57,87 @@ const Book = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}>
         <StatusBar style="dark" />
-        <Header 
+        {/* <Header 
           handleClose={() => handleDismiss()}
-          isDisabled={app.disabled} />
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView>
-              <TextCard
-                item={book.title}
-                size={22}
-                isNumeric={false}
-                editItem={(el: string) => dispatch(updateBook({title: el}))}
-              />
-              <TextCard
-                item={book.author}
-                size={20}
-                isNumeric={false}
-                editItem={(el: string) => dispatch(updateBook({author: el}))}
-              />
-              <NumbersCard
-                language={book.language}
-                editLanguage={(el: string) => dispatch(updateBook({language: el}))}
-                pageCount={book.pageCount}
-                editPageCount={(el: string) => dispatch(updateBook({pageCount: el}))}
-                publishedDate={book.publishedDate}
-                editPublishedDate={(el: string) => dispatch(updateBook({publishedDate: el}))}
-              />
-              <SelectionCard
-                title={"Genre:"}
-                icon={genreIcon}
-                data={picker.genre}
-                active={book.genre}
-                select={(el: string) => dispatch(updateBook({genre: el}))}
-              />
-              <SelectionCard
-                title={"Series:"}
-                icon={seriesIcon}
-                data={picker.series}
-                active={book.series}
-                select={(el: string) => dispatch(updateBook({series: el}))}
-              />
-              <SelectionCard
-                title={"World:"}
-                icon={worldIcon}
-                data={picker.world}
-                active={book.world}
-                select={(el: string) => dispatch(updateBook({world: el}))}
-              />
-              <SelectionCard
-                title={"Read By:"}
-                icon={readByIcon}
-                data={picker.readBy}
-                active={book.readBy}
-                select={(el: string) => dispatch(updateBook({readBy: el}))}
-              />
+          isDisabled={app.disabled} /> */}
+        <Header>
+          <Header.GoBack goBackUrl="library" />
+          <View style={headerInfoContainer}>
+            <Header.Icon uri={require('../../assets/book-data.gif')} />
+            <Header.Title>Book Data</Header.Title>
+          </View>
+        </Header>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView>
+            <TextCard
+              item={book.title}
+              size={22}
+              isNumeric={false}
+              editItem={(el: string) => dispatch(updateBook({title: el}))}
+            />
+            <TextCard
+              item={book.author}
+              size={20}
+              isNumeric={false}
+              editItem={(el: string) => dispatch(updateBook({author: el}))}
+            />
+            <NumbersCard
+              language={book.language}
+              editLanguage={(el: string) => dispatch(updateBook({language: el}))}
+              pageCount={book.pageCount}
+              editPageCount={(el: string) => dispatch(updateBook({pageCount: el}))}
+              publishedDate={book.publishedDate}
+              editPublishedDate={(el: string) => dispatch(updateBook({publishedDate: el}))}
+            />
+            <SelectionCard
+              title={"Genre:"}
+              icon={genreIcon}
+              data={picker.genre}
+              active={book.genre}
+              select={(el: string) => dispatch(updateBook({genre: el}))}
+            />
+            <SelectionCard
+              title={"Series:"}
+              icon={seriesIcon}
+              data={picker.series}
+              active={book.series}
+              select={(el: string) => dispatch(updateBook({series: el}))}
+            />
+            <SelectionCard
+              title={"World:"}
+              icon={worldIcon}
+              data={picker.world}
+              active={book.world}
+              select={(el: string) => dispatch(updateBook({world: el}))}
+            />
+            <SelectionCard
+              title={"Read By:"}
+              icon={readByIcon}
+              data={picker.readBy}
+              active={book.readBy}
+              select={(el: string) => dispatch(updateBook({readBy: el}))}
+            />
 
-              <TitleHeader icon={boughtGivenOnIcon} title="Bought/Given On:" />
-              <DateCard type={"boughtGivenOn"} dateData={book.boughtGivenOn} />
+            <TitleHeader icon={boughtGivenOnIcon} title="Bought/Given On:" />
+            <DateCard type={"boughtGivenOn"} dateData={book.boughtGivenOn} />
 
-              <TitleHeader icon={givenByIcon} title="Given By:" />
-              <TextCard
-                item={book.givenBy}
-                size={20}
-                isNumeric={false}
-                editItem={(el: string) => dispatch(updateBook({givenBy: el}))}
-              />
+            <TitleHeader icon={givenByIcon} title="Given By:" />
+            <TextCard
+              item={book.givenBy}
+              size={20}
+              isNumeric={false}
+              editItem={(el: string) => dispatch(updateBook({givenBy: el}))}
+            />
 
-              <TitleHeader icon={lastReadIcon} title="Last Read By Jowie On:" />
-              <DateCard type={"lastReadByJowie"} dateData={book.lastReadByJowie} />
+            <TitleHeader icon={lastReadIcon} title="Last Read By Jowie On:" />
+            <DateCard type={"lastReadByJowie"} dateData={book.lastReadByJowie} />
 
-              <TitleHeader icon={lastReadIcon} title="Last Read By Kasia On:" />
-              <DateCard type={"lastReadByKasia"} dateData={book.lastReadByKasia} />
+            <TitleHeader icon={lastReadIcon} title="Last Read By Kasia On:" />
+            <DateCard type={"lastReadByKasia"} dateData={book.lastReadByKasia} />
 
-              <View style={styles.dummy}/>
-            </ScrollView>
-          </TouchableWithoutFeedback>
+            <View style={styles.dummy}/>
+          </ScrollView>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
       <BottomMenu
           disabled={app.disabled}
@@ -157,6 +167,7 @@ const TitleHeader = ({icon, title}: TitleHeaderTypes) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colours.primary,
     // topPadding: 100
     // justifyContent: 'center',
     // alignItems: 'center'
@@ -166,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginBottom: 10,
-    marginTop: 30,
+    marginTop: 10,
     borderTopColor: '#d0d0d0',
   },
   title: {

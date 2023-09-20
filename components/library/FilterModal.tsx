@@ -5,6 +5,11 @@ import { RootState, useAppDispatch } from '../../redux/store';
 import { genreIcon, seriesIcon, worldIcon } from '../book/infoModules/Icons';
 import SelectionCard from '../book/infoModules/SelectionCard';
 import { filterLibrary, setSelectedFilters } from '../../redux/slices/bookSlice';
+import  Header from '../header/Header';
+import { headerInfoContainer } from '../../styles/styles';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Colours } from '../../styles/constants';
+import MainButton from '../button/MainButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -46,10 +51,6 @@ const FilterModal = ({ visible, onClose }: any) => {
     onClose();
   };
 
-  const logSelectedValue = (filterName: string, value: string) => {
-    console.log(`Selected ${filterName}: ${value}`);
-  };
-
   if (!visible) {
     return null;
   }
@@ -70,13 +71,16 @@ const FilterModal = ({ visible, onClose }: any) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Filter Library by:</Text>
+            <View style={styles.header}>
+              <Header.Icon uri={require('../../assets/filter.gif')} />
+              <Text style={styles.headerText}>Filter by:</Text>
+            </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
               <SelectionCard
                 title={"Genre:"}
                 icon={genreIcon}
                 data={picker.genre}
-                active={selectedFilters.item} // Use the selected value from local state
+                active={selectedFilters.item}
                 select={(el: string) => {
                   dispatch(
                     setSelectedFilters({
@@ -85,14 +89,13 @@ const FilterModal = ({ visible, onClose }: any) => {
                       item: el,
                     })
                   );
-                  logSelectedValue('Genre', el); // Log the selected genre
                 }}
               />
               <SelectionCard
                 title={"Series:"}
                 icon={seriesIcon}
                 data={picker.series}
-                active={selectedFilters.item} // Use the selected value from local state
+                active={selectedFilters.item}
                 select={(el: string) => {
                   dispatch(
                     setSelectedFilters({
@@ -101,14 +104,13 @@ const FilterModal = ({ visible, onClose }: any) => {
                       item: el,
                     })
                   );
-                  logSelectedValue('Genre', el); // Log the selected genre
                 }}
               />
               <SelectionCard
                 title={"World:"}
                 icon={worldIcon}
                 data={picker.world}
-                active={selectedFilters.item} // Use the selected value from local state
+                active={selectedFilters.item}
                 select={(el: string) => {
                   dispatch(
                     setSelectedFilters({
@@ -117,16 +119,25 @@ const FilterModal = ({ visible, onClose }: any) => {
                       item: el,
                     })
                   );
-                  logSelectedValue('Genre', el); // Log the selected genre
                 }}
               />
             </ScrollView>
-            <TouchableOpacity onPress={handleFilterUpdate}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
+              <MainButton>
+                <Ionicons name="caret-back-circle" size={24} color="white" />
+                <MainButton.Title>Go Back</MainButton.Title>
+              </MainButton>
+              <MainButton>
+                <MainButton.Title>Save</MainButton.Title>
+                <Ionicons name="cloud-upload" size={24} color="white" />
+              </MainButton>
+            </View>
+            {/* <TouchableOpacity onPress={handleFilterUpdate}>
               <Text>Apply Filters</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onClose}>
               <Text>Close Modal</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -150,12 +161,23 @@ const styles = StyleSheet.create({
   modalContent: {
     width: modalWidth,
     height: modalHeight,
-    backgroundColor: 'white',
+    backgroundColor: Colours.primary,
     borderRadius: 20,
     padding: 10,
   },
   scrollViewContent: {
     flexGrow: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingTop: 10,
+  },
+  headerText: {
+    left: 8,
+    fontSize: 25,
+    fontFamily: 'Courier Prime Bold',
   },
 });
 

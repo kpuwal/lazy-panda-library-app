@@ -10,10 +10,11 @@ import AlphabetList from '../components/library/AlphabetList';
 import { navigate } from '../redux/slices/navigationSlice';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '../styles/constants';
-import { headerContainer } from '../styles/styles';
+import { headerContainer, headerInfoContainer } from '../styles/styles';
+import Header from '../components/header/Header';
 
 const SPACING = 15;
-const ITEM_HEIGHT = 65;
+const ITEM_HEIGHT = 80;
 // const MAX_TITLE_LENGTH = 30;
 
 const Library = forwardRef((props, ref) => {
@@ -218,6 +219,10 @@ const Library = forwardRef((props, ref) => {
     <Text style={styles.sectionHeader}>{section.title}</Text>
   );
 
+  const toUpperCase = () => {
+    return selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1);
+  }
+
   // const sectionKeyExtractor = (section: any) => section.key.toString();
   const sectionKeyExtractor = (section: any) => {
     if (section && section.title) {
@@ -239,25 +244,19 @@ const Library = forwardRef((props, ref) => {
       <StatusBar style="dark" />
 
       <View style={styles.headerContainer}>
-        <View style={headerContainer}>
-          <Pressable
-            onPress={() => dispatch(navigate('home'))}
-            style={styles.backButton}>
-            <MaterialIcons name="arrow-back-ios" size={24} color="black" />
-          </Pressable>
-          <View style={styles.headerIcons}>
-            <Image 
-              source={require('../assets/library.png')}  
-              style={{ width: 30, height: 30 }}
-            />
-            <Text style={styles.infoLabel} numberOfLines={2} lineBreakMode="tail">Our Library</Text>
+        <Header>
+          <Header.GoBack goBackUrl="home" />
+          <View style={headerInfoContainer}>
+            <Header.Icon uri={require('../assets/books.gif')} />
+            <Header.Title>Our Library</Header.Title>
           </View>
-        </View>
+        </Header>
+
         <View style={styles.subheader}>
           <Pressable
             onPress={toggleModal}
             style={styles.subheaderFilter}>
-            <MaterialCommunityIcons name="filter-menu" size={28} color="black" />
+            <MaterialCommunityIcons name="filter-menu" size={28} color={Colours.secondary} />
             <Text style={styles.sortButtonText}>Filter</Text>
           </Pressable>
 
@@ -267,7 +266,7 @@ const Library = forwardRef((props, ref) => {
               <TouchableOpacity
                 onPress={handleSortByDefault}
                 style={[styles.sortButton, activeButton === 'default' ? styles.bgBlack : styles.bgWhite]}>
-                  <Text style={[activeButton === 'default' ? styles.white : styles.black, styles.sortButtonText]}>default</Text>
+                  <Text style={[activeButton === 'default' ? styles.white : styles.black, styles.sortButtonText]}>all</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleSort('title')}
@@ -282,13 +281,18 @@ const Library = forwardRef((props, ref) => {
             </View>
           </View>
         </View>
-        <View>
-          {/* <Text style={[styles.sortButtonText, {paddingTop: 10}]}>{library.length} items</Text> */}
+        <View style={styles.booksNumber}> 
+          <Text style={[styles.sortButtonText, {paddingTop: 10}]}>
+            {library.length} books
+          </Text>
         </View>
-        <View>{libraryIsFiltered ? (
-          <View style={[ styles.filterButton]}>
-            <Text style={[styles.sortButtonText, styles.black]}>{selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1)}: {selectedFilters.item}</Text>
-          </View>) : <View style={styles.filterButton} />}</View>
+        
+        {libraryIsFiltered ? (
+          <View style={[ styles.filterDisplay]}>
+            <Text style={[styles.sortButtonText, styles.black]}>
+              {toUpperCase()}: {selectedFilters.item}
+            </Text>
+          </View>) : <View style={styles.filterDisplay} />}
       </View>
 
       {showSectionList ? (
@@ -298,6 +302,7 @@ const Library = forwardRef((props, ref) => {
             keyExtractor={sectionKeyExtractor}
             renderItem={renderItem}
             renderSectionHeader={renderSectionHeader}
+            showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
           />
         ) : (
@@ -305,6 +310,7 @@ const Library = forwardRef((props, ref) => {
             data={library as BookType[]}
             keyExtractor={keyExtractor}
             contentContainerStyle={styles.flatList}
+            showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
             initialNumToRender={10}
             windowSize={10}
@@ -318,7 +324,7 @@ const Library = forwardRef((props, ref) => {
         )}
       <AlphabetList
         onLetterPress={scrollToSection}
-        floatStyles={{top: 75, right: 0}}
+        floatStyles={{top: 60, right: 0}}
         alphabet={sectionLetters}
         isActive={activeList}
       />
@@ -336,10 +342,10 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
     backgroundColor: Colours.primary,
-    paddingTop: 30,
+    // paddingTop: 30,
     paddingBottom: 10,
-    paddingHorizontal: 15,
-    height: 160,
+    // paddingHorizontal: 15,
+    height: 180,
     // backgroundColor: 'pink'
   },
   editContainer: {
@@ -375,27 +381,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily:  'Courier Prime',
   },
-  filterButton: {
-    paddingVertical: 2.5,
-    paddingHorizontal: 2.5,
-    marginTop: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    height: 20
-    // width: 160,
-  },
+  // filterButton: {
+  //   paddingVertical: 2.5,
+  //   paddingHorizontal: 2.5,
+  //   marginTop: 15,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   borderRadius: 5,
+  //   height: 20,
+
+  //   // width: 160,
+  // },
   white: {
     color: 'white'
   },
   bgWhite: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderColor: Colours.secondary,
+    borderWidth: .5
   },
   black: {
-    color: 'black'
+    color: Colours.secondary
   },
   bgBlack: {
-    backgroundColor: 'black'
+    backgroundColor: Colours.secondary
   },
   alphabetButton2: {
     paddingVertical: 5,
@@ -403,8 +412,8 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   separator: {
-    height: 1, // Adjust the height of the separator as needed
-    backgroundColor: 'gray', // Adjust the color of the separator as needed
+    height: .5,
+    backgroundColor: Colours.tertiary, // Adjust the color of the separator as needed
   },
   sectionHeader: {
     backgroundColor: 'lightgray',
@@ -417,6 +426,7 @@ const styles = StyleSheet.create({
   subheader: {
     flexDirection: 'row',
     height: 50,
+    marginHorizontal: 15,
   },
   subheaderFilter: {
     flex: 3,
@@ -426,10 +436,20 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderColor: '#d2d4d6',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   subheaderSort: {
     flex: 7
+  },
+  filterDisplay: {
+    alignItems: 'flex-start',
+    paddingHorizontal: 15,
+    // paddingTop: 15,
+    // backgroundColor: Colours.secondary,
+    // paddingTop: 10,
+  },
+  booksNumber: {
+    paddingHorizontal: 15,
   },
 
 

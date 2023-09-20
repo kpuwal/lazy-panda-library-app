@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Pressable, View, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import HeaderNew from '../../header/Header';
+import { headerInfoContainer } from '../../../styles/styles';
 
 type HeaderTypes = {
   handleClose: any,
@@ -10,19 +12,27 @@ type HeaderTypes = {
 
 const Header = ({handleClose, isDisabled}: HeaderTypes) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Pressable onPress={handleClose} style={styles.backButton}>
-          <MaterialIcons name="arrow-back-ios" size={24} color="black" />
-        </Pressable>
-        <View style={styles.headerIcons}>
-          <Image 
-            source={require('./../../../assets/book.png')}  
-            style={{ width: 30, height: 30 }}
-          />
-          <Text style={styles.infoLabel}>Book Details</Text>
+    // <View style={styles.container}>
+    //   <View style={styles.header}>
+    //     <Pressable onPress={handleClose} style={styles.backButton}>
+    //       <MaterialIcons name="arrow-back-ios" size={24} color="black" />
+    //     </Pressable>
+    //     <View style={styles.headerIcons}>
+    //       <Image 
+    //         source={require('./../../../assets/book.png')}  
+    //         style={{ width: 30, height: 30 }}
+    //       />
+    //       <Text style={styles.infoLabel}>Book Details</Text>
+    //     </View>
+    //   </View>
+    <View>
+      <HeaderNew>
+        <HeaderNew.GoBack goBackUrl="library" />
+        <View style={headerInfoContainer}>
+          <HeaderNew.Icon uri={require('./../../../assets/book.png')} />
+          <HeaderNew.Title>Book Data</HeaderNew.Title>
         </View>
-      </View>
+      </HeaderNew>
       <View style={styles.alertContainer}>
         {isDisabled && (
           <View style={styles.alertRow}>

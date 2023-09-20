@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Colours } from '../../../styles/constants';
 
 type SelectionCardTypes = {
   data: {label: string, value: string}[],
@@ -36,10 +37,10 @@ const Item = ({el, select, active}: ItemTypes) => {
 
   return (
     <TouchableOpacity
-      style={[styles.itemContainer, el === active ? styles.active : styles.reg]}
+      style={[styles.itemContainer, el === active ? styles.active : styles.inactive]}
       onPress={() => handleSelect(el)}
     >
-      <Text style={el === active ? styles.active : styles.reg}>{el}</Text>
+      <Text style={el === active ? styles.active : styles.inactive}>{el}</Text>
     </TouchableOpacity>
   )
 }
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 10,
     marginTop: 30,
-    borderTopColor: '#d0d0d0',
+    // borderTopColor: Colours.seco,
   },
   container: {
     flexDirection: 'row',
@@ -62,27 +63,32 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     borderWidth: .5,
-    borderColor: '#f9f9f9',
+    borderColor: Colours.primary,
     borderRadius: 5,
     padding: 5,
     margin: 3
   },
   active: {
-    color: '#FFFFFF',
-    backgroundColor: '#000000',
+    color: Colours.primary,
+    backgroundColor: Colours.secondary,
     fontFamily: 'Courier Prime',
     fontSize: 18
   },
-  reg: {
-    color: '#000000',
-    backgroundColor: '#FFFFFF',
+  inactive: {
+    color: Colours.secondary,
+    backgroundColor: Colours.quinary,
     fontFamily: 'Courier Prime',
-    fontSize: 18
+    fontSize: 18,
+    // borderWidth: .5,
+    // border: Colours.secondary,
+    // borderRadius: 5,
+    // padding: 3,
+
   },
   title: {
-    color: '#000000',
+    color: Colours.secondary,
     padding: 5,
-    fontFamily: 'Courier Prime',
+    fontFamily: 'Courier Prime Bold',
     fontWeight: 'bold',
     fontSize: 18,
   }
