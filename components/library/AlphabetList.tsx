@@ -31,6 +31,7 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
 
   useEffect(() => {
     if (isActive) {
+      // setIsOpen(false);
       if (isOpen) {
         // Animate the letters with a spring effect when the menu is opened
         Animated.spring(letterScale, {
@@ -80,8 +81,9 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
 
   return (
     <View style={[styles.buttonContainer, floatStyles]}>
-      <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)} disabled={!isActive}>
-        <Animated.View
+      
+      <Pressable onPress={() => setIsOpen(!isOpen)}>
+        <View
           style={[
             styles.button,
             { 
@@ -89,17 +91,17 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
             },
           ]}
         >
-          {isOpen ? (
-            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={20} color="white" />
-          ) : (
+          {isOpen ? 
+            <MaterialCommunityIcons name="sort-alphabetical-ascending" size={20} color={Colours.primary} />
+           : 
             <MaterialCommunityIcons
               name="sort-alphabetical-ascending"
               size={24}
-              color={isActive ? Colours.secondary : 'white'}
+              color={isActive ? Colours.secondary : Colours.primary}
             />
-          )}
-        </Animated.View>
-      </TouchableWithoutFeedback>
+          }
+        </View>
+      </Pressable>
       {isOpen && (
         <ScrollView style={styles.alphabetContainer} showsVerticalScrollIndicator={false}>
           {alphabet.map((letter) => (

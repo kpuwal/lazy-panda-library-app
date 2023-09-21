@@ -6,26 +6,20 @@ import { genreIcon, seriesIcon, worldIcon } from '../book/infoModules/Icons';
 import SelectionCard from '../book/infoModules/SelectionCard';
 import { filterLibrary, setSelectedFilters } from '../../redux/slices/bookSlice';
 import  Header from '../header/Header';
-import { headerInfoContainer } from '../../styles/styles';
+import { buttonBlue, buttonSml, headerInfoContainer } from '../../styles/styles';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours } from '../../styles/constants';
 import MainButton from '../button/MainButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const modalWidth = 300; // Adjust this to your desired fixed width
-const modalHeight = 400; // Adjust this to your desired fixed height
+const modalWidth = windowWidth * 0.90; // Adjust this to your desired fixed width
+const modalHeight = windowHeight * 0.75; // Adjust this to your desired fixed height
 
 const FilterModal = ({ visible, onClose }: any) => {
   const picker = useSelector((state: RootState) => state.pickers);
-  const { book } = useSelector((state: RootState) => state.book);
+  // const { book } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
-
-  // Use local state for selected filters
-  // const [selectedFilters, setSelectedFilters] = useState({
-  //   type: '',
-  //   item: ''
-  // });
 
   const { selectedFilters } = useSelector((state: RootState) => state.book);
 
@@ -122,22 +116,19 @@ const FilterModal = ({ visible, onClose }: any) => {
                 }}
               />
             </ScrollView>
-            <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10}}>
-              <MainButton>
-                <Ionicons name="caret-back-circle" size={24} color="white" />
-                <MainButton.Title>Go Back</MainButton.Title>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <MainButton action={onClose} style={buttonSml}>
+                <Ionicons name="ios-close" size={20} color="white" />
+                <MainButton.Title>
+                  Close
+                </MainButton.Title>
               </MainButton>
-              <MainButton>
-                <MainButton.Title>Save</MainButton.Title>
-                <Ionicons name="cloud-upload" size={24} color="white" />
+              <MainButton action={handleFilterUpdate}>
+                <MainButton.Title>
+                  Apply Filter
+                </MainButton.Title>
               </MainButton>
             </View>
-            {/* <TouchableOpacity onPress={handleFilterUpdate}>
-              <Text>Apply Filters</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onClose}>
-              <Text>Close Modal</Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -162,7 +153,7 @@ const styles = StyleSheet.create({
     width: modalWidth,
     height: modalHeight,
     backgroundColor: Colours.primary,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 10,
   },
   scrollViewContent: {

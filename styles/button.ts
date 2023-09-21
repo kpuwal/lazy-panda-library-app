@@ -3,23 +3,26 @@ import { Colours } from './constants';
 
 const buttonStyle = StyleSheet.create({
   container: {
-    width: '40%',
-    // height: '10%',
+    // width: '40%',
+    // height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    // paddingHorizontal: 10,
-    paddingVertical: 3,
-    // marginVertical: 5,
-    borderRadius: 10,
-    backgroundColor: Colours.secondary,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    marginVertical: 10,
+    borderRadius: 5,
+    // backgroundColor: Colours.secondary,
+
   },
   text: {
-    left: 8,
-    right: 8,
-    fontSize: 16,
+    paddingHorizontal: 10,
+    fontSize: 18,
     fontFamily: 'Courier Prime',
+    // color:  '#33CCCC',
+
     color: Colours.primary,
+    textAlign: 'center',
   },
   // goBackButton: {
   //   flex: 1, // Take up 10% of the available space

@@ -12,9 +12,11 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '../styles/constants';
 import { headerContainer, headerInfoContainer } from '../styles/styles';
 import Header from '../components/header/Header';
+import { v4 as uuidv4 } from 'uuid';
 
-const SPACING = 15;
+const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
+const HEADER_HEIGHT = 150;
 // const MAX_TITLE_LENGTH = 30;
 
 const Library = forwardRef((props, ref) => {
@@ -33,10 +35,17 @@ const Library = forwardRef((props, ref) => {
   const [showSectionList, setShowSectionList] = useState(false);
   const [sectionLetters, setSectionLetters] = useState<string[]>([]);
   const [scrollToTop, setScrollToTop] = useState(false);
+
   const sectionListRef = useRef<SectionList | null>(null);
+
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.book);
   const [activeButton, setActiveButton] = useState('default');
   const [activeList, setActiveList] = useState(false);
+  const [currentScrollOffset, setCurrentScrollOffset] = useState(0);
+  
+  const handleScroll = (event: { nativeEvent: { contentOffset: { y: React.SetStateAction<number>; }; }; }) => {
+    setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
+  };
 
   useImperativeHandle(ref, () => ({
     scrollToLocation: (params: any) => {
@@ -45,6 +54,11 @@ const Library = forwardRef((props, ref) => {
       }
     },
   }));
+
+  useEffect(() => {
+    // You can now access the current scroll offset in currentScrollOffset state variable.
+    console.log('Current Scroll Offset:', currentScrollOffset);
+  }, [currentScrollOffset]);
 
   // Effect to scroll to the top when sorting changes
   useEffect(() => {
@@ -116,7 +130,7 @@ const Library = forwardRef((props, ref) => {
         sortSectionLetters.push(currentLetter);
       }
   
-      const uniqueKey = keyCounter++;
+      const uniqueKey = uuidv4();
       currentSection.data.push({ ...item, key: uniqueKey });
     });
     setShowSectionList(true);
@@ -180,33 +194,37 @@ const Library = forwardRef((props, ref) => {
     dispatch(sortLibrary(sections));
     setScrollToTop(true);
   };
-  
-  const scrollToLetter = (letter: string) => {
+
+  // const scrollToSection = (letter: string) => {
+  //   const sectionIndex = sectionLetters.indexOf(letter);
+  //   if (sectionIndex !== -1 && sectionListRef.current) {
+  //     sectionListRef.current.scrollToLocation({
+  //       sectionIndex,
+  //       itemIndex: 0, // Scroll to the first item in the section
+  //       animated: true,
+  //     });
+  //   }
+  // };
+
+  const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
     const sectionIndex = sortedLibrary.findIndex((section) => section.title === letter);
-
+  
     if (sectionIndex !== -1 && sectionListRef.current) {
+      const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
       // Scroll to the section with the specified letter
       sectionListRef.current.scrollToLocation({
         sectionIndex,
         itemIndex: 0,
-        viewOffset: 0,
+        viewOffset,
         viewPosition: 0,
         animated: true,
       });
+      console.log('Requested viewOffset:', viewOffset);
     }
+    
   };
-
-  const scrollToSection = (letter: string) => {
-    const sectionIndex = sectionLetters.indexOf(letter);
-    if (sectionIndex !== -1 && sectionListRef.current) {
-      sectionListRef.current.scrollToLocation({
-        sectionIndex,
-        itemIndex: 0, // Scroll to the first item in the section
-        animated: true,
-      });
-    }
-  };
+  
 
   const handleSortByDefault = () => {
     setActiveButton('default');
@@ -240,7 +258,7 @@ const Library = forwardRef((props, ref) => {
   }
 // 71B460
   return (
-    <View style={{flex: 1, backgroundColor: Colours.quaternary}}>
+    <View style={{flex: 1, backgroundColor: Colours.secondary}}>
       <StatusBar style="dark" />
 
       <View style={styles.headerContainer}>
@@ -255,7 +273,13 @@ const Library = forwardRef((props, ref) => {
         <View style={styles.subheader}>
           <Pressable
             onPress={toggleModal}
-            style={styles.subheaderFilter}>
+            style={({pressed}) => [
+              styles.subheaderFilter,
+              {
+                backgroundColor: pressed ? Colours.action : Colours.primary
+              }
+            ]}
+          >
             <MaterialCommunityIcons name="filter-menu" size={28} color={Colours.secondary} />
             <Text style={styles.sortButtonText}>Filter</Text>
           </Pressable>
@@ -304,6 +328,7 @@ const Library = forwardRef((props, ref) => {
             renderSectionHeader={renderSectionHeader}
             showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
+            onScroll={handleScroll}
           />
         ) : (
           <FlatList
@@ -434,7 +459,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     paddingRight: 10,
     marginRight: 10,
-    borderColor: '#d2d4d6',
+    borderColor: Colours.tertiary,
     alignItems: 'center',
     justifyContent: 'center'
   },

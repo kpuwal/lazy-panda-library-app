@@ -26,7 +26,7 @@ export type BookType = {
   lastReadByKasia: string,
   isFound?: boolean,
   isLoaded?: boolean,
-  key?: number
+  key?: string
 }
 
 type SelectedFilters = {
@@ -52,7 +52,7 @@ const initialState = {
     lastReadByKasia: '',
     isFound: false,
     isLoaded: false,
-    key: 0
+    key: ''
   } as BookType,
   library: [] as  BookType[],
   bookTitleForRowUpdate: '' as string,

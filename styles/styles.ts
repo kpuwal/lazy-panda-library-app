@@ -7,6 +7,23 @@ export const HeaderStyle = {
   backgroundColour: 'pink'
 };
 
+export const buttonSml = {
+  width: '40%',
+}
+
+export const buttonMid = {
+  width: '90%',
+}
+
+export const buttonLrg = {
+  width: '50%'
+}
+
+export const buttonBlue = {
+  borderColor: '#fff',
+  borderWidth: 2
+}
+
 const headerStyle = StyleSheet.create({
   container: {
     marginHorizontal: 15,
@@ -20,6 +37,11 @@ const headerStyle = StyleSheet.create({
     left: 8,
     fontSize: 28,
     fontFamily: 'Courier Prime',
+  },
+  goBackContainer: {
+    width: 30, 
+    height: 30, 
+    justifyContent: 'center'
   },
   goBackButton: {
     flex: 1, // Take up 10% of the available space
@@ -37,5 +59,6 @@ const headerStyle = StyleSheet.create({
 
 export const headerContainer = headerStyle.container;
 export const headerText = headerStyle.text;
+export const headerGoBackContainer = headerStyle.goBackContainer;
 export const headerGoBackButton = headerStyle.goBackButton;
 export const headerInfoContainer = headerStyle.headerInfo;

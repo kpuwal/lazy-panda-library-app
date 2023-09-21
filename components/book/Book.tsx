@@ -13,10 +13,11 @@ import { navigate } from '../../redux/slices/navigationSlice';
 import NumbersCard from './infoModules/NumbersCard';
 import SelectionCard from './infoModules/SelectionCard';
 import DateCard from './infoModules/DateCard';
-import BottomMenu from "./infoModules/BottomMenu";
 import Header from "../header/Header";
-import { headerContainer, headerInfoContainer } from "../../styles/styles";
+import { buttonMid, headerContainer, headerInfoContainer } from "../../styles/styles";
 import { Colours } from "../../styles/constants";
+import MainButton from "../button/MainButton";
+import { Ionicons } from "@expo/vector-icons";
 
 
 const Book = () => {
@@ -139,11 +140,16 @@ const Book = () => {
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      <BottomMenu
-          disabled={app.disabled}
-          handleScan={() => handleDismiss()}
-          handleSave={() => handleSaveBook()}
-        />
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingVertical: 5
+      }}>
+          <MainButton action={handleSaveBook} style={buttonMid}>
+            <MainButton.Title>Save To Spreadsheet</MainButton.Title>
+            <Ionicons name="cloud-upload" size={22} color={Colours.primary} />
+          </MainButton>
+        </View>
     </View>
   )
 }

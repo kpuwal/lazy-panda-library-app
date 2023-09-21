@@ -32,14 +32,33 @@ const BookItem = React.memo(({ item }: any) => {
   };
 
   return (
-    <TouchableOpacity onPress={handleBookPress}>
+    <Pressable
+      onPress={handleBookPress}
+      style={({pressed}) => [
+        {
+          backgroundColor: pressed ? Colours.action : Colours.primary
+        }
+      ]}
+    >
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text style={styles.textTitle}>{item.title}</Text>
-          <Text style={styles.textAuthor}>{item.author}</Text>
+          <Text
+            numberOfLines={2}
+            lineBreakMode="tail" 
+            style={styles.textTitle}
+          >
+              {item.title}
+          </Text>
+          <Text
+            style={styles.textAuthor}
+            numberOfLines={1}
+            lineBreakMode="tail" 
+          >
+            {item.author}
+          </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 });
 
@@ -62,7 +81,7 @@ const styles = StyleSheet.create({
     // },
     // shadowOpacity: .1,
     // shadowRadius: 10,
-    backgroundColor: Colours.primary
+    // backgroundColor: Colours.primary
   },
   textContainer: {
     // padding: SPACING,
