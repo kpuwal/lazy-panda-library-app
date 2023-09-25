@@ -25,7 +25,7 @@ export type BookType = {
   lastReadByJowie: string,
   lastReadByKasia: string,
   isFound?: boolean,
-  isLoaded?: boolean,
+  // isLoaded: boolean,
   key?: string
 }
 
@@ -54,47 +54,40 @@ const initialState = {
     isLoaded: false,
     key: ''
   } as BookType,
-  library: [] as  BookType[],
   bookTitleForRowUpdate: '' as string,
-  sortedLibrary: [] as LibrarySectionType[],
-  libraryIsLoaded: false as boolean,
-  libraryIsFiltered: false as boolean,
   bookError: '' as string,
-  selectedFilters: {
-    type: '',
-    item: '',
-  } as SelectedFilters,
+  bookIsLoaded: false as boolean
 };
 
-export const readLibrary = createAsyncThunk(
-  '/api/library',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${URL}/api/library`, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      });
-      return response.data;
-    } catch(err) {
-      return rejectWithValue(err)
-    }
-  }
-)
+// export const readLibrary = createAsyncThunk(
+//   '/api/library',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get(`${URL}/api/library`, {
+//         headers: { Authorization: `Bearer ${TOKEN}` },
+//       });
+//       return response.data;
+//     } catch(err) {
+//       return rejectWithValue(err)
+//     }
+//   }
+// )
 
-export const filterLibrary = createAsyncThunk(
-  '/api/filter-library',
-  async (filter: {type: string, item: string}, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${URL}/api/filter-library`,
-      { filter }, 
-      {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      });
-      return response.data;
-    } catch(err) {
-      return rejectWithValue(err)
-    }
-  }
-)
+// export const filterLibrary = createAsyncThunk(
+//   '/api/filter-library',
+//   async (filter: {type: string, item: string}, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.post(`${URL}/api/filter-library`,
+//       { filter }, 
+//       {
+//         headers: { Authorization: `Bearer ${TOKEN}` },
+//       });
+//       return response.data;
+//     } catch(err) {
+//       return rejectWithValue(err)
+//     }
+//   }
+// )
 
 export const fetchBook = createAsyncThunk(
   '/api/book',
@@ -155,33 +148,33 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: BookType,
   }
 )
 
-export const updateLibrary = createAsyncThunk('/api/update-library', async ({ book, bookTitleForRowUpdate }: { book: BookType; bookTitleForRowUpdate: string }, { rejectWithValue }) => {
-  const config = {
-      "title": book.title,
-      "author": book.author,
-      "language": book.language,
-      "publishedDate": book.publishedDate,
-      "pageCount": book.pageCount,
-      "genre": book.genre,
-      "series": book.series,
-      "world": book.world,
-      "readBy": book.readBy,
-      "boughtGivenOn": book.boughtGivenOn,
-      "givenBy": book.givenBy,
-      "lastReadByJowie": book.lastReadByJowie,
-      "lastReadByKasia": book.lastReadByKasia,
-      "bookTitleForRowUpdate": bookTitleForRowUpdate
-    }
+// export const updateLibrary = createAsyncThunk('/api/update-library', async ({ book, bookTitleForRowUpdate }: { book: BookType; bookTitleForRowUpdate: string }, { rejectWithValue }) => {
+//   const config = {
+//       "title": book.title,
+//       "author": book.author,
+//       "language": book.language,
+//       "publishedDate": book.publishedDate,
+//       "pageCount": book.pageCount,
+//       "genre": book.genre,
+//       "series": book.series,
+//       "world": book.world,
+//       "readBy": book.readBy,
+//       "boughtGivenOn": book.boughtGivenOn,
+//       "givenBy": book.givenBy,
+//       "lastReadByJowie": book.lastReadByJowie,
+//       "lastReadByKasia": book.lastReadByKasia,
+//       "bookTitleForRowUpdate": bookTitleForRowUpdate
+//     }
 
-  try {
-    await axios.post(`${URL}/api/update-library`, config, {
-      headers: { Authorization: `Bearer ${TOKEN}`}
-    })
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-}
-)
+//   try {
+//     await axios.post(`${URL}/api/update-library`, config, {
+//       headers: { Authorization: `Bearer ${TOKEN}`}
+//     })
+//   } catch (err) {
+//     return rejectWithValue(err);
+//   }
+// }
+// )
 
 
 const bookSlice = createSlice({
@@ -199,6 +192,7 @@ const bookSlice = createSlice({
     },
     displayBookData: (state, action) => {
       const bookData = action.payload;
+      // state.bookTitleForRowUpdate = state.book.title;
       state.book = {
         ...state.book,
         ...bookData,
@@ -208,12 +202,12 @@ const bookSlice = createSlice({
     cleanBook: () => {
       return initialState;
     },
-    sortLibrary: (state, action) => {
-      state.sortedLibrary = action.payload;
-    },
-    setSelectedFilters: (state, action) => {
-      state.selectedFilters = action.payload;
-    },
+    // sortLibrary: (state, action) => {
+    //   state.sortedLibrary = action.payload;
+    // },
+    // setSelectedFilters: (state, action) => {
+    //   state.selectedFilters = action.payload;
+    // },
     copyAndStoreTitle: (state, action) => {
       state.bookTitleForRowUpdate = action.payload;
     }
@@ -229,7 +223,7 @@ const bookSlice = createSlice({
         state.book.pageCount = pageCount || '';
         state.book.publishedDate = publishedDate || '';
         state.book.language = (language || '').toUpperCase();
-        state.book.isLoaded = true;
+        state.bookIsLoaded = true;
       } else {
         state.bookError = "Book has not been found in the database";
       }
@@ -237,24 +231,24 @@ const bookSlice = createSlice({
     .addCase(fetchBook.rejected, (state, action) => {
       state.bookError = "Server is not connected";
     })
-    .addCase(filterLibrary.fulfilled, (state, action) => {
-      state.library = action.payload;
-      state.libraryIsLoaded = true;
-      state.libraryIsFiltered = true;
-    })
+    // .addCase(filterLibrary.fulfilled, (state, action) => {
+    //   state.library = action.payload;
+    //   state.libraryIsLoaded = true;
+    //   state.libraryIsFiltered = true;
+    // })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
     })
-    .addCase(updateLibrary.rejected, (state, action) => {
-      state.bookError = "Error updating the book";
-    })
-    .addCase(readLibrary.fulfilled, (state, action) => {
-      state.library = action.payload;
-      state.libraryIsFiltered = false;
-      state.libraryIsLoaded = true;
-    })
+    // .addCase(updateLibrary.rejected, (state, action) => {
+    //   state.bookError = "Error updating the book";
+    // })
+    // .addCase(readLibrary.fulfilled, (state, action) => {
+    //   state.library = action.payload;
+    //   state.libraryIsFiltered = false;
+    //   state.libraryIsLoaded = true;
+    // })
   },
 })
 
-export const { updateBook, cleanBook, displayBookData, sortLibrary, setSelectedFilters, copyAndStoreTitle } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle } = bookSlice.actions;
 export default bookSlice.reducer;

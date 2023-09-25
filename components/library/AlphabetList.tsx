@@ -2,19 +2,21 @@ import { View, Text, Animated, ActivityIndicator, StyleSheet, ScrollView, Toucha
 import { useEffect, useRef, useState } from 'react';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Colours } from '../../styles/constants';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const { height } = Dimensions.get('window');
 
 interface AlphabetListProps {
   onLetterPress: (letter: string) => void;
   floatStyles: any,
-  alphabet: string[],
   isActive?: boolean
 }
 
 // const ALPHABET = '129ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles, alphabet, isActive }) => {
+const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles, isActive }) => {
+  const { alphabet } = useSelector((state: RootState) => state.library);
   const rotateValue = useRef(new Animated.Value(0)).current;
   const [isOpen, setIsOpen] = useState(false);
   const letterScale = useRef(new Animated.Value(0.5)).current;
@@ -82,7 +84,7 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
   return (
     <View style={[styles.buttonContainer, floatStyles]}>
       
-      <Pressable onPress={() => setIsOpen(!isOpen)}>
+      {isActive && <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View
           style={[
             styles.button,
@@ -101,8 +103,8 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
             />
           }
         </View>
-      </Pressable>
-      {isOpen && (
+      </Pressable>}
+      {isOpen && isActive && (
         <ScrollView style={styles.alphabetContainer} showsVerticalScrollIndicator={false}>
           {alphabet.map((letter) => (
             <TouchableOpacity onPress={() => onLetterPress(letter)} key={letter}>

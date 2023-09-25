@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Text, Animated } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux'; 
 import { RootState, useAppDispatch } from '../redux/store';
 import { setCameraPermission } from '../redux/slices/appSlice';
 import { navigate } from '../redux/slices/navigationSlice';
 import ButtonTmp from '../components/main/ButtonTmp';
 import { fetchPicker } from '../redux/slices/pickerSlice';
-import { readLibrary } from '../redux/slices/bookSlice';
+import { readLibrary } from '../redux/slices/librarySlice';
 
 
 const Home = () => {
@@ -46,15 +47,16 @@ const Home = () => {
     <Animated.View 
       style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}
     >
+      <StatusBar style="light" />
       <ImageBackground
-        source={require('./../assets/image_bg.png')}
+        source={require('./../assets/library2.jpeg')}
         style={styles.image}
       >
         <View style={styles.buttonContainer}>
-          <Image
+          {/* <Image
             source={imageHi}
             style={{ width: 150, height: 150, marginBottom: '10%' }}
-          />
+          /> */}
           <ButtonTmp 
             onPress={() => dispatch(navigate('scanBook'))}
             title="Scan a book"
@@ -92,7 +94,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: '80%'
   },
   textContainer: {
     position: 'absolute',

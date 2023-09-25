@@ -1,7 +1,7 @@
 import React from 'react';
 import { RootState, useAppDispatch } from '../../redux/store';
 import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
-import { displayBookData, sortLibrary } from '../../redux/slices/bookSlice';
+import { displayBookData } from '../../redux/slices/bookSlice';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Pressable } from 'react-native';
 import { savingBookIsDisabled } from '../../redux/slices/appSlice';
 import { Colours } from '../../styles/constants';

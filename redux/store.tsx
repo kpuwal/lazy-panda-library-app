@@ -5,6 +5,7 @@ import bookReducer from './slices/bookSlice';
 import pickerReducer from './slices/pickerSlice';
 import appReducer from './slices/appSlice';
 import navigationSlice from './slices/navigationSlice';
+import librarySlice from './slices/librarySlice';
 
 const customSerializableCheck = {
   isSerializable: (value: any) => {
@@ -17,6 +18,7 @@ const customSerializableCheck = {
 export const store = configureStore({
   reducer: {
     book: bookReducer,
+    library: librarySlice,
     pickers: pickerReducer,
     app: appReducer,
     navigate: navigationSlice

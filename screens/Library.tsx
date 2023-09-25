@@ -3,34 +3,26 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, 
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
-import { sortLibrary, BookType, LibrarySectionType, readLibrary } from '../redux/slices/bookSlice';
+import { BookType } from '../redux/slices/bookSlice';
+import { librarySectionType, readLibrary, sortLibraryByAuthor, sortLibraryByTitle } from '../redux/slices/librarySlice';
 import FilterModal from '../components/library/FilterModal';
 import BookItem from '../components/library/BookItem';
 import AlphabetList from '../components/library/AlphabetList';
-import { navigate } from '../redux/slices/navigationSlice';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '../styles/constants';
 import { headerContainer, headerInfoContainer } from '../styles/styles';
 import Header from '../components/header/Header';
-import { v4 as uuidv4 } from 'uuid';
 
 const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
 const HEADER_HEIGHT = 150;
-// const MAX_TITLE_LENGTH = 30;
 
 const Library = forwardRef((props, ref) => {
-  let keyCounter = 0;
-  const { height } = Dimensions.get('window');
-  const [animation, setAnimation] = useState(new Animated.Value(0));
-  const { library, libraryIsLoaded, sortedLibrary } = useSelector((state: RootState) => state.book);
-  // const [truncatedTitles, setTruncatedTitles] = useState<string[]>([]);
   const dispatch = useAppDispatch();
-  const flatListRef = useRef<FlatList | null>(null);
-  const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
-  const renderItem = useCallback(({ item, index }: any) => (
-    <BookItem item={item} />
-  ), []);
+
+  const { height } = Dimensions.get('window');
+  const { library, sortedLibrary, libraryIsLoaded, booksNumber } = useSelector((state: RootState) => state.library);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [showSectionList, setShowSectionList] = useState(false);
   const [sectionLetters, setSectionLetters] = useState<string[]>([]);
@@ -38,10 +30,18 @@ const Library = forwardRef((props, ref) => {
 
   const sectionListRef = useRef<SectionList | null>(null);
 
-  const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.book);
+  const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.library);
   const [activeButton, setActiveButton] = useState('default');
   const [activeList, setActiveList] = useState(false);
   const [currentScrollOffset, setCurrentScrollOffset] = useState(0);
+
+  // const [defaultLibrary, setDefaultLibrary] = useState<BookType[] | librarySectionType[]>(library);
+  // const [booksNumber, setBooksNumber] = useState(library.length);
+
+  const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
+  const renderItem = useCallback(({ item, index }: any) => (
+    <BookItem item={item} />
+  ), []);
   
   const handleScroll = (event: { nativeEvent: { contentOffset: { y: React.SetStateAction<number>; }; }; }) => {
     setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
@@ -55,24 +55,24 @@ const Library = forwardRef((props, ref) => {
     },
   }));
 
-  useEffect(() => {
-    // You can now access the current scroll offset in currentScrollOffset state variable.
-    console.log('Current Scroll Offset:', currentScrollOffset);
-  }, [currentScrollOffset]);
+  // useEffect(() => {
+  //   // You can now access the current scroll offset in currentScrollOffset state variable.
+  //   console.log('Current Scroll Offset:', currentScrollOffset);
+  // }, [currentScrollOffset]);
 
   // Effect to scroll to the top when sorting changes
-  useEffect(() => {
-    if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
-      sectionListRef.current?.scrollToLocation({
-        sectionIndex: 0,
-        itemIndex: 0,
-        viewOffset: 0,
-        viewPosition: 0,
-        animated: true,
-      });
-      setScrollToTop(false);
-    }
-  }, [scrollToTop, sortedLibrary]);
+  // useEffect(() => {
+  //   if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
+  //     sectionListRef.current?.scrollToLocation({
+  //       sectionIndex: 0,
+  //       itemIndex: 0,
+  //       viewOffset: 0,
+  //       viewPosition: 0,
+  //       animated: true,
+  //     });
+  //     setScrollToTop(false);
+  //   }
+  // }, [scrollToTop, sortedLibrary]);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -92,123 +92,43 @@ const Library = forwardRef((props, ref) => {
   //   }
   // };
 
-  // FIX TYPES
-  const sortByField = (array: any, fieldName: string) => {
-    return [...array].sort((a, b) => {
-      const fieldA = a[fieldName].toLowerCase();
-      const fieldB = b[fieldName].toLowerCase();
-
-      if (fieldA < fieldB) {
-        return -1;
-      } else if (fieldA > fieldB) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-  };
-
   const ItemSeparator = () => {
     return <View style={styles.separator} />;
-  };
-
-  const handleSort = (field: string) => {
-    setActiveButton('title');
-    setActiveList(true);
-    const sortedLibrary = sortByField(library, field);
-    const sortSectionLetters: string[] = [];
-    const sections: LibrarySectionType[] = [];
-    let currentLetter = '';
-    let currentSection: LibrarySectionType = { title: '', data: [] };
-  
-    sortedLibrary.forEach((item: BookType) => {
-      const firstLetter = field === 'title' ? item.title.charAt(0).toUpperCase() : item.author.charAt(0).toUpperCase();
-      if (firstLetter !== currentLetter) {
-        currentLetter = firstLetter;
-        currentSection = { title: currentLetter, data: [] };
-        sections.push(currentSection);
-        sortSectionLetters.push(currentLetter);
-      }
-  
-      const uniqueKey = uuidv4();
-      currentSection.data.push({ ...item, key: uniqueKey });
-    });
-    setShowSectionList(true);
-    setSectionLetters(sortSectionLetters);
-    dispatch(sortLibrary(sections));
-    setScrollToTop(true);
   };
 
   const handleSortByAuthor = () => {
     setActiveButton('author');
     setActiveList(true);
-    let sortedLibrary = sortByField(library, 'author');
-  
-    const sections: LibrarySectionType[] = [];
-    const sortSectionLetters: string[] = [];
-  
-    sortedLibrary.forEach((item: BookType) => {
-      // Split the author's list into individual authors
-      const authorsList = item.author.split(',').map((author) => author.trim());
-      // Extract the first author's surname
-      const firstAuthor = authorsList[0].split(' ');
-      let surname = '';
-  
-      for (let i = 0; i < firstAuthor.length; i++) {
-        if (firstAuthor[i].startsWith('(')) {
-          // If a word starts with '(', use the previous word as the surname
-          if (i > 0) {
-            surname = firstAuthor[i - 1];
-          }
-          break;
-        }
-      }
-  
-      // If no word before '(', use the default behavior
-      if (!surname) {
-        surname = firstAuthor[firstAuthor.length - 1];
-      }
-  
-      const firstLetter = surname.charAt(0).toUpperCase();
-  
-      // Find the section corresponding to the first letter or create a new one
-      const sectionIndex = sections.findIndex((section) => section.title === firstLetter);
-      if (sectionIndex === -1) {
-        sections.push({ title: firstLetter, data: [item] });
-        sortSectionLetters.push(firstLetter);
-
-      } else {
-        sections[sectionIndex].data.push(item);
-      }
-    });
-
-  
     setShowSectionList(true);
-  
-    // Sort sections alphabetically based on the section title
-    sections.sort((a, b) => a.title.localeCompare(b.title));
-    sortSectionLetters.sort((a, b) => a.localeCompare(b));
-    // console.log('sections ', sections)
-    setSectionLetters(sortSectionLetters);
-  
-    dispatch(sortLibrary(sections));
+    dispatch(sortLibraryByAuthor(library));
     setScrollToTop(true);
   };
 
-  // const scrollToSection = (letter: string) => {
-  //   const sectionIndex = sectionLetters.indexOf(letter);
-  //   if (sectionIndex !== -1 && sectionListRef.current) {
-  //     sectionListRef.current.scrollToLocation({
-  //       sectionIndex,
-  //       itemIndex: 0, // Scroll to the first item in the section
-  //       animated: true,
-  //     });
-  //   }
-  // };
+  const handleSortByTitle = () => {
+    setActiveButton('title');
+    setActiveList(true);
+    setShowSectionList(true);
+    dispatch(sortLibraryByTitle(library));
+    setScrollToTop(true);
+  }
+
+  const handleSortByDefault = () => {
+    setActiveButton('default');
+    setActiveList(false);
+    setShowSectionList(false);
+  };
+
+  const handleCloseModal = () => {
+    setShowSectionList(false);
+    setActiveButton('default');
+    setActiveList(false);
+    setModalVisible(false);
+
+  }
 
   const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
-    const sectionIndex = sortedLibrary.findIndex((section) => section.title === letter);
+    const sectionIndex = sortedLibrary.findIndex((section: any) => section.title === letter);
   
     if (sectionIndex !== -1 && sectionListRef.current) {
       const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
@@ -224,14 +144,6 @@ const Library = forwardRef((props, ref) => {
     }
     
   };
-  
-
-  const handleSortByDefault = () => {
-    setActiveButton('default');
-    setActiveList(false);
-    setShowSectionList(false);
-    dispatch(readLibrary());
-  };
 
   const renderSectionHeader = ({ section }: any) => (
     <Text style={styles.sectionHeader}>{section.title}</Text>
@@ -246,9 +158,9 @@ const Library = forwardRef((props, ref) => {
     if (section && section.title) {
       return section.title.toString(); // Convert title to string if it's not undefined
     }
-    // Handle empty or undefined titles by returning a default value (e.g., 'Unknown')
     return 'Unknown';
   };
+
   if (!libraryIsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -256,7 +168,7 @@ const Library = forwardRef((props, ref) => {
       </View>
     );
   }
-// 71B460
+
   return (
     <View style={{flex: 1, backgroundColor: Colours.secondary}}>
       <StatusBar style="dark" />
@@ -280,8 +192,19 @@ const Library = forwardRef((props, ref) => {
               }
             ]}
           >
-            <MaterialCommunityIcons name="filter-menu" size={28} color={Colours.secondary} />
-            <Text style={styles.sortButtonText}>Filter</Text>
+              <MaterialCommunityIcons
+                name="filter-menu"
+                size={28} 
+                color={Colours.secondary}
+              />
+              <Text style={[
+              styles.sortButtonText, 
+              {
+                color: Colours.secondary
+              }]}>
+                Filter
+              </Text>
+              
           </Pressable>
 
           <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
@@ -293,7 +216,7 @@ const Library = forwardRef((props, ref) => {
                   <Text style={[activeButton === 'default' ? styles.white : styles.black, styles.sortButtonText]}>all</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleSort('title')}
+                onPress={() => handleSortByTitle()}
                 style={[styles.sortButton, activeButton === 'title' ? styles.bgBlack : styles.bgWhite]}>
                 <Text style={[activeButton === 'title' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
               </TouchableOpacity>
@@ -307,7 +230,7 @@ const Library = forwardRef((props, ref) => {
         </View>
         <View style={styles.booksNumber}> 
           <Text style={[styles.sortButtonText, {paddingTop: 10}]}>
-            {library.length} books
+            {booksNumber} books
           </Text>
         </View>
         
@@ -322,8 +245,8 @@ const Library = forwardRef((props, ref) => {
       {showSectionList ? (
           <SectionList
             ref={sectionListRef}
-            sections={sortedLibrary as unknown as LibrarySectionType[]}
-            keyExtractor={sectionKeyExtractor}
+            sections={sortedLibrary as unknown as librarySectionType[]}
+            // keyExtractor={sectionKeyExtractor}
             renderItem={renderItem}
             renderSectionHeader={renderSectionHeader}
             showsVerticalScrollIndicator={false}
@@ -350,12 +273,11 @@ const Library = forwardRef((props, ref) => {
       <AlphabetList
         onLetterPress={scrollToSection}
         floatStyles={{top: 60, right: 0}}
-        alphabet={sectionLetters}
         isActive={activeList}
       />
       <FilterModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={handleCloseModal}
       />
     </View>
   );

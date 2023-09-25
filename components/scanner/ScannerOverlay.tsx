@@ -11,8 +11,7 @@ import { StatusBar } from 'expo-status-bar';
 
 const ScannerOverlay = () => {
   const scanned = useSelector((state: RootState) => state.app.scanned);
-  const bookIsLoaded = useSelector((state: RootState) => state.book.isLoaded);
-  const bookError = useSelector((state: RootState) => state.book.bookError);
+  const { bookIsLoaded, bookError } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
