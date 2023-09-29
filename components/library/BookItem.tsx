@@ -1,39 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RootState, useAppDispatch } from '../../redux/store';
 import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
 import { displayBookData } from '../../redux/slices/bookSlice';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { savingBookIsDisabled } from '../../redux/slices/appSlice';
 import { Colours } from '../../styles/constants';
+import { useSelector } from 'react-redux';
 const SPACING = 15;
 
 const BookItem = React.memo(({ item }: any) => {
   const dispatch = useAppDispatch();
-  const MAX_TITLE_LENGTH = 40;
+  const { bookIsLoaded } = useSelector((state: RootState) => state.book);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  // const titleLength = item.title.length;
-  // let titleFontSize = 22; 
+  const handlePressIn = () => {
+    loadBook();
+  };
 
-  // if (titleLength > 40) {
-  //   titleFontSize = 18;
-  // } else if (titleLength > 10) {
-  //   titleFontSize = 20;
-  // }
+  // useEffect(() => {console.log('render', bookIsLoaded)}, [])
 
-  const truncatedTitle = item.title.length > MAX_TITLE_LENGTH
-    ? item.title.substring(0, MAX_TITLE_LENGTH - 3) + ' ...'
-    : item.title;
+  // const handlePressOut = () => {
+  //   if (!loading) {
+  //     // Only trigger navigation if not loading
+  //     dispatch(setNavigationSource('Library'));
+  //     dispatch(displayBookData(item));
+  //     dispatch(savingBookIsDisabled(false));
+  //     dispatch(navigate('bookInfo'));
+  //   }
+  // };
 
-  const handleBookPress = () => {
-    dispatch(setNavigationSource('Library'));
+  useEffect(() => {
+    if (bookIsLoaded) {
+      dispatch(navigate('bookInfo'));
+    }
+  }, [bookIsLoaded]);
+
+  const loadBook = () => {
+    setLoading(true);
     dispatch(displayBookData(item));
     dispatch(savingBookIsDisabled(false));
-    dispatch(navigate('bookInfo'));
+    dispatch(setNavigationSource('Library'));
+
+    // Simulate loading progress with a timer (replace with your actual loading logic)
+    const timer = setInterval(() => {
+      setProgress((prevProgress) => {
+        const newProgress = prevProgress + 0.05; // Increment progress by 1%
+        if (newProgress >= 1) {
+          clearInterval(timer);
+          setLoading(false);
+
+          // dispatch(setBookIsLoaded(false)); // Set loading to false when loading is complete
+          // Trigger navigation here
+          // if (bookIsLoaded) {
+          //   dispatch(navigate('bookInfo'));
+          // }
+          return 1;
+        }
+        return newProgress;
+      });
+    }, 50);
   };
+
+
+  // const handleBookPress = () => {
+  //   if (loading) {
+  //     // Don't trigger the action again if a book is already loading
+  //     return;
+  //   }
+  //   loadBook();
+  //   dispatch(setNavigationSource('Library'));
+  //   dispatch(displayBookData(item));
+  //   dispatch(savingBookIsDisabled(false));
+  //   dispatch(navigate('bookInfo'));
+  // };
 
   return (
     <Pressable
-      onPress={handleBookPress}
+      onPress={handlePressIn}
       style={({pressed}) => [
         {
           backgroundColor: pressed ? Colours.action : Colours.primary
@@ -57,6 +101,19 @@ const BookItem = React.memo(({ item }: any) => {
             {item.author}
           </Text>
         </View>
+        {loading && (
+          <View style={styles.progressBarContainer}>
+            <View
+              style={[
+                styles.progressBar,
+                {
+                  width: `${progress * 100}%`,
+                  backgroundColor: Colours.filter,
+                },
+              ]}
+            />
+          </View>
+        )}
       </View>
     </Pressable>
   );
@@ -68,26 +125,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     padding: SPACING,
-    // marginBottom: SPACING,
-    // height: 95,
     height: 80,
     width: '100%',
-    // paddingHorizontal: 20,
-    // borderRadius: 12,
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 10
-    // },
-    // shadowOpacity: .1,
-    // shadowRadius: 10,
-    // backgroundColor: Colours.primary
   },
   textContainer: {
-    // padding: SPACING,
-    // textAlign: 'auto',
-    // backgroundColor: 'yellow',
-    maxWidth: '100%',
+    maxWidth: '96%',
   },
   textTitle: {
     color: Colours.secondary,
@@ -100,7 +142,17 @@ const styles = StyleSheet.create({
     fontFamily:  'Courier Prime',
     fontWeight: 'bold',
     fontSize: 16,
-    // maxWidth: '96%', // Ensure the text doesn't exceed the view's width
-    // maxHeight: '100%'
+  },
+  progressBarContainer: {
+    position: 'absolute',
+    bottom: 2,
+    left: 15,
+    right: 0,
+    // backgroundColor: Colours.primary,
+    height: 3,
+  },
+  progressBar: {
+    height: 1,
+    backgroundColor: Colours.filter,
   },
 })

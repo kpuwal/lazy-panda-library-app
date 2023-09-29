@@ -34,6 +34,7 @@ const Library = forwardRef((props, ref) => {
   const [activeButton, setActiveButton] = useState('default');
   const [activeList, setActiveList] = useState(false);
   const [currentScrollOffset, setCurrentScrollOffset] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // const [defaultLibrary, setDefaultLibrary] = useState<BookType[] | librarySectionType[]>(library);
   // const [booksNumber, setBooksNumber] = useState(library.length);
@@ -123,6 +124,21 @@ const Library = forwardRef((props, ref) => {
     setActiveButton('default');
     setActiveList(false);
     setModalVisible(false);
+  }
+
+  const handleRefresh = () => {
+    setIsRefreshing(true); 
+    dispatch(readLibrary())
+    .then(() => {
+      setIsRefreshing(false);
+      setActiveButton('default');
+      setActiveList(false);
+      setShowSectionList(false);
+    })
+    .catch((error) => {
+      console.error('Error refreshing library data:', error);
+      setIsRefreshing(false);
+    });
 
   }
 
@@ -170,7 +186,7 @@ const Library = forwardRef((props, ref) => {
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: Colours.secondary}}>
+    <View style={{flex: 1, backgroundColor: Colours.tertiary}}>
       <StatusBar style="dark" />
 
       <View style={styles.headerContainer}>
@@ -185,25 +201,25 @@ const Library = forwardRef((props, ref) => {
         <View style={styles.subheader}>
           <Pressable
             onPress={toggleModal}
-            style={({pressed}) => [
-              styles.subheaderFilter,
-              {
-                backgroundColor: pressed ? Colours.action : Colours.primary
-              }
-            ]}
+            style={styles.subheaderFilter}
           >
-              <MaterialCommunityIcons
-                name="filter-menu"
-                size={28} 
-                color={Colours.secondary}
-              />
-              <Text style={[
-              styles.sortButtonText, 
-              {
-                color: Colours.secondary
-              }]}>
-                Filter
-              </Text>
+              {({pressed}) => 
+              <>
+                <MaterialCommunityIcons
+                  name="filter-menu"
+                  size={28} 
+                  color={pressed ? Colours.filter : Colours.secondary}
+                />
+                <Text style={[
+                styles.sortButtonText, 
+                {
+                  color: pressed ? Colours.filter : Colours.secondary
+                }]}>
+                  Filter
+                </Text>
+              </>
+              }
+             
               
           </Pressable>
 
@@ -252,6 +268,8 @@ const Library = forwardRef((props, ref) => {
             showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
             onScroll={handleScroll}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
           />
         ) : (
           <FlatList
@@ -268,6 +286,8 @@ const Library = forwardRef((props, ref) => {
             onEndReachedThreshold={0.1}
             renderItem={renderItem}
             ItemSeparatorComponent={ItemSeparator}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
           />
         )}
       <AlphabetList

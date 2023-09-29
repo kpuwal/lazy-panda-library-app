@@ -4,7 +4,7 @@ export const Colours = {
   tertiary: '#D2D4D8',
   quaternary: '#C9CBCF',
   quinary: '#F0F0F0',
-  // action: '#33CCCC'
+  filter: '#33CCCC',
   action: '#d2d4d8'
 } as const;
 

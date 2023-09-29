@@ -10,7 +10,11 @@ const navigationSlice = createSlice({
   initialState,
   reducers: {
     navigate(state, action) {
-      state.route = action.payload;
+      // state.route = action.payload;
+      return {
+        ...state,
+        route: action.payload,
+      }
     },
     setNavigationSource: (state, action) => {
       return {

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { useEffect } from "react";
 import TextCard from "./infoModules/TextCard";
-import { updateBook, saveBook, copyAndStoreTitle } from '../../redux/slices/bookSlice';
+import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded } from '../../redux/slices/bookSlice';
 import { updateLibrary } from "../../redux/slices/librarySlice";
 import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
@@ -20,6 +20,10 @@ import { Colours } from "../../styles/constants";
 import MainButton from "../button/MainButton";
 import { Ionicons } from "@expo/vector-icons";
 
+import Title from './bookModules/Title';
+import Author from "./bookModules/Author";
+import Numbers from "./bookModules/Numbers";
+
 
 const Book = () => {
   const { book, bookTitleForRowUpdate } = useSelector((state: RootState) => state.book);
@@ -30,21 +34,21 @@ const Book = () => {
 
   useEffect(() => {
     dispatch(copyAndStoreTitle(book.title));
+    dispatch(setBookIsLoaded(false));
   }, []);
 
 
-  const handleDismiss = () => {
-    if (navigationSource === 'Library') {
-      dispatch(navigate('library'))
-    } else {
-      dispatch(navigate('scanBook'))
-    }
-    dispatch(isScanned(false));
-    dispatch(updateBook({isLoaded: false}));
-  }
+  // const handleDismiss = () => {
+  //   if (navigationSource === 'Library') {
+  //     dispatch(navigate('library'))
+  //   } else {
+  //     dispatch(navigate('scanBook'))
+  //   }
+  //   dispatch(isScanned(false));
+  //   dispatch(updateBook({isLoaded: false}));
+  // }
 
   const handleSaveBook = () => {
-    console.log("navigationSource: ", navigationSource)
     if (navigationSource === 'Library') {
       dispatch(updateLibrary({book, bookTitleForRowUpdate}));
     } else {
@@ -59,9 +63,6 @@ const Book = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}>
         <StatusBar style="dark" />
-        {/* <Header 
-          handleClose={() => handleDismiss()}
-          isDisabled={app.disabled} /> */}
         <Header>
           <Header.GoBack goBackUrl="library" />
           <View style={headerInfoContainer}>
@@ -69,28 +70,32 @@ const Book = () => {
             <Header.Title>Book Data</Header.Title>
           </View>
         </Header>
+        
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
-            <TextCard
+            {/* <TextCard
               item={book.title}
               size={22}
               isNumeric={false}
               editItem={(el: string) => dispatch(updateBook({title: el}))}
-            />
-            <TextCard
+            /> */}
+            {/* <TextCard
               item={book.author}
               size={20}
               isNumeric={false}
               editItem={(el: string) => dispatch(updateBook({author: el}))}
-            />
-            <NumbersCard
+            /> */}
+            <Title />
+            <Author />
+            <Numbers />
+            {/* <NumbersCard
               language={book.language}
               editLanguage={(el: string) => dispatch(updateBook({language: el}))}
               pageCount={book.pageCount}
               editPageCount={(el: string) => dispatch(updateBook({pageCount: el}))}
               publishedDate={book.publishedDate}
               editPublishedDate={(el: string) => dispatch(updateBook({publishedDate: el}))}
-            />
+            /> */}
             <SelectionCard
               title={"Genre:"}
               icon={genreIcon}

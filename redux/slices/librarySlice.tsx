@@ -25,7 +25,6 @@ type SelectedFilters = {
 
 const initialState = {
   library: [] as  BookType[],
-  // filteredLibrary: [] as BookType[],
   sortedLibrary: [] as librarySectionType[],
   bookTitleForRowUpdate: '' as string,
   libraryIsLoaded: false as boolean,

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Text, View, StyleSheet, ImageBackground, Pressable, Image } from "react-native";
+import { Colours } from "../../styles/constants";
 
 interface Props {
   pressed: boolean;
@@ -22,7 +23,7 @@ export default function ButtonTmp(props: any) {
   return (
         <Pressable style={({pressed}) => [
           {
-            backgroundColor: pressed ? colourBlue : 'black'
+            backgroundColor: pressed ? Colours.action : 'black'
           },
           styles.button
         ]} onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>

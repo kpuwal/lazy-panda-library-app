@@ -51,7 +51,6 @@ const initialState = {
     lastReadByJowie: '',
     lastReadByKasia: '',
     isFound: false,
-    isLoaded: false,
     key: ''
   } as BookType,
   bookTitleForRowUpdate: '' as string,
@@ -191,25 +190,21 @@ const bookSlice = createSlice({
       };
     },
     displayBookData: (state, action) => {
+      state.bookIsLoaded = true;
       const bookData = action.payload;
-      // state.bookTitleForRowUpdate = state.book.title;
       state.book = {
         ...state.book,
         ...bookData,
       };
-      state.book.isFound = true;
     },
     cleanBook: () => {
       return initialState;
     },
-    // sortLibrary: (state, action) => {
-    //   state.sortedLibrary = action.payload;
-    // },
-    // setSelectedFilters: (state, action) => {
-    //   state.selectedFilters = action.payload;
-    // },
     copyAndStoreTitle: (state, action) => {
       state.bookTitleForRowUpdate = action.payload;
+    },
+    setBookIsLoaded: (state, action) => {
+      state.bookIsLoaded = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -250,5 +245,5 @@ const bookSlice = createSlice({
   },
 })
 
-export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle, setBookIsLoaded } = bookSlice.actions;
 export default bookSlice.reducer;

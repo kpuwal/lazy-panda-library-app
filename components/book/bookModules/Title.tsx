@@ -1,33 +1,31 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { Colours } from '../../../styles/constants';
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from '../../../redux/store';
+import { updateBook } from '../../../redux/slices/bookSlice';
 
-type TextCardTypes = {
-  size: number,
-  isNumeric: boolean,
-  item: string,
-  editItem: any,
-}
+const Title = () => {
+  const { book } = useSelector((state: RootState) => state.book);
+  const dispatch = useAppDispatch();
 
-const TextCard = ({size, item, isNumeric, editItem}: TextCardTypes) => {
   return (   
     <View style={styles.inputContainer}>
       <TextInput
-        style={[styles.input, {fontSize: size}]}
-        onChangeText={editItem}
-        // defaultValue={item}
-        value={item}
+        style={[styles.input, {fontSize: 22}]}
+        onChangeText={(el: string) => dispatch(updateBook({title: el}))}
+        value={book.title}
         editable
         multiline
         selectionColor='pink'
         numberOfLines={4}
-        keyboardType={isNumeric ? 'numeric' : 'default'}
+        keyboardType={'default'}
       />
     </View>
   )
 }
 
-export default TextCard;
+export default Title;
 
 const styles = StyleSheet.create({
   inputContainer: {

@@ -5,11 +5,9 @@ import Home from '../screens/Home';
 import Scanner from '../screens/Scanner';
 import AddBook from '../screens/AddBook';
 import Library from '../screens/Library';
-import BookInfo from './book/BookInfo';
 import Book from './book/Book';
 
 const Navigation = () => {
-
   const route = useSelector((state: RootState) => state.navigate.route);
   
   switch(route) {
