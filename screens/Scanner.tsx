@@ -1,15 +1,12 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { useState, useRef, useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import BookInfo from '../components/book/BookInfo';
 import ScannerBG from '../components/scanner/ScannerBG';
 import { navigate } from '../redux/slices/navigationSlice';
 
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../redux/store';
 import { fetchPicker } from '../redux/slices/pickerSlice';
-import { fetchBook, cleanBook } from '../redux/slices/bookSlice';
-import { isDisabled, isScanned } from '../redux/slices/appSlice';
 import { Animated } from 'react-native';
 import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-gesture-handler';
 import ScannerOverlay from '../components/scanner/ScannerOverlay';
@@ -32,13 +29,13 @@ const Scanner = () => {
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
     
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 800,
-      useNativeDriver: false,
-    }).start(() => {
-      setIsAnimating(false);
-    });
+    // Animated.timing(opacity, {
+    //   toValue: 1,
+    //   duration: 800,
+    //   useNativeDriver: false,
+    // }).start(() => {
+    //   setIsAnimating(false);
+    // });
 
   }, []);
 
@@ -61,25 +58,19 @@ const Scanner = () => {
 
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <PanGestureHandler
-        onGestureEvent={onSwipeRight}
-        onHandlerStateChange={({ nativeEvent }) => {
-          if (nativeEvent.state === State.END) {
-            onSwipeRight({ nativeEvent });
-          }
-        }}
-      >
-        <Animated.View style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}>
+    // <GestureHandlerRootView style={{flex: 1}}>
+    //   <PanGestureHandler
+    //     onGestureEvent={onSwipeRight}
+    //     onHandlerStateChange={({ nativeEvent }) => {
+    //       if (nativeEvent.state === State.END) {
+    //         onSwipeRight({ nativeEvent });
+    //       }
+    //     }}
+    //   >
+        <View style={[styles.container]}>
           <BarcodeScanner />
           <ScannerOverlay />
-          {/* <BookInfo /> */}
-          {/* <Pressable onPress={() => dispatch(navigate('home'))}>
-            <Text>back</Text>
-          </Pressable> */}
-        </Animated.View>
-    </PanGestureHandler>
-    </GestureHandlerRootView>
+        </View>
   )
 }
 

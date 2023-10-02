@@ -9,6 +9,11 @@ import { isScanned } from '../../redux/slices/appSlice';
 import { navigate } from '../../redux/slices/navigationSlice';
 import { StatusBar } from 'expo-status-bar';
 
+import { headerInfoContainer } from '../../styles/styles';
+import Header from '../header/Header';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Colours } from '../../styles/constants';
+
 const ScannerOverlay = () => {
   const scanned = useSelector((state: RootState) => state.app.scanned);
   const { bookIsLoaded, bookError } = useSelector((state: RootState) => state.book);
@@ -21,6 +26,10 @@ const ScannerOverlay = () => {
     }
   },[bookError])
 
+  const handleClose = () => {
+    dispatch(navigate('home'));
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -28,7 +37,22 @@ const ScannerOverlay = () => {
         <ScannerBG />
       </View>
       <View style={styles.container}>
-        <View style={styles.box1}></View>
+        <View style={styles.box1}>
+          <Pressable
+            onPress={handleClose}
+            style={{marginTop: 30, justifyContent: 'flex-start'}}>
+            {({pressed}) => 
+              <View style={styles.headerGoBackContainer}>
+                <MaterialIcons
+                  name="arrow-back-ios"
+                  size={24}
+                  color={pressed ? Colours.filter : Colours.primary }
+                />
+                <Text style={{color: pressed ? Colours.filter : Colours.primary, fontFamily: 'Courier Prime', fontSize: 20, paddingVertical: 4}}>Back</Text>
+              </View>
+            }
+          </Pressable>
+        </View>
         <View style={styles.box2}></View>
         <View style={styles.box3}>
           <View style={styles.box31}>
@@ -61,6 +85,9 @@ const styles = StyleSheet.create({
   },
   box1: {
     flex: 20, // 20% height
+    // backgroundColor: 'pink',
+    paddingHorizontal: 15,
+    width: '100%'
   },
   box2: {
     flex: 40, // 60% height
@@ -81,5 +108,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginRight: 5,
     fontFamily: 'Courier Prime',
+  },
+  headerGoBackContainer: {
+    flexDirection: 'row',
+    // justifyContent: 'center',
   }
 })

@@ -54,26 +54,24 @@ const Home = () => {
       <StatusBar style="light" />
       <ImageBackground
         source={require('./../assets/bg3.jpeg')}
-        style={[styles.image]}
+        style={styles.image}
       >
         <Image
             source={require('./../assets/logo.png')}
             style={{width: 185, height: 107, top: 25, left: '22%', justifyContent: 'center', opacity: 1}}
           />
         <View style={styles.buttonContainer}>
-        
-          {/* <Text numberOfLines={3} style={{ color: 'black', fontSize: 42, width: 150, textAlign: 'center', fontFamily: 'Courier Prime' }}>Lazy Panda Library </Text> */}
-          {/* <Image 
-            source={require('./../assets/libr.png')}
-            style={{
-               height: 190, width: 190, marginBottom: 90
-            }}
-          /> */}
           <ButtonTmp 
             onPress={() => dispatch(navigate('scanBook'))}
             title="Scan a book"
             imgSource={require('./../assets/scan.png')}
             imgCol={require('./../assets/scan-col.png')}
+          />
+          <ButtonTmp
+            onPress={() => dispatch(navigate('library'))}
+            title="When in doubt, go to the Library"
+            imgSource={require('./../assets/library-books.png')}
+            imgCol={require('./../assets/library-books-col.png')}
           />
           <Pressable
             onPressIn={() => setLove(!isLove)} 
@@ -90,11 +88,6 @@ const Home = () => {
               }}
             />
           </Pressable>
-          <ButtonTmp
-            onPress={() => dispatch(navigate('library'))}
-            title="When in doubt, go to the Library"
-            imgSource={require('./../assets/library-books.png')}
-            imgCol={require('./../assets/library-books-col.png')} />
         </View>
       </ImageBackground>
     </Animated.View>
@@ -108,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: Colours.tertiary,
+    backgroundColor: Colours.secondary,
     borderWidth: 5,  // Default thickness for sides (bottom, left, right)
     borderTopWidth: 30,  // Thickness for the top
     borderColor: 'black',

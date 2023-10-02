@@ -1,6 +1,6 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
@@ -9,7 +9,7 @@ import { savingBookIsDisabled, isScanned, setCameraPermission } from '../../redu
 import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
 
 const Scanner = () => {
-  // const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
+  const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const scanned = useSelector((state: RootState) => state.app.scanned);
   // const { isLoaded } = useSelector((state: RootState) => state.book)
   const dispatch = useAppDispatch();
@@ -25,7 +25,12 @@ const Scanner = () => {
     });
   }
 
-  // if (!cameraPermission) { return <Text>No access to camera</Text> }; 
+  if (cameraPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
+  }
+  if (cameraPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <BarCodeScanner

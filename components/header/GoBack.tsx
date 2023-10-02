@@ -6,10 +6,11 @@ import { headerGoBackButton, headerGoBackContainer } from '../../styles/styles';
 import { Colours } from "../../styles/constants";
 
 type GoBackProps = {
-  goBackUrl: string
+  goBackUrl: string,
+  styling?: any
 }
 
-const GoBack: React.FC<GoBackProps> = ({goBackUrl}) => {
+const GoBack: React.FC<GoBackProps> = ({goBackUrl, styling}) => {
   const dispatch = useAppDispatch();
 
   const handleClose = () => {
@@ -19,7 +20,7 @@ const GoBack: React.FC<GoBackProps> = ({goBackUrl}) => {
   return (
     <Pressable
       onPress={handleClose}
-      style={headerGoBackButton}>
+      style={[headerGoBackButton, styling]}>
       {({pressed}) => 
       <View style={headerGoBackContainer}>
         <MaterialIcons
