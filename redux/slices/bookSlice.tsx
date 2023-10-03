@@ -205,7 +205,10 @@ const bookSlice = createSlice({
     },
     setBookIsLoaded: (state, action) => {
       state.bookIsLoaded = action.payload;
-    }
+    },
+    resetBookIsLoaded: (state) => {
+      state.bookIsLoaded = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -245,5 +248,5 @@ const bookSlice = createSlice({
   },
 })
 
-export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle, setBookIsLoaded } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle, setBookIsLoaded, resetBookIsLoaded } = bookSlice.actions;
 export default bookSlice.reducer;

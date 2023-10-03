@@ -14,110 +14,100 @@ const BookItem = React.memo(({ item }: any) => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  // useEffect(() => {
+  //   if (bookIsLoaded) {
+  //     dispatch(navigate('bookInfo'));
+  //   }
+  // }, [bookIsLoaded, dispatch]);
+
+  useEffect(() => {
+    // Code that depends on the updated state can be placed here
+    const progressPercentage = progress * 100;
+
+    if (progressPercentage >= 100) {
+      setLoading(false);
+
+      setTimeout(() => {
+        dispatch(navigate('bookInfo'));
+      }, 500);
+    }
+  }, [progress]); 
+
   const handlePressIn = () => {
     loadBook();
   };
 
-  // useEffect(() => {console.log('render', bookIsLoaded)}, [])
-
-  // const handlePressOut = () => {
-  //   if (!loading) {
-  //     // Only trigger navigation if not loading
-  //     dispatch(setNavigationSource('Library'));
-  //     dispatch(displayBookData(item));
-  //     dispatch(savingBookIsDisabled(false));
-  //     dispatch(navigate('bookInfo'));
-  //   }
-  // };
-
-  useEffect(() => {
-    if (bookIsLoaded) {
-      dispatch(navigate('bookInfo'));
-    }
-  }, [bookIsLoaded]);
-
-  const loadBook = () => {
-    setLoading(true);
+  const loadBook = async () => {
+    // setLoading(true);
     dispatch(displayBookData(item));
     dispatch(savingBookIsDisabled(false));
     dispatch(setNavigationSource('Library'));
-
-    // Simulate loading progress with a timer (replace with your actual loading logic)
+  
     const timer = setInterval(() => {
       setProgress((prevProgress) => {
         const newProgress = prevProgress + 0.05; // Increment progress by 1%
-        if (newProgress >= 1) {
+        const clampedProgress = Math.min(newProgress, 1);
+  
+        if (clampedProgress >= 1) {
           clearInterval(timer);
-          setLoading(false);
-
-          // dispatch(setBookIsLoaded(false)); // Set loading to false when loading is complete
-          // Trigger navigation here
-          // if (bookIsLoaded) {
+          // setLoading(false);
+  
+          // Introduce a delay before navigation
+          // setTimeout(() => {
           //   dispatch(navigate('bookInfo'));
-          // }
+          // }, 500);
+  
           return 1;
         }
-        return newProgress;
+  
+        return clampedProgress;
       });
     }, 50);
   };
+  
 
-
-  // const handleBookPress = () => {
-  //   if (loading) {
-  //     // Don't trigger the action again if a book is already loading
-  //     return;
-  //   }
-  //   loadBook();
-  //   dispatch(setNavigationSource('Library'));
-  //   dispatch(displayBookData(item));
-  //   dispatch(savingBookIsDisabled(false));
-  //   dispatch(navigate('bookInfo'));
-  // };
+  const progressPercentage = progress * 100; // Corrected
 
   return (
     <Pressable
       onPress={handlePressIn}
-      style={({pressed}) => [
+      style={({ pressed }) => [
         {
-          backgroundColor: pressed ? Colours.action : Colours.primary
-        }
+          backgroundColor: pressed ? Colours.action : Colours.primary,
+        },
       ]}
     >
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text
-            numberOfLines={2}
-            lineBreakMode="tail" 
-            style={styles.textTitle}
-          >
-              {item.title}
+          <Text numberOfLines={2} lineBreakMode="tail" style={styles.textTitle}>
+            {item.title}
           </Text>
           <Text
             style={styles.textAuthor}
             numberOfLines={1}
-            lineBreakMode="tail" 
+            lineBreakMode="tail"
           >
             {item.author}
           </Text>
         </View>
-        {loading && (
+        {/* {loading && ( */}
           <View style={styles.progressBarContainer}>
             <View
               style={[
                 styles.progressBar,
                 {
-                  width: `${progress * 100}%`,
+                  width: `${progressPercentage}%`, // Corrected
                   backgroundColor: Colours.filter,
                 },
               ]}
             />
           </View>
-        )}
+        {/* )} */}
       </View>
     </Pressable>
   );
 });
+
 
 export default BookItem;
 
@@ -125,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     padding: SPACING,
-    height: 80,
+    height: 90,
     width: '100%',
   },
   textContainer: {
@@ -144,15 +134,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   progressBarContainer: {
-    position: 'absolute',
-    bottom: 2,
-    left: 15,
-    right: 0,
-    // backgroundColor: Colours.primary,
-    height: 3,
+    // position: 'absolute',
+    bottom: 0,
+    // left: 15,
+    // right: 0,
+    // backgroundColor: 'pink',
+    height: 2,
   },
   progressBar: {
     height: 1,
-    backgroundColor: Colours.filter,
+    // marginTop: '5%',
+    // backgroundColor: Colours.filter,
+    zIndex: 7
   },
 })
