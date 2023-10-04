@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     // position: 'absolute',
+    marginTop: 5,
     bottom: 0,
     // left: 15,
     // right: 0,
