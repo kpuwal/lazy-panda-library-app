@@ -6,7 +6,7 @@ import { store } from './redux/store';
 import { mainUrl } from './server-location';
 import * as Font from 'expo-font';
 import axios from 'axios';
-import Navigation from './components/Navigation';
+import AppNavigator from './components/NavigationStack';
 
 const URL = mainUrl();
 SplashScreen.preventAutoHideAsync();
@@ -68,7 +68,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <View style={styles.container} onLayout={onLayoutRootView}>
-        <Navigation />
+        <AppNavigator />
       </View>
     </Provider>
   );

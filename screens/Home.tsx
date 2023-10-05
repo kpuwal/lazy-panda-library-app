@@ -13,7 +13,7 @@ import { setBookIsLoaded } from '../redux/slices/bookSlice';
 import { Colours } from '../styles/constants';
 
 
-const Home = () => {
+const Home = ({navigation}: any) => {
   const imageHi = require('./../assets/icon.png');
   const dispatch = useAppDispatch();
   const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
@@ -62,13 +62,13 @@ const Home = () => {
           />
         <View style={styles.buttonContainer}>
           <ButtonTmp 
-            onPress={() => dispatch(navigate('scanBook'))}
+            onPress={() => navigation(navigate('Scanner'))}
             title="Scan a book"
             imgSource={require('./../assets/scan.png')}
             imgCol={require('./../assets/scan-col.png')}
           />
           <ButtonTmp
-            onPress={() => dispatch(navigate('library'))}
+            onPress={() => navigation(navigate('Library'))}
             title="When in doubt, go to the Library"
             imgSource={require('./../assets/library-books.png')}
             imgCol={require('./../assets/library-books-col.png')}
