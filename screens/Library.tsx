@@ -193,7 +193,7 @@ const Library = forwardRef((_props, ref) => {
 
       <View style={styles.headerContainer}>
         <Header>
-          <Header.GoBack goBackUrl="home" />
+          <Header.GoBack />
           <View style={headerInfoContainer}>
             <Header.Icon uri={require('../assets/books.gif')} />
             <Header.Title>Our Library</Header.Title>

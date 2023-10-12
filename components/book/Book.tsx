@@ -51,7 +51,7 @@ const Book = () => {
       style={styles.container}>
         <StatusBar style="dark" />
         <Header>
-          <Header.GoBack goBackUrl="library" />
+          <Header.GoBack />
           <View style={headerInfoContainer}>
             <Header.Icon uri={require('../../assets/book-data.gif')} />
             <Header.Title>Book Data</Header.Title>

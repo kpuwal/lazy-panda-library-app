@@ -5,11 +5,10 @@ import { Colours } from "../../styles/constants";
 import { useNavigation } from "@react-navigation/native";
 
 type GoBackProps = {
-  goBackUrl: string,
   styling?: any
 }
 
-const GoBack: React.FC<GoBackProps> = ({goBackUrl, styling}) => {
+const GoBack: React.FC<GoBackProps> = ({styling}) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
