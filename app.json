@@ -32,12 +32,12 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#89b09b"
+        "backgroundColor": "#010101"
       },
       "splash": {
         "image": "./assets/splash.png",
         "resizeMode": "contain",
-        "backgroundColor": "#89b09b"
+        "backgroundColor": "#010101"
       },
       "permissions": [
         "android.permission.CAMERA"
