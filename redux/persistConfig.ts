@@ -1,26 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persistReducer, PersistConfig } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import { CombinedState, Reducer, combineReducers } from '@reduxjs/toolkit';
 
-import bookReducer, { BookType } from './slices/bookSlice';
-import pickerReducer, { pickerDataTypes } from './slices/pickerSlice';
+import bookReducer, { bookTypes } from './slices/bookSlice';
+import pickerReducer, { pickerTypes } from './slices/pickerSlice';
 import appReducer, { appTypes } from './slices/appSlice';
-import navigationSlice, { navType } from './slices/navigationSlice';
-import libraryReducer, { LibraryTypes } from './slices/librarySlice';
-// import { RootState } from './store';
+import navigationSlice, { navTypes } from './slices/navigationSlice';
+import libraryReducer, { libraryTypes } from './slices/librarySlice';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 
 export type RootStateType = {
-  book: {
-    book: BookType;
-    bookTitleForRowUpdate: string;
-    bookError: string;
-    bookIsLoaded: boolean;
-  };
-  library: LibraryTypes;
-  pickers: pickerDataTypes;
+  book: bookTypes,
+  library: libraryTypes;
+  pickers: pickerTypes;
   app: appTypes;
-  navigate: navType;
+  navigate: navTypes;
 };
 
 const rootReducer: Reducer<CombinedState<RootStateType>, any> = combineReducers({
@@ -40,10 +34,4 @@ const persistConfig = {
 
 const persistedReducer = persistReducer<RootStateType>(persistConfig, rootReducer);
 
-// const persistedReducer = () =>
-//   persistReducer(persistConfig, rootReducer);
-
 export { persistedReducer, rootReducer };
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-// export default persistedReducer;

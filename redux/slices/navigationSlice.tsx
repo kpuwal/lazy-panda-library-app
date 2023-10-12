@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type navType = {
+export type navTypes = {
   route: string,
   navigationSource: string
 }
 
-const initialState: navType = {
+const initialState: navTypes = {
   route: 'home',
   navigationSource: ''
 };
@@ -15,7 +15,6 @@ const navigationSlice = createSlice({
   initialState,
   reducers: {
     navigate(state, action) {
-      // state.route = action.payload;
       return {
         ...state,
         route: action.payload,

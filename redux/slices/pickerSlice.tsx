@@ -4,19 +4,19 @@ import { mainUrl } from '../../server-location';
 import axios from 'axios';
 const URL = mainUrl();
 
-type pickerTypes = {label: string, value: string};
+type pickerType = {label: string, value: string};
 
-export type pickerDataTypes = {
-  genre: pickerTypes[],
-  series: pickerTypes[],
-  world: pickerTypes[],
-  readBy: pickerTypes[],
+export type pickerTypes = {
+  genre: pickerType[],
+  series: pickerType[],
+  world: pickerType[],
+  readBy: pickerType[],
   pickerError: string,
 }
 
 const pickerDefault = [{label: '', value: ''}];
 
-const initialState: pickerDataTypes = {
+const initialState: pickerTypes = {
   genre: pickerDefault,
   series: pickerDefault,
   world: pickerDefault,

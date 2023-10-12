@@ -24,17 +24,19 @@ export type BookType = {
   givenBy: string,
   lastReadByJowie: string,
   lastReadByKasia: string,
+  subtitle?: string,
   isFound?: boolean,
-  // isLoaded: boolean,
   key?: string
 }
 
-type SelectedFilters = {
-  type: string,
-  item: string
+export type bookTypes = {
+  book: BookType,
+  bookTitleForRowUpdate: string,
+  bookError: string,
+  bookIsLoaded: boolean
 }
 
-const initialState = {
+const initialState: bookTypes = {
   book: {
     title: '',
     subtitle: '',
@@ -52,10 +54,10 @@ const initialState = {
     lastReadByKasia: '',
     isFound: false,
     key: ''
-  } as BookType,
-  bookTitleForRowUpdate: '' as string,
-  bookError: '' as string,
-  bookIsLoaded: false as boolean
+  },
+  bookTitleForRowUpdate: '',
+  bookError: '',
+  bookIsLoaded: false
 };
 
 // export const readLibrary = createAsyncThunk(

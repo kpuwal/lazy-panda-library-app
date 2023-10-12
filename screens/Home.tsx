@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Text, Animated, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux'; 
 import { RootState, useAppDispatch } from '../redux/store';
 import { setCameraPermission } from '../redux/slices/appSlice';
-import { navigate } from '../redux/slices/navigationSlice';
 import ButtonTmp from '../components/main/ButtonTmp';
 import { fetchPicker } from '../redux/slices/pickerSlice';
 import { readLibrary } from '../redux/slices/librarySlice';
@@ -14,7 +13,6 @@ import { Colours } from '../styles/constants';
 
 
 const Home = ({navigation}: any) => {
-  const imageHi = require('./../assets/icon.png');
   const dispatch = useAppDispatch();
   const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const [isLove, setLove] = useState(false);
@@ -23,7 +21,6 @@ const Home = ({navigation}: any) => {
   const opacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
-    console.log('Current State:', cameraPermission);
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       if (status === 'granted') {
@@ -54,7 +51,7 @@ const Home = ({navigation}: any) => {
     >
       <StatusBar style="light" />
       <ImageBackground
-        source={require('./../assets/bg3.jpeg')}
+        source={require('./../assets/bg58.jpeg')}
         style={styles.image}
       >
         <Image

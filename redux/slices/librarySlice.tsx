@@ -23,7 +23,7 @@ type SelectedFiltersType = {
   item: string
 }
 
-export type LibraryTypes = {
+export type libraryTypes = {
   library: BookType[],
   sortedLibrary: librarySectionType[],
   bookTitleForRowUpdate: string,
@@ -35,7 +35,7 @@ export type LibraryTypes = {
   booksNumber: number
 }
 
-const initialState: LibraryTypes = {
+const initialState: libraryTypes = {
   library: [],
   sortedLibrary: [],
   bookTitleForRowUpdate: '',
