@@ -28,7 +28,6 @@ const appSlice = createSlice({
       state.flashMode = action.payload;
     },
     setCameraPermission: (state, action) => {
-      console.log(state.cameraPermission)
       state.cameraPermission = action.payload;
     },
   },

@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { useEffect } from "react";
 import TextCard from "./infoModules/TextCard";
 import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded } from '../../redux/slices/bookSlice';
-import { updateLibrary } from "../../redux/slices/librarySlice";
+import { resetLibraryMessages, updateLibrary } from "../../redux/slices/librarySlice";
 import { savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 
@@ -20,19 +20,35 @@ import { Ionicons } from "@expo/vector-icons";
 import Title from './bookModules/Title';
 import Author from "./bookModules/Author";
 import Numbers from "./bookModules/Numbers";
+import { useFocusEffect } from "@react-navigation/native";
+import React from "react";
 
 
 const Book = () => {
-  const { book, bookTitleForRowUpdate } = useSelector((state: RootState) => state.book);
+  const { book, bookTitleForRowUpdate, bookError, bookMsg } = useSelector((state: RootState) => state.book);
+  const { libraryMsg, libraryError } = useSelector((state: RootState) => state.library);
   const picker = useSelector((state: RootState) => state.pickers);
   const { navigationSource } = useSelector((state: RootState) => state.navigate)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log('nav source', navigationSource)
     dispatch(copyAndStoreTitle(book.title));
-    // dispatch(setBookIsLoaded(false));
   }, []);
+
+  useEffect(() => {
+    if (libraryMsg !== null) {
+      Alert.alert(libraryMsg);
+    }
+    if (libraryError !== null) {
+      Alert.alert(libraryError);
+    }
+    if (bookMsg !== null) {
+      Alert.alert(bookMsg);
+    }
+    if (bookError !== null) {
+      Alert.alert(bookError);
+    }
+  }, [libraryMsg, libraryError]);
 
 
   const handleSaveBook = () => {

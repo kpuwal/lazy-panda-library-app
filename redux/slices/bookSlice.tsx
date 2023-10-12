@@ -32,7 +32,8 @@ export type BookType = {
 export type bookTypes = {
   book: BookType,
   bookTitleForRowUpdate: string,
-  bookError: string,
+  bookError: string | null,
+  bookMsg: string | null,
   bookIsLoaded: boolean
 }
 
@@ -56,7 +57,8 @@ const initialState: bookTypes = {
     key: ''
   },
   bookTitleForRowUpdate: '',
-  bookError: '',
+  bookError: null,
+  bookMsg: null,
   bookIsLoaded: false
 };
 
@@ -140,9 +142,10 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: BookType,
       }
 
     try {
-      await axios.post(`${URL}/api/add-book`, config, {
+      const response = await axios.post(`${URL}/api/add-book`, config, {
         headers: { Authorization: `Bearer ${TOKEN}`}
       })
+      return response.data.msg;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -211,6 +214,10 @@ const bookSlice = createSlice({
     resetBookIsLoaded: (state) => {
       state.bookIsLoaded = false;
     },
+    resetBookMessages: (state) => {
+      state.bookMsg = null;
+      state.bookError = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -236,6 +243,9 @@ const bookSlice = createSlice({
     //   state.libraryIsLoaded = true;
     //   state.libraryIsFiltered = true;
     // })
+    .addCase(saveBook.fulfilled, (state, action) => {
+      state.bookMsg = action.payload;
+    })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
     })
@@ -250,5 +260,5 @@ const bookSlice = createSlice({
   },
 })
 
-export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle, setBookIsLoaded, resetBookIsLoaded } = bookSlice.actions;
+export const { updateBook, cleanBook, displayBookData, copyAndStoreTitle, setBookIsLoaded, resetBookIsLoaded, resetBookMessages } = bookSlice.actions;
 export default bookSlice.reducer;

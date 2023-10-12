@@ -29,10 +29,11 @@ export type libraryTypes = {
   bookTitleForRowUpdate: string,
   libraryIsLoaded: boolean,
   libraryIsFiltered: boolean,
-  libraryError: string,
+  libraryError: string | null,
   alphabet: string[],
   selectedFilters: SelectedFiltersType,
-  booksNumber: number
+  booksNumber: number,
+  libraryMsg: string | null
 }
 
 const initialState: libraryTypes = {
@@ -41,13 +42,14 @@ const initialState: libraryTypes = {
   bookTitleForRowUpdate: '',
   libraryIsLoaded: false,
   libraryIsFiltered: false,
-  libraryError: '',
+  libraryError: null,
   alphabet: [],
   selectedFilters: {
     type: '',
     item: '',
   },
-  booksNumber: 0
+  booksNumber: 0,
+  libraryMsg: null
 }
 
 export const readLibrary = createAsyncThunk(
@@ -99,9 +101,10 @@ export const updateLibrary = createAsyncThunk('/api/update-library', async ({ bo
     }
 
   try {
-    await axios.post(`${URL}/api/update-library`, config, {
+    const response = await axios.post(`${URL}/api/update-library`, config, {
       headers: { Authorization: `Bearer ${TOKEN}`}
     })
+    return response.data.msg;
   } catch (err) {
     return rejectWithValue(err);
   }
@@ -121,11 +124,14 @@ const librarySlice = createSlice({
       state.alphabet = sortedByTitle.sectionLetters;
     },
     sortLibraryByAuthor: (state, action) => {
-      // console.log('slice: ', action.payload)
       const sortedByAuthor = handleSort(action.payload, 'author');
       state.sortedLibrary = sortedByAuthor.sortedSections;
       state.alphabet = sortedByAuthor.sectionLetters;
-    }
+    },
+    resetLibraryMessages: (state) => {
+      state.libraryMsg = null;
+      state.libraryError = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -134,6 +140,9 @@ const librarySlice = createSlice({
       state.libraryIsLoaded = true;
       state.libraryIsFiltered = true;
       state.booksNumber = state.library.length;
+    })
+    .addCase(updateLibrary.fulfilled, (state, action) => {
+      state.libraryMsg = action.payload;
     })
     .addCase(updateLibrary.rejected, (state, action) => {
       state.libraryError = "Error updating the book";
@@ -151,5 +160,6 @@ export const {
   setSelectedFilters,
   sortLibraryByAuthor,
   sortLibraryByTitle,
+  resetLibraryMessages
 } = librarySlice.actions;
 export default librarySlice.reducer;

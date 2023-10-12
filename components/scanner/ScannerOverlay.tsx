@@ -20,7 +20,6 @@ const ScannerOverlay = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log('scanned? ', scanned)
     if (bookError !== '') {
       alert(bookError);
       dispatch(isScanned(false));

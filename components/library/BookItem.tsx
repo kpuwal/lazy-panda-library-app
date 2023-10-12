@@ -1,12 +1,13 @@
 import React, { useEffect, useState, PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { displayBookData } from '../../redux/slices/bookSlice';
+import { displayBookData, resetBookMessages } from '../../redux/slices/bookSlice';
 import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { savingBookIsDisabled } from '../../redux/slices/appSlice';
 import { Colours } from '../../styles/constants';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../NavigationStack';
+import { resetLibraryMessages } from '../../redux/slices/librarySlice';
 
 const SPACING = 15;
 
@@ -17,6 +18,8 @@ interface BookItemProps {
   setNavigationSource: (source: string) => void;
   navigate: (screen: string) => void;
   savingBookIsDisabled: (disabled: boolean) => void;
+  resetLibraryMessages: () => void;
+  resetBookMessages: () => void;
 }
 
 interface BookItemState {
@@ -50,6 +53,8 @@ class BookItem extends PureComponent<BookItemProps, BookItemState> {
 
   handleGoToBook = () => {
     this.props.displayBookData(this.props.item);
+    this.props.resetLibraryMessages();
+    this.props.resetBookMessages();
     this.props.setNavigationSource('Library');
     this.props.navigation.navigate('Book');
   }
@@ -127,6 +132,8 @@ const mapDispatchToProps = {
   navigate,
   setNavigationSource,
   savingBookIsDisabled,
+  resetLibraryMessages,
+  resetBookMessages
 };
 
 export default connect(null, mapDispatchToProps)(BookItem);
