@@ -18,24 +18,36 @@ export type sortedLibrarySectionType = {
   sortedSections: librarySectionType[]
 }
 
-type SelectedFilters = {
+type SelectedFiltersType = {
   type: string,
   item: string
 }
 
-const initialState = {
-  library: [] as  BookType[],
-  sortedLibrary: [] as librarySectionType[],
-  bookTitleForRowUpdate: '' as string,
-  libraryIsLoaded: false as boolean,
-  libraryIsFiltered: false as boolean,
-  libraryError: '' as string,
-  alphabet: [] as string[],
+export type LibraryTypes = {
+  library: BookType[],
+  sortedLibrary: librarySectionType[],
+  bookTitleForRowUpdate: string,
+  libraryIsLoaded: boolean,
+  libraryIsFiltered: boolean,
+  libraryError: string,
+  alphabet: string[],
+  selectedFilters: SelectedFiltersType,
+  booksNumber: number
+}
+
+const initialState: LibraryTypes = {
+  library: [],
+  sortedLibrary: [],
+  bookTitleForRowUpdate: '',
+  libraryIsLoaded: false,
+  libraryIsFiltered: false,
+  libraryError: '',
+  alphabet: [],
   selectedFilters: {
     type: '',
     item: '',
-  } as SelectedFilters,
-  booksNumber: 0 as number
+  },
+  booksNumber: 0
 }
 
 export const readLibrary = createAsyncThunk(

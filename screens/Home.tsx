@@ -23,6 +23,7 @@ const Home = ({navigation}: any) => {
   const opacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
+    console.log('Current State:', cameraPermission);
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       if (status === 'granted') {
@@ -114,8 +115,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    // paddingTop: '40%'
+    alignItems: 'center'
   },
   textContainer: {
     position: 'absolute',

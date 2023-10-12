@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+export type navType = {
+  route: string,
+  navigationSource: string
+}
+
+const initialState: navType = {
   route: 'home',
   navigationSource: ''
 };

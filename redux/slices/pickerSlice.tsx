@@ -6,7 +6,7 @@ const URL = mainUrl();
 
 type pickerTypes = {label: string, value: string};
 
-type pickerDataTypes = {
+export type pickerDataTypes = {
   genre: pickerTypes[],
   series: pickerTypes[],
   world: pickerTypes[],
