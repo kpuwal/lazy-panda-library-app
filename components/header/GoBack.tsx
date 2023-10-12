@@ -1,9 +1,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Pressable, View } from "react-native";
-import { navigate } from '../../redux/slices/navigationSlice';
-import { useAppDispatch } from '../../redux/store';
 import { headerGoBackButton, headerGoBackContainer } from '../../styles/styles';
 import { Colours } from "../../styles/constants";
+import { useNavigation } from "@react-navigation/native";
 
 type GoBackProps = {
   goBackUrl: string,
@@ -11,15 +10,15 @@ type GoBackProps = {
 }
 
 const GoBack: React.FC<GoBackProps> = ({goBackUrl, styling}) => {
-  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
-  const handleClose = () => {
-    dispatch(navigate(goBackUrl));
+  const handlePress = () => {
+    navigation.goBack();
   }
 
   return (
     <Pressable
-      onPress={handleClose}
+      onPress={handlePress}
       style={[headerGoBackButton, styling]}>
       {({pressed}) => 
       <View style={headerGoBackContainer}>

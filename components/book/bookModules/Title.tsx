@@ -5,6 +5,10 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../../redux/store';
 import { updateBook } from '../../../redux/slices/bookSlice';
 
+type TitleProps = {
+  data: string
+}
+
 const Title = () => {
   const { book } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();

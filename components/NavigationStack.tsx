@@ -5,11 +5,16 @@ import HomeScreen from '../screens/Home';
 import LibraryScreen from '../screens/Library';
 import ScannerScreen from '../screens/Scanner';
 import BookScreen from './book/Book';
+import { useNavigation } from '@react-navigation/native';
+import { Text, Pressable, View } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Colours } from '../styles/constants';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined,
   Library: undefined,
-  Scanner: undefined
+  Scanner: undefined,
+  Book: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -17,10 +22,32 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const NavigationStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Library" component={LibraryScreen} />
-      <Stack.Screen name="Scanner" component={ScannerScreen} />
-      {/* <Stack.Screen name="Book" component={BookScreen} /> */}
+      <Stack.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="Library" 
+        component={LibraryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="Scanner" 
+        component={ScannerScreen}
+        options={{
+          headerTitle: '',
+          headerTransparent: true,
+          headerLeft: () => <CustomBackButton />
+        }}
+      />
+      <Stack.Screen 
+        name="Book" 
+        component={BookScreen}
+        options={{ 
+          headerShown: false
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -35,3 +62,28 @@ const AppNavigator = () => {
 };
 
 export default AppNavigator;
+
+const CustomBackButton = () => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    navigation.goBack();
+  };
+
+  return (
+    <Pressable
+      onPress={handlePress}
+      style={{marginTop: 0, justifyContent: 'flex-start'}}>
+      {({pressed}) => 
+        <View style={{flexDirection: 'row'}}>
+          <MaterialIcons
+            name="arrow-back-ios"
+            size={24}
+            color={pressed ? Colours.filter : Colours.primary }
+          />
+          <Text style={{color: pressed ? Colours.filter : Colours.primary, fontFamily: 'Courier Prime', fontSize: 22, paddingVertical: 2}}>Home</Text>
+        </View>
+      }
+    </Pressable>
+  );
+};

@@ -12,7 +12,7 @@ import { GestureHandlerRootView, PanGestureHandler, State } from 'react-native-g
 import ScannerOverlay from '../components/scanner/ScannerOverlay';
 import BarcodeScanner from '../components/scanner/BarcodeScanner';
 
-const Scanner = () => {
+const Scanner = ({navigation}: any) => {
   const [hasPermission, setHasPermission] = useState(false);
   const scanned = useSelector((state: RootState) => state.app.scanned);
   const dispatch = useAppDispatch();
@@ -68,7 +68,7 @@ const Scanner = () => {
     //     }}
     //   >
         <View style={[styles.container]}>
-          <BarcodeScanner />
+          <BarcodeScanner navigation={navigation} />
           <ScannerOverlay />
         </View>
   )

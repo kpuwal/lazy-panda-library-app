@@ -12,14 +12,16 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '../styles/constants';
 import { headerContainer, headerInfoContainer } from '../styles/styles';
 import Header from '../components/header/Header';
+import { useNavigation } from '@react-navigation/native';
 
 const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
 const HEADER_HEIGHT = 150;
 
-const Library = forwardRef((props, ref) => {
+const Library = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch();
-
+  const navigation = useNavigation();
+  
   const { height } = Dimensions.get('window');
   const { library, sortedLibrary, libraryIsLoaded, booksNumber } = useSelector((state: RootState) => state.library);
 
@@ -41,7 +43,7 @@ const Library = forwardRef((props, ref) => {
 
   const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
   const renderItem = useCallback(({ item, index }: any) => (
-    <BookItem item={item} />
+    <BookItem item={item} navigation={navigation} />
   ), []);
   
   const handleScroll = (event: { nativeEvent: { contentOffset: { y: React.SetStateAction<number>; }; }; }) => {
@@ -233,7 +235,12 @@ const Library = forwardRef((props, ref) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleSortByTitle()}
-                style={[styles.sortButton, activeButton === 'title' ? styles.bgBlack : styles.bgWhite]}>
+                style={[
+                  styles.sortButton, activeButton === 'title' ? 
+                    styles.bgBlack :
+                    styles.bgWhite
+                ]}
+              >
                 <Text style={[activeButton === 'title' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
               </TouchableOpacity>
               <TouchableOpacity

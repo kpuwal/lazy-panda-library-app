@@ -4,24 +4,25 @@ import { StyleSheet, Text } from 'react-native';
 
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
-import { fetchBook, cleanBook } from '../../redux/slices/bookSlice';
+import { fetchBook, cleanBook, setBookIsLoaded } from '../../redux/slices/bookSlice';
 import { savingBookIsDisabled, isScanned, setCameraPermission } from '../../redux/slices/appSlice';
-import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
+import { setNavigationSource } from '../../redux/slices/navigationSlice';
 
-const Scanner = () => {
+const Scanner = ({navigation}: any) => {
   const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const scanned = useSelector((state: RootState) => state.app.scanned);
-  // const { isLoaded } = useSelector((state: RootState) => state.book)
   const dispatch = useAppDispatch();
   const cameraRef = useRef(null);
 
-  const handleBarcodeScan = ({ data }: BarCodeScannerResult) => {
+  const handleBarcodeScan = async ({ data }: BarCodeScannerResult) => {
     dispatch(isScanned(true));
     dispatch(cleanBook());
-    dispatch(fetchBook(data)).then(() => {
-      dispatch(savingBookIsDisabled(false));
+    await dispatch(fetchBook(data)).then(() => {
+      // dispatch(savingBookIsDisabled(false));
       dispatch(setNavigationSource('Scanner'));
-      dispatch(navigate('bookInfo'));
+      navigation.navigate('Book');
+      dispatch(isScanned(false));
+      dispatch(setBookIsLoaded(false));
     });
   }
 

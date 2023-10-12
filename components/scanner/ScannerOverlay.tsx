@@ -20,6 +20,7 @@ const ScannerOverlay = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log('scanned? ', scanned)
     if (bookError !== '') {
       alert(bookError);
       dispatch(isScanned(false));
@@ -37,27 +38,12 @@ const ScannerOverlay = () => {
         <ScannerBG />
       </View>
       <View style={styles.container}>
-        <View style={styles.box1}>
-          <Pressable
-            onPress={handleClose}
-            style={{marginTop: 30, justifyContent: 'flex-start'}}>
-            {({pressed}) => 
-              <View style={styles.headerGoBackContainer}>
-                <MaterialIcons
-                  name="arrow-back-ios"
-                  size={24}
-                  color={pressed ? Colours.filter : Colours.primary }
-                />
-                <Text style={{color: pressed ? Colours.filter : Colours.primary, fontFamily: 'Courier Prime', fontSize: 20, paddingVertical: 4}}>Back</Text>
-              </View>
-            }
-          </Pressable>
-        </View>
-        <View style={styles.box2}></View>
+        <View style={styles.box1} />
+        <View style={styles.box2} />
         <View style={styles.box3}>
           <View style={styles.box31}>
-          {!scanned && <Text style={styles.infoTxt}>Scanning</Text>}
-            {scanned || bookIsLoaded ? <Text style={styles.infoTxt}>Loading</Text> : <View />}
+            {scanned && !bookIsLoaded && <Text style={styles.infoTxt}>Loading</Text>}
+            {!scanned && <Text style={styles.infoTxt}>Scanning</Text>}
             <LoadingDots />
           </View>
           <View style={styles.box32}>

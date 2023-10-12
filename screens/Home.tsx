@@ -62,13 +62,13 @@ const Home = ({navigation}: any) => {
           />
         <View style={styles.buttonContainer}>
           <ButtonTmp 
-            onPress={() => navigation(navigate('Scanner'))}
+            onPress={() => navigation.navigate('Scanner')}
             title="Scan a book"
             imgSource={require('./../assets/scan.png')}
             imgCol={require('./../assets/scan-col.png')}
           />
           <ButtonTmp
-            onPress={() => navigation(navigate('Library'))}
+            onPress={() => navigation.navigate('Library')}
             title="When in doubt, go to the Library"
             imgSource={require('./../assets/library-books.png')}
             imgCol={require('./../assets/library-books-col.png')}
