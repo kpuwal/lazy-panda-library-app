@@ -36,7 +36,3 @@ export const lastReadIcon = <Image
   style={{ width: 25, height: 25 }}
 />
 
-export const filter = <Image 
-  source={require('./../../../assets/filter.png')}  
-  style={{ width: 20, height: 20 }}
-/>

@@ -1,7 +1,7 @@
 import ScannerBG from './ScannerBG';
 import LoadingDots from './LoadingDots';
 import ScanningGIF from './ScanningGIF';
-import { Text, View, StyleSheet, Pressable } from 'react-native';
+import { Text, View, StyleSheet, Pressable, Alert } from 'react-native';
 import { RootState, useAppDispatch } from '../../redux/store';
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
@@ -9,26 +9,17 @@ import { isScanned } from '../../redux/slices/appSlice';
 import { navigate } from '../../redux/slices/navigationSlice';
 import { StatusBar } from 'expo-status-bar';
 
-import { headerInfoContainer } from '../../styles/styles';
-import Header from '../header/Header';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Colours } from '../../styles/constants';
-
 const ScannerOverlay = () => {
-  const scanned = useSelector((state: RootState) => state.app.scanned);
+  const { scanned } = useSelector((state: RootState) => state.app);
   const { bookIsLoaded, bookError } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (bookError !== '') {
-      alert(bookError);
+    if (bookError !== null) {
+      Alert.alert(bookError);
       dispatch(isScanned(false));
     }
   },[bookError])
-
-  const handleClose = () => {
-    dispatch(navigate('home'));
-  }
 
   return (
     <>
