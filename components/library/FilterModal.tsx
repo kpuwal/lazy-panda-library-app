@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { genreIcon, seriesIcon, worldIcon } from '../book/infoModules/Icons';
 import SelectionCard from '../book/infoModules/SelectionCard';
-import { filterLibrary, setSelectedFilters } from '../../redux/slices/librarySlice';
+import { filterLibrary, resetSelectedFilters, setSelectedFilters } from '../../redux/slices/librarySlice';
 import  Header from '../header/Header';
 import { buttonBlue, buttonSml, headerInfoContainer } from '../../styles/styles';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';

@@ -37,48 +37,13 @@ class BookItem extends PureComponent<BookItemProps, BookItemState> {
     };
   }
 
-  // componentDidUpdate(prevProps: BookItemProps, prevState: BookItemState) {
-  //   const { progress } = this.state;
-
-  //   const progressPercentage = progress * 100;
-
-  //   if (progressPercentage >= 100 && prevState.progress !== 1) {
-  //     this.setState({ loading: false });
-
-  //     setTimeout(() => {
-  //       this.props.navigation.navigate('Book');
-  //     }, 500);
-  //   }
-  // }
-
   handleGoToBook = () => {
     this.props.displayBookData(this.props.item);
-    this.props.resetLibraryMessages();
-    this.props.resetBookMessages();
+    // this.props.resetLibraryMessages();
+    // this.props.resetBookMessages();
     this.props.setNavigationSource('Library');
     this.props.navigation.navigate('Book');
   }
-
-  // handleGoToBook = async () => {
-  //   this.setState({ loading: true });
-  //   this.props.displayBookData(this.props.item);
-  //   this.props.savingBookIsDisabled(false);
-  //   this.props.setNavigationSource('Library');
-
-  //   const timer = setInterval(() => {
-  //     this.setState((prevState) => {
-  //       const newProgress = prevState.progress + 0.02;
-  //       const clampedProgress = Math.min(newProgress, 1);
-
-  //       if (clampedProgress >= 1) {
-  //         clearInterval(timer);
-  //         return { progress: 1 };
-  //       }
-
-  //       return { progress: clampedProgress };
-  //     });
-  //   }, 50);
-  // };
 
   render() {
     const { item } = this.props;
@@ -108,19 +73,6 @@ class BookItem extends PureComponent<BookItemProps, BookItemState> {
               {item.author}
             </Text>
           </View>
-          {loading && (
-            <View style={styles.progressBarContainer}>
-              <View
-                style={[
-                  styles.progressBar,
-                  {
-                    width: `${progressPercentage}%`,
-                    backgroundColor: Colours.filter,
-                  },
-                ]}
-              />
-            </View>
-        )}
         </View>
       </Pressable>
     );
@@ -159,20 +111,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Courier Prime',
     fontWeight: 'bold',
     fontSize: 16,
-  },
-  progressBarContainer: {
-    // position: 'absolute',
-    // backgroundColor: 'pink',
-    marginTop: 5,
-    // bottom: 0,
-    height: 5,
-    // width: '100%'
-  },
-  progressBar: {
-    // width: '100%',
-    // backgroundColor: 'blue',
-    height: 1,
-    zIndex: 7,
   },
 });
 

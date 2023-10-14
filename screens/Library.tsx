@@ -3,8 +3,8 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, 
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
-import { BookType } from '../redux/slices/bookSlice';
-import { librarySectionType, readLibrary, sortLibraryByAuthor, sortLibraryByTitle } from '../redux/slices/librarySlice';
+import { BookType, resetBookMessages } from '../redux/slices/bookSlice';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle } from '../redux/slices/librarySlice';
 import FilterModal from '../components/library/FilterModal';
 import BookItem from '../components/library/BookItem';
 import AlphabetList from '../components/library/AlphabetList';
@@ -13,6 +13,8 @@ import { Colours, Fonts } from '../styles/constants';
 import { headerContainer, headerInfoContainer } from '../styles/styles';
 import Header from '../components/header/Header';
 import { useNavigation } from '@react-navigation/native';
+import { resetLibraryMessages } from '../redux/slices/librarySlice';
+
 
 const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
@@ -23,11 +25,10 @@ const Library = forwardRef((_props, ref) => {
   const navigation = useNavigation();
   
   const { height } = Dimensions.get('window');
-  const { library, sortedLibrary, libraryIsLoaded, booksNumber } = useSelector((state: RootState) => state.library);
+  const { library, sortedLibrary, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [showSectionList, setShowSectionList] = useState(false);
-  const [sectionLetters, setSectionLetters] = useState<string[]>([]);
   const [scrollToTop, setScrollToTop] = useState(false);
 
   const sectionListRef = useRef<SectionList | null>(null);
@@ -58,6 +59,15 @@ const Library = forwardRef((_props, ref) => {
     },
   }));
 
+  useEffect(() => {
+    dispatch(resetLibraryMessages());
+    dispatch(resetBookMessages());
+  });
+
+  // useEffect(() => {
+  //   dispatch(resetSelectedFilters());
+  // }, [])
+
   // useEffect(() => {
   //   // You can now access the current scroll offset in currentScrollOffset state variable.
   //   console.log('Current Scroll Offset:', currentScrollOffset);
@@ -78,6 +88,7 @@ const Library = forwardRef((_props, ref) => {
   // }, [scrollToTop, sortedLibrary]);
 
   const toggleModal = () => {
+    dispatch(resetSelectedFilters());
     setModalVisible(!modalVisible);
   };
 
@@ -168,7 +179,7 @@ const Library = forwardRef((_props, ref) => {
   );
 
   const toUpperCase = () => {
-    return selectedFilters.type.charAt(0).toUpperCase() + selectedFilters.type.slice(1);
+    return selectedFilterHeader.type.charAt(0).toUpperCase() + selectedFilterHeader.type.slice(1);
   }
 
   // const sectionKeyExtractor = (section: any) => section.key.toString();
@@ -190,7 +201,6 @@ const Library = forwardRef((_props, ref) => {
   return (
     <View style={{flex: 1, backgroundColor: Colours.tertiary}}>
       <StatusBar style="dark" />
-
       <View style={styles.headerContainer}>
         <Header>
           <Header.GoBack />
@@ -221,8 +231,6 @@ const Library = forwardRef((_props, ref) => {
                 </Text>
               </>
               }
-             
-              
           </Pressable>
 
           <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
@@ -260,7 +268,7 @@ const Library = forwardRef((_props, ref) => {
         {libraryIsFiltered ? (
           <View style={[ styles.filterDisplay]}>
             <Text style={[styles.sortButtonText, styles.black]}>
-              {toUpperCase()}: {selectedFilters.item}
+              {toUpperCase()}: {selectedFilterHeader.item}
             </Text>
           </View>) : <View style={styles.filterDisplay} />}
       </View>

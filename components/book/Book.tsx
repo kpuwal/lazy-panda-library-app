@@ -20,7 +20,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Title from './bookModules/Title';
 import Author from "./bookModules/Author";
 import Numbers from "./bookModules/Numbers";
-import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 
 
@@ -43,6 +42,7 @@ const Book = () => {
       Alert.alert(libraryError);
     }
     if (bookMsg !== null) {
+      console.log('book message: ', bookMsg)
       Alert.alert(bookMsg);
     }
     if (bookError !== null) {

@@ -32,8 +32,9 @@ export type libraryTypes = {
   libraryError: string | null,
   alphabet: string[],
   selectedFilters: SelectedFiltersType,
+  selectedFilterHeader: SelectedFiltersType,
   booksNumber: number,
-  libraryMsg: string | null
+  libraryMsg: string | null,
 }
 
 const initialState: libraryTypes = {
@@ -47,6 +48,10 @@ const initialState: libraryTypes = {
   selectedFilters: {
     type: '',
     item: '',
+  },
+  selectedFilterHeader: {
+    type: '',
+    item: ''
   },
   booksNumber: 0,
   libraryMsg: null
@@ -117,6 +122,7 @@ const librarySlice = createSlice({
   reducers: {
     setSelectedFilters: (state, action) => {
       state.selectedFilters = action.payload;
+      state.selectedFilterHeader = action.payload;
     },
     sortLibraryByTitle: (state, action) => {
       const sortedByTitle = handleSort(action.payload, 'title');
@@ -132,6 +138,10 @@ const librarySlice = createSlice({
       state.libraryMsg = null;
       state.libraryError = null;
     },
+    resetSelectedFilters: (state) => {
+      state.selectedFilters.type = '';
+      state.selectedFilters.item = ''; 
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -149,9 +159,9 @@ const librarySlice = createSlice({
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
       state.library = action.payload;
+      state.booksNumber = state.library.length;
       state.libraryIsFiltered = false;
       state.libraryIsLoaded = true;
-      state.booksNumber = state.library.length;
     })
   },
 })
@@ -160,6 +170,7 @@ export const {
   setSelectedFilters,
   sortLibraryByAuthor,
   sortLibraryByTitle,
-  resetLibraryMessages
+  resetLibraryMessages,
+  resetSelectedFilters
 } = librarySlice.actions;
 export default librarySlice.reducer;
