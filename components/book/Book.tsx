@@ -23,7 +23,7 @@ import Numbers from "./bookModules/Numbers";
 import React from "react";
 
 
-const Book = () => {
+const Book = ({ navigation }: any) => {
   const { book, bookTitleForRowUpdate, bookError, bookMsg } = useSelector((state: RootState) => state.book);
   const { libraryMsg, libraryError } = useSelector((state: RootState) => state.library);
   const picker = useSelector((state: RootState) => state.pickers);
@@ -36,19 +36,19 @@ const Book = () => {
 
   useEffect(() => {
     if (libraryMsg !== null) {
-      Alert.alert(libraryMsg);
+      Alert.alert('', libraryMsg);
     }
     if (libraryError !== null) {
-      Alert.alert(libraryError);
+      Alert.alert('', libraryError);
     }
     if (bookMsg !== null) {
       console.log('book message: ', bookMsg)
-      Alert.alert(bookMsg);
+      Alert.alert('', bookMsg);
     }
     if (bookError !== null) {
-      Alert.alert(bookError);
+      // Alert.alert('', bookError);
     }
-  }, [libraryMsg, libraryError]);
+  }, [libraryMsg, libraryError, bookError, bookMsg]);
 
 
   const handleSaveBook = () => {
@@ -56,6 +56,7 @@ const Book = () => {
       dispatch(updateLibrary({book, bookTitleForRowUpdate}));
     } else {
       dispatch(saveBook(book));
+      navigation.navigate('Library');
     }
     dispatch(savingBookIsDisabled(true));
   }

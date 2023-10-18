@@ -1,12 +1,10 @@
-import React, { useEffect, useState, PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { displayBookData, resetBookMessages } from '../../redux/slices/bookSlice';
-import { navigate, setNavigationSource } from '../../redux/slices/navigationSlice';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { savingBookIsDisabled } from '../../redux/slices/appSlice';
+import { connect } from 'react-redux';
+
+import { savingBookIsDisabled, setNavigationSource } from '../../redux/slices/appSlice';
+import { displayBookData, resetBookMessages } from '../../redux/slices/bookSlice';
 import { Colours } from '../../styles/constants';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../NavigationStack';
 import { resetLibraryMessages } from '../../redux/slices/librarySlice';
 
 const SPACING = 15;
@@ -16,7 +14,6 @@ interface BookItemProps {
   navigation: any;
   displayBookData: (item: any) => void;
   setNavigationSource: (source: string) => void;
-  navigate: (screen: string) => void;
   savingBookIsDisabled: (disabled: boolean) => void;
   resetLibraryMessages: () => void;
   resetBookMessages: () => void;
@@ -47,9 +44,6 @@ class BookItem extends PureComponent<BookItemProps, BookItemState> {
 
   render() {
     const { item } = this.props;
-    const { loading, progress } = this.state;
-
-    const progressPercentage = progress * 100;
 
     return (
       <Pressable
@@ -81,7 +75,6 @@ class BookItem extends PureComponent<BookItemProps, BookItemState> {
 
 const mapDispatchToProps = {
   displayBookData,
-  navigate,
   setNavigationSource,
   savingBookIsDisabled,
   resetLibraryMessages,

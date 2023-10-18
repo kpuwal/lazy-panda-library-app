@@ -107,6 +107,7 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: BookType,
       const response = await axios.post(`${URL}/api/add-book`, config, {
         headers: { Authorization: `Bearer ${TOKEN}`}
       })
+      console.log('resp while saving ', response.data.msg)
       return response.data.msg;
     } catch (err) {
       return rejectWithValue(err);

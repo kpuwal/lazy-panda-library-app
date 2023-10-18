@@ -58,7 +58,6 @@ const LoadingDots = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    // paddingTop: '25%'
     alignItems: 'center'
   },
   dot: {

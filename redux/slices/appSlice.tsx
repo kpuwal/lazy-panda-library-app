@@ -4,14 +4,14 @@ export type appTypes = {
   cameraPermission: boolean,
   scanned: boolean,
   disabled: boolean,
-  flashMode: string,
+  navigationSource: string,
 }
 
 const initialState: appTypes = {
   cameraPermission: false,
   scanned: false,
   disabled: true,
-  flashMode: 'off',
+  navigationSource: ''
 };
 
 const appSlice = createSlice({
@@ -24,14 +24,23 @@ const appSlice = createSlice({
     savingBookIsDisabled: (state, action) => {
       state.disabled = action.payload;
     },
-    setFlashMode: (state, action) => {
-      state.flashMode = action.payload;
-    },
     setCameraPermission: (state, action) => {
       state.cameraPermission = action.payload;
+    },
+    setNavigationSource: (state, action) => {
+      return {
+        ...state,
+        navigationSource: action.payload,
+      };
     },
   },
 })
 
-export const { isScanned, savingBookIsDisabled, setFlashMode, setCameraPermission } = appSlice.actions;
+export const { 
+  isScanned, 
+  savingBookIsDisabled,
+  setCameraPermission,
+  setNavigationSource
+} = appSlice.actions;
+
 export default appSlice.reducer;
