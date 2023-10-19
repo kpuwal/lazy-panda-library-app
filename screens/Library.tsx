@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Animated, Dimensions, SectionList, SectionListScrollParams, Pressable, Image } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
@@ -8,9 +8,9 @@ import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAut
 import FilterModal from '../components/library/FilterModal';
 import BookItem from '../components/library/BookItem';
 import AlphabetList from '../components/library/AlphabetList';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '../styles/constants';
-import { headerContainer, headerInfoContainer } from '../styles/styles';
+import { headerInfoContainer } from '../styles/styles';
 import Header from '../components/header/Header';
 import { useNavigation } from '@react-navigation/native';
 import { resetLibraryMessages } from '../redux/slices/librarySlice';

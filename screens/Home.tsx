@@ -5,16 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux'; 
 import { RootState, useAppDispatch } from '../redux/store';
 import { setCameraPermission } from '../redux/slices/appSlice';
-import ButtonTmp from '../components/main/ButtonTmp';
 import { fetchPicker } from '../redux/slices/pickerSlice';
 import { readLibrary } from '../redux/slices/librarySlice';
-import { setBookIsLoaded } from '../redux/slices/bookSlice';
+import { cleanBook, setBookIsLoaded } from '../redux/slices/bookSlice';
 import { Colours } from '../styles/constants';
-
+import ButtonTmp from '../components/main/ButtonTmp';
 
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
-  const cameraPermission = useSelector((state: RootState) => state.app.cameraPermission);
   const [isLove, setLove] = useState(false);
 
   const [isAnimating, setIsAnimating] = useState(true);
@@ -27,16 +25,10 @@ const Home = ({navigation}: any) => {
         dispatch(setCameraPermission(true))
       }
     };
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 800,
-      useNativeDriver: false,
-    }).start(() => {
-      setIsAnimating(false);
-    });
 
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
+    dispatch(cleanBook());
     dispatch(readLibrary())
       .then(() => dispatch(setBookIsLoaded(false)))
       .catch(error => {
@@ -47,7 +39,7 @@ const Home = ({navigation}: any) => {
 
   return (
     <Animated.View 
-      style={[styles.container, { opacity: isAnimating ? opacity : 1 }]}
+      style={styles.container}
     >
       <StatusBar style="light" />
       <ImageBackground

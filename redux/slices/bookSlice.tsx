@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Alert } from 'react-native';
 import { TOKEN } from '@env';
 import { mainUrl } from '../../server-location';
 import axios from 'axios';
@@ -151,6 +150,7 @@ const bookSlice = createSlice({
     resetBookMessages: (state) => {
       state.bookMsg = null;
       state.bookError = null;
+      state.bookIsLoaded = false;
     },
   },
   extraReducers: (builder) => {

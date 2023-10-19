@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { useEffect } from "react";
 import TextCard from "./infoModules/TextCard";
-import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded } from '../../redux/slices/bookSlice';
+import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages } from '../../redux/slices/bookSlice';
 import { resetLibraryMessages, updateLibrary } from "../../redux/slices/librarySlice";
-import { savingBookIsDisabled } from '../../redux/slices/appSlice';
+import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 
 import SelectionCard from './infoModules/SelectionCard';
@@ -24,15 +24,23 @@ import React from "react";
 
 
 const Book = ({ navigation }: any) => {
-  const { book, bookTitleForRowUpdate, bookError, bookMsg } = useSelector((state: RootState) => state.book);
+  const { book, bookTitleForRowUpdate, bookError, bookMsg, bookIsLoaded } = useSelector((state: RootState) => state.book);
   const { libraryMsg, libraryError } = useSelector((state: RootState) => state.library);
-  const picker = useSelector((state: RootState) => state.pickers);
-  const { navigationSource } = useSelector((state: RootState) => state.navigate)
+  const { genre, series, world, readBy } = useSelector((state: RootState) => state.pickers);
+  const { navigationSource, scanned } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(copyAndStoreTitle(book.title));
   }, []);
+
+  const resetStates = () => {
+    dispatch(isScanned(false));
+    dispatch(setBookIsLoaded(false));
+    dispatch(resetBookMessages());
+  }
+
+  useEffect(() => console.log('book is scanned ', scanned, ' loaded ', bookIsLoaded, ' book msg ', bookMsg, ' error ', bookError), [])
 
   useEffect(() => {
     if (libraryMsg !== null) {
@@ -42,11 +50,10 @@ const Book = ({ navigation }: any) => {
       Alert.alert('', libraryError);
     }
     if (bookMsg !== null) {
-      console.log('book message: ', bookMsg)
       Alert.alert('', bookMsg);
     }
     if (bookError !== null) {
-      // Alert.alert('', bookError);
+      Alert.alert('', bookError);
     }
   }, [libraryMsg, libraryError, bookError, bookMsg]);
 
@@ -54,9 +61,10 @@ const Book = ({ navigation }: any) => {
   const handleSaveBook = () => {
     if (navigationSource === 'Library') {
       dispatch(updateLibrary({book, bookTitleForRowUpdate}));
+      resetStates();
     } else {
       dispatch(saveBook(book));
-      navigation.navigate('Library');
+      resetStates();
     }
     dispatch(savingBookIsDisabled(true));
   }
@@ -83,28 +91,28 @@ const Book = ({ navigation }: any) => {
             <SelectionCard
               title={"Genre:"}
               icon={genreIcon}
-              data={picker.genre}
+              data={genre}
               active={book.genre}
               select={(el: string) => dispatch(updateBook({genre: el}))}
             />
             <SelectionCard
               title={"Series:"}
               icon={seriesIcon}
-              data={picker.series}
+              data={series}
               active={book.series}
               select={(el: string) => dispatch(updateBook({series: el}))}
             />
             <SelectionCard
               title={"World:"}
               icon={worldIcon}
-              data={picker.world}
+              data={world}
               active={book.world}
               select={(el: string) => dispatch(updateBook({world: el}))}
             />
             <SelectionCard
               title={"Read By:"}
               icon={readByIcon}
-              data={picker.readBy}
+              data={readBy}
               active={book.readBy}
               select={(el: string) => dispatch(updateBook({readBy: el}))}
             />

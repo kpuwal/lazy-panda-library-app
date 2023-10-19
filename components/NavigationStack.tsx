@@ -1,5 +1,5 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../screens/Home';
 import LibraryScreen from '../screens/Library';
@@ -64,7 +64,9 @@ const AppNavigator = () => {
 export default AppNavigator;
 
 const CustomBackButton = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<
+  NativeStackNavigationProp<RootStackParamList, keyof RootStackParamList>
+>();
 
   const handlePress = () => {
     navigation.goBack();
