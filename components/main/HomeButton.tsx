@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, ImageBackground, Pressable, Image } from "react-native";
+import { Text, View, StyleSheet, Pressable, Image } from "react-native";
 import { Colours } from "../../styles/constants";
 
 interface Props {
   pressed: boolean;
 }
 
-export default function ButtonTmp(props: any) {
+export default function HomeButton(props: any) {
   const { onPress, title, imgSource, imgCol } = props;
   const [isPressed, setIsPressed] = useState(false);
   const colourGreen = '#B6E902';

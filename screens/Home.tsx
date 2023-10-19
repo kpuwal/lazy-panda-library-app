@@ -9,7 +9,7 @@ import { fetchPicker } from '../redux/slices/pickerSlice';
 import { readLibrary } from '../redux/slices/librarySlice';
 import { cleanBook, setBookIsLoaded } from '../redux/slices/bookSlice';
 import { Colours } from '../styles/constants';
-import ButtonTmp from '../components/main/ButtonTmp';
+import HomeButton from '../components/main/HomeButton';
 
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
@@ -38,9 +38,7 @@ const Home = ({navigation}: any) => {
   }, [dispatch]);
 
   return (
-    <Animated.View 
-      style={styles.container}
-    >
+    <Animated.View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
         source={require('./../assets/bg58.jpeg')}
@@ -51,18 +49,6 @@ const Home = ({navigation}: any) => {
             style={{width: 185, height: 107, top: 25, left: '22%', justifyContent: 'center', opacity: 1}}
           />
         <View style={styles.buttonContainer}>
-          <ButtonTmp 
-            onPress={() => navigation.navigate('Scanner')}
-            title="Scan a book"
-            imgSource={require('./../assets/scan.png')}
-            imgCol={require('./../assets/scan-col.png')}
-          />
-          <ButtonTmp
-            onPress={() => navigation.navigate('Library')}
-            title="When in doubt, go to the Library"
-            imgSource={require('./../assets/library-books.png')}
-            imgCol={require('./../assets/library-books-col.png')}
-          />
           <Pressable
             onPressIn={() => setLove(!isLove)} 
             onPressOut={() => setLove(false)} 
@@ -78,6 +64,18 @@ const Home = ({navigation}: any) => {
               }}
             />
           </Pressable>
+          <HomeButton 
+            onPress={() => navigation.navigate('Scanner')}
+            title="Scan a book"
+            imgSource={require('./../assets/scan.png')}
+            imgCol={require('./../assets/scan-col.png')}
+          />
+          <HomeButton
+            onPress={() => navigation.navigate('Library')}
+            title="When in doubt, go to the Library"
+            imgSource={require('./../assets/library-books.png')}
+            imgCol={require('./../assets/library-books-col.png')}
+          />
         </View>
       </ImageBackground>
     </Animated.View>
