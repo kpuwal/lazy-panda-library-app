@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Text, View, StyleSheet, Pressable, Image } from "react-native";
 import { Colours } from "../../styles/constants";
 
-interface Props {
-  pressed: boolean;
+interface HomeButtonTypes {
+  onPress: () => void;
+  title: string;
+  imgSource: any;
+  imgColourSource: any;
 }
 
-export default function HomeButton(props: any) {
-  const { onPress, title, imgSource, imgCol } = props;
+const HomeButton = (props: HomeButtonTypes) => {
+  const { onPress, title, imgSource, imgColourSource } = props;
   const [isPressed, setIsPressed] = useState(false);
-  const colourGreen = '#B6E902';
-  const colourBlue = 'rgb(210, 230, 255)'
 
   const handlePressIn = () => {
     setIsPressed(true);
@@ -21,24 +22,33 @@ export default function HomeButton(props: any) {
   };
 
   return (
-        <Pressable style={({pressed}) => [
-          {
-            backgroundColor: pressed ? Colours.action : 'black'
-          },
-          styles.button
-        ]} onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
-          <View style={styles.imgContainer}>
-            <Image 
-              source={isPressed ? imgCol : imgSource}
-              style={styles.image} 
-            />
-          </View>
-          <Text style={[styles.text, isPressed ? styles.textPressed : null]} numberOfLines={3} lineBreakMode="tail">
-            {title}
-          </Text>
-        </Pressable>
+    <Pressable 
+      style={({pressed}) => [
+        {
+          backgroundColor: pressed ? Colours.action : 'black'
+        },
+        styles.button
+      ]} 
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+    >
+      <View style={styles.imgContainer}>
+        <Image 
+          source={isPressed ? imgColourSource : imgSource}
+          style={styles.image} 
+        />
+      </View>
+      <Text 
+        style={[styles.text, isPressed ? styles.textPressed : null]} numberOfLines={3} lineBreakMode="tail"
+      >
+        {title}
+      </Text>
+    </Pressable>
   )
 }
+
+export default HomeButton;
 
 const styles = StyleSheet.create({
   container: {

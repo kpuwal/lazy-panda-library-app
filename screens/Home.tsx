@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Text, Animated, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from 'react-redux'; 
-import { RootState, useAppDispatch } from '../redux/store';
+import { useAppDispatch } from '../redux/store';
 import { setCameraPermission } from '../redux/slices/appSlice';
 import { fetchPicker } from '../redux/slices/pickerSlice';
 import { readLibrary } from '../redux/slices/librarySlice';
@@ -14,9 +13,6 @@ import HomeButton from '../components/main/HomeButton';
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
   const [isLove, setLove] = useState(false);
-
-  const [isAnimating, setIsAnimating] = useState(true);
-  const opacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -38,47 +34,47 @@ const Home = ({navigation}: any) => {
   }, [dispatch]);
 
   return (
-    <Animated.View style={styles.container}>
+    <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
         source={require('./../assets/bg58.jpeg')}
         style={styles.image}
       >
         <Image
-            source={require('./../assets/logo.png')}
-            style={{width: 185, height: 107, top: 25, left: '22%', justifyContent: 'center', opacity: 1}}
-          />
+          source={require('./../assets/logo.png')}
+          style={{ width: 185, height: 107, top: 25, left: '22%', justifyContent: 'center', opacity: 1 }}
+        />
         <View style={styles.buttonContainer}>
           <Pressable
-            onPressIn={() => setLove(!isLove)} 
-            onPressOut={() => setLove(false)} 
-            style={{bottom: 280, right: 55, position: 'absolute'}}
+            onPressIn={() => setLove(!isLove)}
+            onPressOut={() => setLove(false)}
+            style={{ bottom: '65%', right: 55, position: 'absolute', zIndex: 2 }}
           >
-            <Image 
+            <Image
               source={
-                isLove ? 
-                require('./../assets/love-panda-over2.png') : 
+                isLove ?
+                require('./../assets/love-panda-over2.png') :
                 require('./../assets/love-panda.png')}
               style={{
-                width: 150, height: 120, 
+                width: 150, height: 120,
               }}
             />
           </Pressable>
-          <HomeButton 
+          <HomeButton
             onPress={() => navigation.navigate('Scanner')}
             title="Scan a book"
             imgSource={require('./../assets/scan.png')}
-            imgCol={require('./../assets/scan-col.png')}
+            imgColourSource={require('./../assets/scan-col.png')}
           />
           <HomeButton
             onPress={() => navigation.navigate('Library')}
             title="When in doubt, go to the Library"
             imgSource={require('./../assets/library-books.png')}
-            imgCol={require('./../assets/library-books-col.png')}
+            imgColourSource={require('./../assets/library-books-col.png')}
           />
         </View>
       </ImageBackground>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -100,7 +96,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   buttonContainer: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center'
   },
