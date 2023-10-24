@@ -13,8 +13,6 @@ interface AlphabetListProps {
   isActive?: boolean
 }
 
-// const ALPHABET = '129ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
 const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles, isActive }) => {
   const { alphabet } = useSelector((state: RootState) => state.library);
   const rotateValue = useRef(new Animated.Value(0)).current;
@@ -51,35 +49,6 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
       }
     }
   }, [isOpen, isActive]);
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     // Animate the letters with a spring effect when the menu is opened
-  //     Animated.spring(letterScale, {
-  //       toValue: 1,
-  //       friction: 8,
-  //       useNativeDriver: true,
-  //     }).start();
-  //   } else {
-  //     // Start the closing animation
-  //     Animated.spring(closingAnimation, {
-  //       toValue: 0, // Set it to your desired closing scale value
-  //       friction: 8,
-  //       useNativeDriver: true,
-  //     }).start();
-  //   }
-  // }, [isOpen]);
-
-  // const rotation = {
-  //   transform: [
-  //     {
-  //       rotate: rotateValue.interpolate({
-  //         inputRange: [0, 1],
-  //         outputRange: ['0deg', '180deg']
-  //       })
-  //     }
-  //   ]
-  // };
 
   return (
     <View style={[styles.buttonContainer, floatStyles]}>
@@ -141,9 +110,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-    // borderWidth: .5,
-    // borderColor: Colours.secondary
+    marginBottom: 10
   },
   alphabetContainer: {
     maxHeight: height * .7, // Add this line to limit the widt
@@ -162,7 +129,8 @@ const styles = StyleSheet.create({
     right: 0,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    width: 25,
+    width: 30,
+    height: 25
   },
   alphabetButtonText: {
     fontSize: 16,

@@ -1,24 +1,24 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { BookType, resetBookMessages } from '../redux/slices/bookSlice';
 import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle } from '../redux/slices/librarySlice';
-import FilterModal from '../components/library/FilterModal';
-import BookItem from '../components/library/BookItem';
-import AlphabetList from '../components/library/AlphabetList';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '../styles/constants';
 import { headerInfoContainer } from '../styles/styles';
 import Header from '../components/header/Header';
 import { useNavigation } from '@react-navigation/native';
 import { resetLibraryMessages } from '../redux/slices/librarySlice';
-
+import FilterModal from '../components/library/FilterModal';
+import BookItem from '../components/library/BookItem';
+import AlphabetList from '../components/library/AlphabetList';
+import LibraryLoader from '../components/library/LibraryLoader';
 
 const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
-const HEADER_HEIGHT = 150;
+const HEADER_HEIGHT = 150+50;
 
 const Library = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch();
@@ -31,13 +31,16 @@ const Library = forwardRef((_props, ref) => {
   const [showSectionList, setShowSectionList] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(false);
 
-  const sectionListRef = useRef<SectionList | null>(null);
+  const sectionListRef = useRef<SectionList>(null);
+  const [index, setIndex] = useState(0);
 
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.library);
   const [activeButton, setActiveButton] = useState('default');
   const [activeList, setActiveList] = useState(false);
   const [currentScrollOffset, setCurrentScrollOffset] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
 
   // const [defaultLibrary, setDefaultLibrary] = useState<BookType[] | librarySectionType[]>(library);
   // const [booksNumber, setBooksNumber] = useState(library.length);
@@ -51,13 +54,13 @@ const Library = forwardRef((_props, ref) => {
     setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
   };
 
-  useImperativeHandle(ref, () => ({
-    scrollToLocation: (params: any) => {
-      if (sectionListRef.current) {
-        sectionListRef.current.scrollToLocation(params);
-      }
-    },
-  }));
+  // useImperativeHandle(ref, () => ({
+  //   scrollToLocation: (params: any) => {
+  //     if (sectionListRef.current) {
+  //       sectionListRef.current.scrollToLocation(params);
+  //     }
+  //   },
+  // }));
 
   useEffect(() => {
     dispatch(resetLibraryMessages());
@@ -158,21 +161,31 @@ const Library = forwardRef((_props, ref) => {
   const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
     const sectionIndex = sortedLibrary.findIndex((section: any) => section.title === letter);
-  
-    if (sectionIndex !== -1 && sectionListRef.current) {
-      const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
-      // Scroll to the section with the specified letter
-      sectionListRef.current.scrollToLocation({
-        sectionIndex,
-        itemIndex: 0,
-        viewOffset,
-        viewPosition: 0,
-        animated: true,
-      });
-      console.log('Requested viewOffset:', viewOffset);
-    }
-    
+    setIndex(sectionIndex);
+// console.log('sorted', sortedLibrary)
+    // if (sectionIndex !== -1 && sectionListRef.current) {
+    //   const viewOffset = sectionIndex === 0 ? 0 : headerHeight;
+    //   // Scroll to the section with the specified letter
+    //   sectionListRef.current.scrollToLocation({
+    //     sectionIndex,
+    //     itemIndex: 0,
+    //     viewOffset,
+    //     viewPosition: 0,
+    //     animated: true,
+    //   });
+      console.log('Requested section index: ', sectionIndex);
+    // }
   };
+
+  useEffect(() => {
+    sectionListRef.current?.scrollToLocation({
+      sectionIndex: index,
+      itemIndex: 0,
+      animated: true,
+      viewOffset: 150,
+      viewPosition: 0
+    })
+  }, [index]);
 
   const renderSectionHeader = ({ section }: any) => (
     <Text style={styles.sectionHeader}>{section.title}</Text>
@@ -183,25 +196,27 @@ const Library = forwardRef((_props, ref) => {
   }
 
   // const sectionKeyExtractor = (section: any) => section.key.toString();
-  const sectionKeyExtractor = (section: any) => {
-    if (section && section.title) {
-      return section.title.toString(); // Convert title to string if it's not undefined
-    }
-    return 'Unknown';
-  };
+  // const sectionKeyExtractor = (section: any) => {
+  //   if (section && section.title) {
+  //     return section.title.toString(); // Convert title to string if it's not undefined
+  //   }
+  //   return 'Unknown';
+  // };
+
 
   if (!libraryIsLoaded) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
-      </View>
+      <LibraryLoader />
+      // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      //   <ActivityIndicator size="large" />
+      // </View>
     );
   }
 
   return (
     <View style={{flex: 1, backgroundColor: Colours.tertiary}}>
       <StatusBar style="dark" />
-      <View style={styles.headerContainer}>
+      <View style={styles.headerContainer} ref={(headerView) => headerView && headerView.measure((x, y, width, height) => setHeaderHeight(height))}>
         <Header>
           <Header.GoBack />
           <View style={headerInfoContainer}>
@@ -274,18 +289,21 @@ const Library = forwardRef((_props, ref) => {
       </View>
 
       {showSectionList ? (
+        <SafeAreaView>
           <SectionList
             ref={sectionListRef}
-            sections={sortedLibrary as unknown as librarySectionType[]}
-            // keyExtractor={sectionKeyExtractor}
+            initialScrollIndex={index}
+            sections={sortedLibrary as librarySectionType[]}
+            // keyExtractor={(item, index) => item + index}
             renderItem={renderItem}
             renderSectionHeader={renderSectionHeader}
             showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
-            onScroll={handleScroll}
+            // onScroll={handleScroll}
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
           />
+          </SafeAreaView>
         ) : (
           <FlatList
             data={library as BookType[]}

@@ -4,5 +4,9 @@
     "jsx": "react-native",
     "strict": true,
     "typeRoots": ["./types"],
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["components/*"], 
+    }
   }
 }

@@ -10,8 +10,17 @@ import { cleanBook, setBookIsLoaded } from '../redux/slices/bookSlice';
 import { Colours } from '../styles/constants';
 import HomeButton from '../components/main/HomeButton';
 
+const BACKGROUND = [
+  require('./../assets/bg3.jpeg'),
+  require('./../assets/bg5.jpeg'),
+  require('./../assets/bg8.jpeg'),
+  require('./../assets/bg58.jpeg')
+]
+
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
+  const randomIndex = Math.floor(Math.random() * BACKGROUND.length);
+  const [randomBackground] = useState(BACKGROUND[randomIndex]);
   const [isLove, setLove] = useState(false);
 
   useEffect(() => {
@@ -37,26 +46,26 @@ const Home = ({navigation}: any) => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require('./../assets/bg58.jpeg')}
+        source={randomBackground}
         style={styles.image}
       >
         <Image
           source={require('./../assets/logo.png')}
-          style={{ width: 185, height: 107, top: 25, left: '22%', justifyContent: 'center', opacity: 1 }}
+          style={{ width: 185, height: 107, top: 25, left: '21%', justifyContent: 'center', opacity: 1 }}
         />
         <View style={styles.buttonContainer}>
           <Pressable
             onPressIn={() => setLove(!isLove)}
             onPressOut={() => setLove(false)}
-            style={{ bottom: '65%', right: 55, position: 'absolute', zIndex: 2 }}
+            style={{ bottom: '69%', right: 55, position: 'absolute', zIndex: 2 }}
           >
             <Image
               source={
                 isLove ?
-                require('./../assets/love-panda-over2.png') :
-                require('./../assets/love-panda.png')}
+                require('./../assets/panda_button_love.png') :
+                require('./../assets/panda_button.png')}
               style={{
-                width: 150, height: 120,
+                width: 150, height: 100,
               }}
             />
           </Pressable>

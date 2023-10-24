@@ -7,25 +7,26 @@ import { mainUrl } from './server-location';
 import * as Font from 'expo-font';
 import axios from 'axios';
 import AppNavigator from './components/NavigationStack';
+import { useFonts } from 'expo-font';
 
 const URL = mainUrl();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [appIsReady, setAppIsReady] = useState(false);
+  // const [appIsReady, setAppIsReady] = useState(false);
 
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      'Courier Prime': {
-        uri: require('./assets/Courier_Prime/CourierPrime-Regular.ttf'),
-        display: Font.FontDisplay.FALLBACK,
-      },
-      'Courier Prime Bold': {
-        uri: require('./assets/Courier_Prime/CourierPrime-Bold.ttf'),
-        display: Font.FontDisplay.FALLBACK,
-      },
-    });
-  }
+  // const loadFonts = async () => {
+  //   await Font.loadAsync({
+  //     'Courier Prime': {
+  //       uri: require('./assets/Courier_Prime/CourierPrime-Regular.ttf'),
+  //       display: Font.FontDisplay.FALLBACK,
+  //     },
+  //     'Courier Prime Bold': {
+  //       uri: require('./assets/Courier_Prime/CourierPrime-Bold.ttf'),
+  //       display: Font.FontDisplay.FALLBACK,
+  //     },
+  //   });
+  // }
 
 // get ping message from the server to see if it's working
   const getPingMessage = async () => {
@@ -43,25 +44,38 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        await loadFonts();
+        // await loadFonts();
+        await getPingMessage();
+
       } catch (e) {
         console.warn(e);
-      } finally {
-        setAppIsReady(true);
-        await getPingMessage();
-      }
+      } 
+      // finally {
+      //   setAppIsReady(true);
+      //   await getPingMessage();
+      // }
     }
 
     prepare();
   }, []);
 
+  const [fontsLoaded] = useFonts({
+    'Courier Prime': require('./assets/Courier_Prime/CourierPrime-Regular.ttf'),
+    'Courier Prime Bold': require('./assets/Courier_Prime/CourierPrime-Bold.ttf')
+  });
+
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (appIsReady) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [appIsReady]);
   const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
+    if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
-  }, [appIsReady]);
+  }, [fontsLoaded]);
 
-  if (!appIsReady) {
+  if (!fontsLoaded) {
     return null;
   }
 

@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 
 const SIZE = 6;
-const COLOUR = 'white';
+// const COLOUR = 'white';
 
-const LoadingDots = () => {
+type LoadingDotsTypes = {
+  colour: string
+}
+
+const LoadingDots = ({ colour }: LoadingDotsTypes) => {
   const [dot1Scale] = useState(new Animated.Value(1));
   const [dot2Scale] = useState(new Animated.Value(1));
   const [dot3Scale] = useState(new Animated.Value(1));
+  const COLOUR = colour;
 
   useEffect(() => {
     const animationSequence = [
@@ -48,9 +53,27 @@ const LoadingDots = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.dot, { transform: [{ scale: dot1Scale }] }]} />
-      <Animated.View style={[styles.dot, { transform: [{ scale: dot2Scale }] }]} />
-      <Animated.View style={[styles.dot, { transform: [{ scale: dot3Scale }] }]} />
+      <Animated.View style={[
+        styles.dot,
+        {
+          transform: [{ scale: dot1Scale }], 
+          backgroundColor: COLOUR 
+        }]} 
+      />
+      <Animated.View style={[
+        styles.dot,
+        {
+          transform: [{ scale: dot2Scale }], 
+          backgroundColor: COLOUR 
+        }]} 
+      />
+      <Animated.View style={[
+        styles.dot,
+        {
+          transform: [{ scale: dot3Scale }], 
+          backgroundColor: COLOUR 
+        }]} 
+      />
     </View>
   );
 };
@@ -64,7 +87,6 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
     borderRadius: SIZE/2,
-    backgroundColor: COLOUR,
     marginHorizontal: 4,
   },
 });

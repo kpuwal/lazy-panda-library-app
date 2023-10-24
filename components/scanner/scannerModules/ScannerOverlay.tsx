@@ -26,7 +26,7 @@ const ScannerOverlay = () => {
             {!scanned && 
               <Text style={styles.infoTxt}>Scanning</Text>
             }
-            <LoadingDots />
+            <LoadingDots colour={'white'} />
           </View>
           <View style={styles.box32}>
             <ScanningGIF />
