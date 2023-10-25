@@ -4,64 +4,68 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages } from '../../redux/slices/bookSlice';
 import { isScanned, setNavigationSource } from '../../redux/slices/appSlice';
-import { useEffect, useState } from 'react';
+import { randomBookNotFoundMessage } from '../../helpers/constants';
 
 
-const Scanner = ({navigation}: any) => {
+const Scanner = ({ navigation }: any) => {
   const scanned = useSelector((state: RootState) => state.app.scanned);
-  const { bookError, book } = useSelector((state: RootState) => state.book);
-  const [alertShown, setAlertShown] = useState(false);
+  const { bookIsLoaded } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
-
-  useEffect(() => scannerAlert(), [bookError, alertShown]);
 
   const resetStates = () => {
     dispatch(isScanned(false));
     dispatch(setBookIsLoaded(false));
     dispatch(resetBookMessages());
-    setAlertShown(false);
-  }
+  };
 
   const scannerAlert = () => {
-    if (bookError !== null && !alertShown) {
       Alert.alert(
-        '', 
-        bookError,
-        [{
-          text: 'Scan again',
-          onPress: () => {
-            resetStates();
-          }
-          ,
-          style: 'cancel',
-        }, {
-          text: 'Add book manually', onPress: () => {
-          navigation.navigate('Book');
-          resetStates();
-        }}]
+        'Error',
+        randomBookNotFoundMessage,
+        [
+          {
+            text: 'Scan again',
+            onPress: () => {
+              resetStates();
+            },
+          },
+          {
+            text: 'Add this book to our collection and be the hero panda.',
+            onPress: () => {
+              navigation.navigate('Book');
+              resetStates();
+            },
+          },
+        ]
       );
-      setAlertShown(true);
-    }
   };
 
   const handleBarcodeScan = async ({ data }: BarCodeScannerResult) => {
+    if (!scanned) {
       dispatch(isScanned(true));
       dispatch(cleanBook());
-      await dispatch(fetchBook(data)).then(() => {
-        dispatch(setNavigationSource('Scanner'));
-        resetStates();
-        if (book.isFound) {
+      try {
+        await dispatch(fetchBook(data));
+        if (bookIsLoaded) {
+          dispatch(setNavigationSource('Scanner'));
+          resetStates();
           navigation.navigate('Book');
-        };
-      });
+        } else {
+          scannerAlert();
+        }
+      } catch (error) {
+        console.error('Error during book fetching:', error);
+      }
+    }
   };
 
   return (
-     <BarCodeScanner
+    <BarCodeScanner
       style={StyleSheet.absoluteFillObject}
       onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
     />
-  )
-}
+  );
+};
 
 export default Scanner;
+

@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import ScannerBG from './ScannerBG';
 import LoadingDots from './LoadingDots';
 import ScanningGIF from './ScanningGIF';
+import { useEffect } from 'react';
 
 const ScannerOverlay = () => {
   const { scanned } = useSelector((state: RootState) => state.app);

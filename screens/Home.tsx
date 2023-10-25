@@ -9,13 +9,7 @@ import { readLibrary } from '../redux/slices/librarySlice';
 import { cleanBook, setBookIsLoaded } from '../redux/slices/bookSlice';
 import { Colours } from '../styles/constants';
 import HomeButton from '../components/main/HomeButton';
-
-const BACKGROUND = [
-  require('./../assets/bg3.jpeg'),
-  require('./../assets/bg5.jpeg'),
-  require('./../assets/bg8.jpeg'),
-  require('./../assets/bg58.jpeg')
-]
+import { BACKGROUND } from '../helpers/constants';
 
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
@@ -38,7 +32,6 @@ const Home = ({navigation}: any) => {
       .then(() => dispatch(setBookIsLoaded(false)))
       .catch(error => {
         dispatch(setBookIsLoaded(false));
-        console.error("Error fetching library:", error);
       });
   }, [dispatch]);
 

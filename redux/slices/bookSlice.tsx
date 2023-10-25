@@ -106,7 +106,6 @@ export const saveBook = createAsyncThunk('/api/add-book', async (book: BookType,
       const response = await axios.post(`${URL}/api/add-book`, config, {
         headers: { Authorization: `Bearer ${TOKEN}`}
       })
-      console.log('resp while saving ', response.data.msg)
       return response.data.msg;
     } catch (err) {
       return rejectWithValue(err);
@@ -144,9 +143,6 @@ const bookSlice = createSlice({
     setBookIsLoaded: (state, action) => {
       state.bookIsLoaded = action.payload;
     },
-    resetBookIsLoaded: (state) => {
-      state.bookIsLoaded = false;
-    },
     resetBookMessages: (state) => {
       state.bookMsg = null;
       state.bookError = null;
@@ -157,7 +153,7 @@ const bookSlice = createSlice({
     builder
     .addCase(fetchBook.fulfilled, (state, action) => {
       const { isFound, title, author, pageCount, publishedDate, language } = action.payload;
-    
+    console.log('is found ')
       if (isFound) {
         state.book.title = title || '';
         state.book.author = author || '';
@@ -165,18 +161,21 @@ const bookSlice = createSlice({
         state.book.publishedDate = publishedDate || '';
         state.book.language = (language || '').toUpperCase();
         state.bookIsLoaded = true;
-      } else {
-        state.bookError = "Book has not been found in the database";
-      }
+      } 
+      // else {
+      //   state.bookError = "Book has not been found in the database";
+      // }
     })    
     .addCase(fetchBook.rejected, (state, action) => {
       state.bookError = "Server is not connected";
     })
     .addCase(saveBook.fulfilled, (state, action) => {
       state.bookMsg = action.payload;
+      // state.bookIsLoaded = true;
     })
     .addCase(saveBook.rejected, (state, action) => {
       state.bookError = "Error saving the book";
+      // state.bookIsLoaded = true;
     })
   },
 })
@@ -187,7 +186,6 @@ export const {
   displayBookData,
   copyAndStoreTitle,
   setBookIsLoaded,
-  resetBookIsLoaded,
   resetBookMessages
 } = bookSlice.actions;
 
