@@ -25,7 +25,9 @@ const HomeButton = (props: HomeButtonTypes) => {
     <Pressable 
       style={({pressed}) => [
         {
-          backgroundColor: pressed ? Colours.action : 'black'
+          backgroundColor: pressed ? Colours.action : '#0d0d0d',
+          borderWidth: 1,
+          borderColour: '#0d0d0d'
         },
         styles.button
       ]} 

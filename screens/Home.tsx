@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colours.secondary,
     borderWidth: 5,  // Default thickness for sides (bottom, left, right)
     borderTopWidth: 30,  // Thickness for the top
-    borderColor: 'black',
+    borderColor: '#0d0d0d',
     justifyContent: 'space-around'
   },
   image: {

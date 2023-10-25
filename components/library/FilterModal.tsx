@@ -7,29 +7,21 @@ import SelectionCard from '../book/infoModules/SelectionCard';
 import { filterLibrary, resetSelectedFilters, setSelectedFilters } from '../../redux/slices/librarySlice';
 import  Header from '../header/Header';
 import { buttonBlue, buttonSml, headerInfoContainer } from '../../styles/styles';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Colours } from '../../styles/constants';
 import MainButton from '../button/MainButton';
+import { LANGUAGES } from '../../helpers/constants';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const modalWidth = windowWidth * 0.90; // Adjust this to your desired fixed width
-const modalHeight = windowHeight * 0.75; // Adjust this to your desired fixed height
+const modalWidth = windowWidth * 0.90;
+const modalHeight = windowHeight * 0.75;
 
 const FilterModal = ({ visible, onClose }: any) => {
   const picker = useSelector((state: RootState) => state.pickers);
-  // const { book } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
-const languages = [
-  {'label': "EN", 'value': 'EN'},
-  {'label': "NL", 'value': 'NL'},
-  {'label': "PL", 'value': 'PL'},
-  {'label': "ES", 'value': 'ES'}
-];
-
   const { selectedFilters } = useSelector((state: RootState) => state.library);
-
-  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity value for the background overlay
+  const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     // Animate the background opacity when the modal becomes visible
@@ -46,7 +38,6 @@ const languages = [
   }, [visible]);
 
   const handleFilterUpdate = async () => {
-    // Dispatch the action to update the Redux state with selected filters
     if (selectedFilters.type !== '') dispatch(filterLibrary(selectedFilters));
     onClose();
   };
@@ -124,7 +115,7 @@ const languages = [
               <SelectionCard
                 title={"Language:"}
                 icon={languagesIcon}
-                data={languages}
+                data={LANGUAGES}
                 active={selectedFilters.item}
                 select={(el: string) => {
                   dispatch(
@@ -160,7 +151,7 @@ const languages = [
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     position: 'absolute',
     width: windowWidth,
     height: windowHeight,

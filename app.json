@@ -17,12 +17,16 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#010101"
+      "backgroundColor": "#0D0D0D"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#33CCCC"
+      },
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera.",
@@ -32,12 +36,12 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#010101"
+        "backgroundColor": "#33CCCC"
       },
       "splash": {
         "image": "./assets/splash.png",
         "resizeMode": "contain",
-        "backgroundColor": "#010101"
+        "backgroundColor": "#0D0D0D"
       },
       "permissions": [
         "android.permission.CAMERA"

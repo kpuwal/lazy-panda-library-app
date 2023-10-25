@@ -13,20 +13,6 @@ const URL = mainUrl();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  // const [appIsReady, setAppIsReady] = useState(false);
-
-  // const loadFonts = async () => {
-  //   await Font.loadAsync({
-  //     'Courier Prime': {
-  //       uri: require('./assets/Courier_Prime/CourierPrime-Regular.ttf'),
-  //       display: Font.FontDisplay.FALLBACK,
-  //     },
-  //     'Courier Prime Bold': {
-  //       uri: require('./assets/Courier_Prime/CourierPrime-Bold.ttf'),
-  //       display: Font.FontDisplay.FALLBACK,
-  //     },
-  //   });
-  // }
 
 // get ping message from the server to see if it's working
   const getPingMessage = async () => {
@@ -44,16 +30,10 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        // await loadFonts();
         await getPingMessage();
-
       } catch (e) {
         console.warn(e);
-      } 
-      // finally {
-      //   setAppIsReady(true);
-      //   await getPingMessage();
-      // }
+      }
     }
 
     prepare();
@@ -64,11 +44,6 @@ export default function App() {
     'Courier Prime Bold': require('./assets/Courier_Prime/CourierPrime-Bold.ttf')
   });
 
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (appIsReady) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [appIsReady]);
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
