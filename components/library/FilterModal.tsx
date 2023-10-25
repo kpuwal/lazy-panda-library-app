@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Animated } from 'react-native';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
-import { genreIcon, seriesIcon, worldIcon } from '../book/infoModules/Icons';
+import { genreIcon, seriesIcon, worldIcon, languagesIcon } from '../book/infoModules/Icons';
 import SelectionCard from '../book/infoModules/SelectionCard';
 import { filterLibrary, resetSelectedFilters, setSelectedFilters } from '../../redux/slices/librarySlice';
 import  Header from '../header/Header';
@@ -20,6 +20,12 @@ const FilterModal = ({ visible, onClose }: any) => {
   const picker = useSelector((state: RootState) => state.pickers);
   // const { book } = useSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
+const languages = [
+  {'label': "EN", 'value': 'EN'},
+  {'label': "NL", 'value': 'NL'},
+  {'label': "PL", 'value': 'PL'},
+  {'label': "ES", 'value': 'ES'}
+];
 
   const { selectedFilters } = useSelector((state: RootState) => state.library);
 
@@ -110,6 +116,21 @@ const FilterModal = ({ visible, onClose }: any) => {
                     setSelectedFilters({
                       ...selectedFilters,
                       type: 'world',
+                      item: el,
+                    })
+                  );
+                }}
+              />
+              <SelectionCard
+                title={"Language:"}
+                icon={languagesIcon}
+                data={languages}
+                active={selectedFilters.item}
+                select={(el: string) => {
+                  dispatch(
+                    setSelectedFilters({
+                      ...selectedFilters,
+                      type: 'language',
                       item: el,
                     })
                   );

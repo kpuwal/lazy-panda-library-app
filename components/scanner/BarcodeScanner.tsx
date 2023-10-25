@@ -1,5 +1,5 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from '../../redux/store';
 import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages } from '../../redux/slices/bookSlice';

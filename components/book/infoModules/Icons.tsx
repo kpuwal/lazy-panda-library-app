@@ -36,3 +36,8 @@ export const lastReadIcon = <Image
   style={{ width: 25, height: 25 }}
 />
 
+export const languagesIcon = <Image 
+  source={require('./../../../assets/language.png')}  
+  style={{ width: 25, height: 25 }}
+/>
+
