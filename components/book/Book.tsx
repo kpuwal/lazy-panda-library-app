@@ -11,6 +11,7 @@ import { Colours } from "@styles/constants";
 import MainButton from "../button/MainButton";
 import { Ionicons } from "@expo/vector-icons";
 import { LoadingDots } from "@scanner/index";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const Book = () => {
@@ -29,6 +30,7 @@ const Book = () => {
     dispatch(isScanned(false));
     dispatch(setBookIsLoaded(false));
     dispatch(resetBookMessages());
+    dispatch(resetLibraryMessages());
   }
 
   useEffect(() => {
@@ -53,16 +55,21 @@ const Book = () => {
     }
   }, [libraryMsg, libraryError, bookError, bookMsg]);
 
-
+  useFocusEffect(
+    React.useCallback(() => {
+      resetStates();
+    }, [])
+  );
+  
   const handleSaveBook = () => {
     if (navigationSource === 'Library') {
       dispatch(updateLibrary({book, bookTitleForRowUpdate}));
       setBookIsLoading(true);
-      resetStates();
+      // resetStates();
     } else {
       dispatch(saveBook(book));
       setBookIsLoading(true);
-      resetStates();
+      // resetStates();
     }
     dispatch(savingBookIsDisabled(true));
   }

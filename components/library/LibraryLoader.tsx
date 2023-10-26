@@ -23,7 +23,7 @@ const LibraryLoader = () => {
         <Text style={{paddingVertical: 20, fontFamily: 'Courier Prime Bold', fontSize: 21}}>Library is loading</Text>
         <LoadingDots colour={'black'} />
       </View>
-      <Text style={{paddingVertical: 30, fontFamily: 'Courier Prime Bold', width: '80%', fontSize: 21}}>{randomLibraryIsLoadingMessage}</Text>
+      <Text style={{paddingVertical: 30, fontFamily: 'Courier Prime Bold', width: '70%', fontSize: 21}}>{randomLibraryIsLoadingMessage}</Text>
     </View>
   )
 }
