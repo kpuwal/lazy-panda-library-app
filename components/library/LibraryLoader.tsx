@@ -1,7 +1,7 @@
 import { View, Text, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import LoadingDots from '../scanner/scannerModules/LoadingDots';
-import { randomLibraryIsLoadingMessage } from '../../helpers/constants';
+import { randomLibraryIsLoadingMessage } from '@helpers/constants';
 
 const LibraryLoader = () => {
   return (

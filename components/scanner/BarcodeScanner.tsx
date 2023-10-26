@@ -1,15 +1,14 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import { Alert, StyleSheet } from 'react-native';
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from '../../redux/store';
-import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages } from '../../redux/slices/bookSlice';
-import { isScanned, setNavigationSource } from '../../redux/slices/appSlice';
-import { randomBookNotFoundMessage } from '../../helpers/constants';
+import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages, isScanned, setNavigationSource, RootState, useAppDispatch } from '@reduxStates/index';
+import { randomBookNotFoundMessage } from '@helpers/constants';
+import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
 
 
 const Scanner = ({ navigation }: any) => {
-  const scanned = useSelector((state: RootState) => state.app.scanned);
-  const { bookIsLoaded } = useSelector((state: RootState) => state.book);
+  const { scanned } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
 
   const resetStates = () => {
@@ -18,7 +17,7 @@ const Scanner = ({ navigation }: any) => {
     dispatch(resetBookMessages());
   };
 
-  const scannerAlert = () => {
+  const handleBookNotFound = () => {
       Alert.alert(
         'Error',
         randomBookNotFoundMessage,
@@ -30,10 +29,9 @@ const Scanner = ({ navigation }: any) => {
             },
           },
           {
-            text: 'Add this book to our collection and be the hero panda.',
+            text: 'Add book manually',
             onPress: () => {
               navigation.navigate('Book');
-              resetStates();
             },
           },
         ]
@@ -45,19 +43,24 @@ const Scanner = ({ navigation }: any) => {
       dispatch(isScanned(true));
       dispatch(cleanBook());
       try {
-        await dispatch(fetchBook(data));
-        if (bookIsLoaded) {
+        const result = await dispatch(fetchBook(data));
+        if (result.payload.isFound) {
           dispatch(setNavigationSource('Scanner'));
-          resetStates();
           navigation.navigate('Book');
         } else {
-          scannerAlert();
+          handleBookNotFound();
         }
       } catch (error) {
         console.error('Error during book fetching:', error);
       }
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      resetStates();
+    }, [])
+  );
 
   return (
     <BarCodeScanner

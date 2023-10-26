@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
-import { navigate } from '../redux/slices/navigationSlice';
-import { useAppDispatch } from '../redux/store';
+import { navigate } from '../reduxStates/slices/navigationSlice';
+import { useAppDispatch } from '../reduxStates/store';
 
 export default function useSwipeToHomeGesture() {
   const dispatch = useAppDispatch();

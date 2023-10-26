@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 // import TextCard from './TextCard';
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from '../../../redux/store';
-import { updateBook } from '../../../redux/slices/bookSlice';
+import { RootState, useAppDispatch } from '../../../reduxStates/store';
+import { updateBook } from '../../../reduxStates/slices/bookSlice';
 import { Colours } from '../../../styles/constants';
 
 const NumbersCard = () => {

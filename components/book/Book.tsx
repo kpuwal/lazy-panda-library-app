@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from '../../redux/store';
+import { RootState, useAppDispatch } from '../../reduxStates/store';
 import { useEffect, useState } from "react";
 import TextCard from "./infoModules/TextCard";
-import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages } from '../../redux/slices/bookSlice';
-import { resetLibraryMessages, updateLibrary } from "../../redux/slices/librarySlice";
-import { isScanned, savingBookIsDisabled } from '../../redux/slices/appSlice';
+import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages } from '../../reduxStates/slices/bookSlice';
+import { resetLibraryMessages, updateLibrary } from "../../reduxStates/slices/librarySlice";
+import { isScanned, savingBookIsDisabled } from '../../reduxStates/slices/appSlice';
 import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
 
 import SelectionCard from './infoModules/SelectionCard';

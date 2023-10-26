@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
-import { useAppDispatch } from '../../../redux/store';
-import { updateBook } from '../../../redux/slices/bookSlice';
+import { useAppDispatch } from '../../../reduxStates/store';
+import { updateBook } from '../../../reduxStates/slices/bookSlice';
 
 
 type DateCardTypes = {

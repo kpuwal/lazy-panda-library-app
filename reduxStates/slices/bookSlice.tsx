@@ -153,7 +153,7 @@ const bookSlice = createSlice({
     builder
     .addCase(fetchBook.fulfilled, (state, action) => {
       const { isFound, title, author, pageCount, publishedDate, language } = action.payload;
-    console.log('is found ')
+    
       if (isFound) {
         state.book.title = title || '';
         state.book.author = author || '';
@@ -161,10 +161,7 @@ const bookSlice = createSlice({
         state.book.publishedDate = publishedDate || '';
         state.book.language = (language || '').toUpperCase();
         state.bookIsLoaded = true;
-      } 
-      // else {
-      //   state.bookError = "Book has not been found in the database";
-      // }
+      }
     })    
     .addCase(fetchBook.rejected, (state, action) => {
       state.bookError = "Server is not connected";

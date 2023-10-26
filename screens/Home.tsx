@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { View, StyleSheet, ImageBackground, Image, Text, Animated, Pressable } from 'react-native';
+import { View, StyleSheet, ImageBackground, Image, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useAppDispatch } from '../redux/store';
-import { setCameraPermission } from '../redux/slices/appSlice';
-import { fetchPicker } from '../redux/slices/pickerSlice';
-import { readLibrary } from '../redux/slices/librarySlice';
-import { cleanBook, setBookIsLoaded } from '../redux/slices/bookSlice';
-import { Colours } from '../styles/constants';
-import HomeButton from '../components/main/HomeButton';
-import { BACKGROUND } from '../helpers/constants';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch } from '@reduxStates/index';
+import { Colours } from '@styles/constants';
+import HomeButton from '@components/main/HomeButton';
+import { BACKGROUND } from '@helpers/constants';
 
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
@@ -30,7 +26,7 @@ const Home = ({navigation}: any) => {
     dispatch(cleanBook());
     dispatch(readLibrary())
       .then(() => dispatch(setBookIsLoaded(false)))
-      .catch(error => {
+      .catch(() => {
         dispatch(setBookIsLoaded(false));
       });
   }, [dispatch]);

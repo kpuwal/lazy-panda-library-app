@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Text, View, StyleSheet, Pressable, Image } from "react-native";
-import { Colours } from "../../styles/constants";
+import { Colours } from "@styles/constants";
 
 interface HomeButtonTypes {
   onPress: () => void;

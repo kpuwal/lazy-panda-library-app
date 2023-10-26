@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Colours } from '../../styles/constants';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState } from '../../reduxStates/store';
 
 const { height } = Dimensions.get('window');
 

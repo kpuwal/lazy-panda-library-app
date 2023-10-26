@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from "react-redux";
-import { store } from './redux/store';
+import { store } from './reduxStates/store';
 import { mainUrl } from './server-location';
 import * as Font from 'expo-font';
 import axios from 'axios';

@@ -6,7 +6,10 @@
     "typeRoots": ["./types"],
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["components/*"], 
+      "@components/*": ["./components/*"],
+      "@helpers/*": ["./helpers/*"],
+      "@reduxStates/*": ["reduxStates/*"],
+      "@styles/*": ["styles/*"],
     }
   }
 }

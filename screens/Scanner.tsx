@@ -1,13 +1,10 @@
 import { useEffect } from 'react';
 import { useSelector } from "react-redux";
 import { Text, View } from 'react-native';
-
-import { RootState, useAppDispatch } from '../redux/store';
-import { fetchPicker } from '../redux/slices/pickerSlice';
-
-import ScannerOverlay from '../components/scanner/scannerModules/ScannerOverlay';
-import BarcodeScanner from '../components/scanner/BarcodeScanner';
 import { Feather } from '@expo/vector-icons';
+import { fetchPicker, RootState, useAppDispatch } from '@reduxStates/index';
+import ScannerOverlay from '@components/scanner/scannerModules/ScannerOverlay';
+import BarcodeScanner from '@components/scanner/BarcodeScanner';
 
 const Scanner = ({navigation}: any) => {
   const cameraPermission = useSelector(

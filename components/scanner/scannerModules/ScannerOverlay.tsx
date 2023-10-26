@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../reduxStates/store';
 import { useSelector } from "react-redux";
 import { StatusBar } from 'expo-status-bar';
 

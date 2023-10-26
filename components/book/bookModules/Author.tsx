@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { Colours } from '../../../styles/constants';
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from '../../../redux/store';
-import { updateBook } from '../../../redux/slices/bookSlice';
+import { RootState, useAppDispatch } from '../../../reduxStates/store';
+import { updateBook } from '../../../reduxStates/slices/bookSlice';
 
 const Author = () => {
   const { book } = useSelector((state: RootState) => state.book);

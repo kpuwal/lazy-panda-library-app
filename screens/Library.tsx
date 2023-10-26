@@ -2,19 +2,17 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef,
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../redux/store';
-import { BookType, resetBookMessages } from '../redux/slices/bookSlice';
-import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle } from '../redux/slices/librarySlice';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Colours, Fonts } from '../styles/constants';
-import { headerInfoContainer } from '../styles/styles';
-import Header from '../components/header/Header';
-import { useNavigation } from '@react-navigation/native';
-import { resetLibraryMessages } from '../redux/slices/librarySlice';
-import FilterModal from '../components/library/FilterModal';
-import BookItem from '../components/library/BookItem';
-import AlphabetList from '../components/library/AlphabetList';
-import LibraryLoader from '../components/library/LibraryLoader';
+import { Colours, Fonts } from '@styles/constants';
+import { headerInfoContainer } from '@styles/styles';
+import Header from '@components/header/Header';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import FilterModal from '@components/library/FilterModal';
+import BookItem from '@components/library/BookItem';
+import AlphabetList from '@components/library/AlphabetList';
+import LibraryLoader from '@components/library/LibraryLoader';
+import LibraryOverlay from '@components/library/LibraryOverlay';
 
 const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
@@ -38,7 +36,10 @@ const Library = forwardRef((_props, ref) => {
   const [activeButton, setActiveButton] = useState('default');
   const [activeList, setActiveList] = useState(false);
   const [currentScrollOffset, setCurrentScrollOffset] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isManualRefreshing, setIsManualRefreshing] = useState(false);
+
   const [headerHeight, setHeaderHeight] = useState(0);
 
 
@@ -62,10 +63,10 @@ const Library = forwardRef((_props, ref) => {
   //   },
   // }));
 
-  useEffect(() => {
-    dispatch(resetLibraryMessages());
-    dispatch(resetBookMessages());
-  });
+  // useEffect(() => {
+  //   dispatch(resetLibraryMessages());
+  //   dispatch(resetBookMessages());
+  // });
 
   // useEffect(() => {
   //   dispatch(resetSelectedFilters());
@@ -100,6 +101,12 @@ const Library = forwardRef((_props, ref) => {
     offset: ITEM_HEIGHT * index,
     index,
   })), []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      handleInitialLoad();
+    }, [])
+  );
 
   // const scrollToLetter = (letter: string) => {
   //   const index = library.findIndex((item) => item.author.charAt(0).toUpperCase() === letter);
@@ -142,21 +149,54 @@ const Library = forwardRef((_props, ref) => {
     setModalVisible(false);
   }
 
-  const handleRefresh = () => {
-    setIsRefreshing(true); 
+  const handleInitialLoad = () => {
+    handleRefresh(setIsInitialLoading);
+    // setIsInitialLoading(true);
+    // dispatch(readLibrary())
+    //   .then(() => {
+    //     setIsInitialLoading(false);
+    //     setActiveButton('default');
+    //     setActiveList(false);
+    //     setShowSectionList(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error loading library data:', error);
+    //     setIsInitialLoading(false);
+    //   });
+  };
+
+  const handleManualRefresh = () => {
+    handleRefresh(setIsManualRefreshing);
+    // setIsManualRefreshing(true);
+    // dispatch(readLibrary())
+    //   .then(() => {
+    //     setIsManualRefreshing(false);
+    //     setActiveButton('default');
+    //     setActiveList(false);
+    //     setShowSectionList(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error refreshing library data:', error);
+    //     setIsManualRefreshing(false);
+    //   });
+  };
+
+  const handleRefresh = ({setrefresh}: any) => {
+    setrefresh(true);
     dispatch(readLibrary())
-    .then(() => {
-      setIsRefreshing(false);
-      setActiveButton('default');
-      setActiveList(false);
-      setShowSectionList(false);
-    })
-    .catch((error) => {
-      console.error('Error refreshing library data:', error);
-      setIsRefreshing(false);
-    });
+      .then(() => {
+        setrefresh(false);
+        setActiveButton('default');
+        setActiveList(false);
+        setShowSectionList(false);
+      })
+      .catch((error: any) => {
+        console.error('Error refreshing library data:', error);
+        setrefresh(false);
+      });
 
   }
+
 
   const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
@@ -207,9 +247,6 @@ const Library = forwardRef((_props, ref) => {
   if (!libraryIsLoaded) {
     return (
       <LibraryLoader />
-      // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      //   <ActivityIndicator size="large" />
-      // </View>
     );
   }
 
@@ -300,8 +337,8 @@ const Library = forwardRef((_props, ref) => {
             showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
             // onScroll={handleScroll}
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
+            refreshing={isManualRefreshing}
+            onRefresh={handleManualRefresh}
           />
           </SafeAreaView>
         ) : (
@@ -319,8 +356,8 @@ const Library = forwardRef((_props, ref) => {
             onEndReachedThreshold={0.1}
             renderItem={renderItem}
             ItemSeparatorComponent={ItemSeparator}
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
+            refreshing={isManualRefreshing}
+            onRefresh={handleManualRefresh}
           />
         )}
       <AlphabetList
@@ -332,6 +369,7 @@ const Library = forwardRef((_props, ref) => {
         visible={modalVisible}
         onClose={handleCloseModal}
       />
+      <LibraryOverlay isVisible={isInitialLoading} />
     </View>
   );
 });
