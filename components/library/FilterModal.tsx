@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Animated } from 'react-native';
+import { View, Text, Modal, StyleSheet, ScrollView, Dimensions, Animated } from 'react-native';
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from '../../reduxStates/store';
-import { genreIcon, seriesIcon, worldIcon, languagesIcon } from '../book/infoModules/Icons';
-import SelectionCard from '../book/infoModules/SelectionCard';
-import { filterLibrary, resetSelectedFilters, setSelectedFilters } from '../../reduxStates/slices/librarySlice';
-import  Header from '../header/Header';
-import { buttonBlue, buttonSml, headerInfoContainer } from '../../styles/styles';
+import { RootState, useAppDispatch, filterLibrary, setSelectedFilters } from '@reduxStates/index';
+import { genreIcon, seriesIcon, worldIcon, languagesIcon, SelectionCard } from '@book/index';
+import  Header from '@components//header/Header';
+import { buttonSml } from '@styles/styles';
 import { Ionicons } from '@expo/vector-icons';
-import { Colours } from '../../styles/constants';
+import { Colours } from '@styles/constants';
 import MainButton from '../button/MainButton';
-import { LANGUAGES } from '../../helpers/constants';
+import { LANGUAGES } from '@helpers/constants';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

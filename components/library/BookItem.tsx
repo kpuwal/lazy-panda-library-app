@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { connect } from 'react-redux';
-
-import { savingBookIsDisabled, setNavigationSource } from '../../reduxStates/slices/appSlice';
-import { displayBookData, resetBookMessages } from '../../reduxStates/slices/bookSlice';
-import { Colours } from '../../styles/constants';
-import { resetLibraryMessages } from '../../reduxStates/slices/librarySlice';
+import { displayBookData, resetBookMessages, resetLibraryMessages, savingBookIsDisabled, setNavigationSource } from '@reduxStates/index';
+import { Colours } from '@styles/constants';
 
 const SPACING = 15;
 

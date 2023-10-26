@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import { Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { fetchPicker, RootState, useAppDispatch } from '@reduxStates/index';
-import ScannerOverlay from '@components/scanner/scannerModules/ScannerOverlay';
-import BarcodeScanner from '@components/scanner/BarcodeScanner';
+import { BarcodeScanner, ScannerOverlay } from '@scanner/index';
 
 const Scanner = ({navigation}: any) => {
   const cameraPermission = useSelector(

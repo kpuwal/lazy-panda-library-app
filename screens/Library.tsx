@@ -8,11 +8,7 @@ import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import FilterModal from '@components/library/FilterModal';
-import BookItem from '@components/library/BookItem';
-import AlphabetList from '@components/library/AlphabetList';
-import LibraryLoader from '@components/library/LibraryLoader';
-import LibraryOverlay from '@components/library/LibraryOverlay';
+import { FilterModal, BookItem, AlphabetList, LibraryLoader, LibraryOverlay } from '@library/index';
 
 const SPACING = 0.5;
 const ITEM_HEIGHT = 80;
@@ -150,35 +146,35 @@ const Library = forwardRef((_props, ref) => {
   }
 
   const handleInitialLoad = () => {
-    handleRefresh(setIsInitialLoading);
-    // setIsInitialLoading(true);
-    // dispatch(readLibrary())
-    //   .then(() => {
-    //     setIsInitialLoading(false);
-    //     setActiveButton('default');
-    //     setActiveList(false);
-    //     setShowSectionList(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error loading library data:', error);
-    //     setIsInitialLoading(false);
-    //   });
+    // handleRefresh(setIsInitialLoading);
+    setIsInitialLoading(true);
+    dispatch(readLibrary())
+      .then(() => {
+        setIsInitialLoading(false);
+        setActiveButton('default');
+        setActiveList(false);
+        setShowSectionList(false);
+      })
+      .catch((error) => {
+        console.error('Error loading library data:', error);
+        setIsInitialLoading(false);
+      });
   };
 
   const handleManualRefresh = () => {
-    handleRefresh(setIsManualRefreshing);
-    // setIsManualRefreshing(true);
-    // dispatch(readLibrary())
-    //   .then(() => {
-    //     setIsManualRefreshing(false);
-    //     setActiveButton('default');
-    //     setActiveList(false);
-    //     setShowSectionList(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error refreshing library data:', error);
-    //     setIsManualRefreshing(false);
-    //   });
+    // handleRefresh(setIsManualRefreshing);
+    setIsManualRefreshing(true);
+    dispatch(readLibrary())
+      .then(() => {
+        setIsManualRefreshing(false);
+        setActiveButton('default');
+        setActiveList(false);
+        setShowSectionList(false);
+      })
+      .catch((error) => {
+        console.error('Error refreshing library data:', error);
+        setIsManualRefreshing(false);
+      });
   };
 
   const handleRefresh = ({setrefresh}: any) => {

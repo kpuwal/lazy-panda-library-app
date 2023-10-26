@@ -7,9 +7,13 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["./components/*"],
+      "@scanner/*": ["./components/scanner/*"],
+      "@library/*": ["./components/library/*"],
+      "@book/*": ["./components/book/*"],
       "@helpers/*": ["./helpers/*"],
-      "@reduxStates/*": ["reduxStates/*"],
-      "@styles/*": ["styles/*"],
+      "@reduxStates/*": ["./reduxStates/*"],
+      "@styles/*": ["./styles/*"],
+      "@assets/*": ["./assets/*"]
     }
   }
 }

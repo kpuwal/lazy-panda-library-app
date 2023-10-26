@@ -9,6 +9,8 @@ import React from 'react';
 
 const Scanner = ({ navigation }: any) => {
   const { scanned } = useSelector((state: RootState) => state.app);
+  const { bookIsLoaded } = useSelector((state: RootState) => state.book);
+
   const dispatch = useAppDispatch();
 
   const resetStates = () => {

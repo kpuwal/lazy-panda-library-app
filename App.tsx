@@ -1,13 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from "react-redux";
-import { store } from './reduxStates/store';
-import { mainUrl } from './server-location';
-import * as Font from 'expo-font';
+import { store } from '@reduxStates/index';
 import axios from 'axios';
-import AppNavigator from './components/NavigationStack';
+import AppNavigator from '@components/NavigationStack';
 import { useFonts } from 'expo-font';
+import { mainUrl } from './server-location';
 
 const URL = mainUrl();
 SplashScreen.preventAutoHideAsync();
@@ -40,8 +39,8 @@ export default function App() {
   }, []);
 
   const [fontsLoaded] = useFonts({
-    'Courier Prime': require('./assets/Courier_Prime/CourierPrime-Regular.ttf'),
-    'Courier Prime Bold': require('./assets/Courier_Prime/CourierPrime-Bold.ttf')
+    'Courier Prime': require('@assets/Fonts/CourierPrime-Regular.ttf'),
+    'Courier Prime Bold': require('@assets/Fonts/CourierPrime-Bold.ttf')
   });
 
   const onLayoutRootView = useCallback(async () => {

@@ -1,12 +1,11 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { RootState } from '../../../reduxStates/store';
 import { useSelector } from "react-redux";
 import { StatusBar } from 'expo-status-bar';
-
+import { RootState } from '@reduxStates/index';
 import ScannerBG from './ScannerBG';
 import LoadingDots from './LoadingDots';
 import ScanningGIF from './ScanningGIF';
-import { useEffect } from 'react';
+
 
 const ScannerOverlay = () => {
   const { scanned } = useSelector((state: RootState) => state.app);

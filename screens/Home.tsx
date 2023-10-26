@@ -39,7 +39,7 @@ const Home = ({navigation}: any) => {
         style={styles.image}
       >
         <Image
-          source={require('./../assets/logo.png')}
+          source={require('@assets/logo.png')}
           style={{ width: 185, height: 107, top: 25, left: '21%', justifyContent: 'center', opacity: 1 }}
         />
         <View style={styles.buttonContainer}>
@@ -51,8 +51,8 @@ const Home = ({navigation}: any) => {
             <Image
               source={
                 isLove ?
-                require('./../assets/panda_button_love.png') :
-                require('./../assets/panda_button.png')}
+                require('@assets/panda_button_love.png') :
+                require('@assets/panda_button.png')}
               style={{
                 width: 150, height: 100,
               }}
@@ -61,14 +61,14 @@ const Home = ({navigation}: any) => {
           <HomeButton
             onPress={() => navigation.navigate('Scanner')}
             title="Scan a book"
-            imgSource={require('./../assets/scan.png')}
-            imgColourSource={require('./../assets/scan-col.png')}
+            imgSource={require('@assets/scan.png')}
+            imgColourSource={require('@assets/scan-col.png')}
           />
           <HomeButton
             onPress={() => navigation.navigate('Library')}
             title="When in doubt, go to the Library"
-            imgSource={require('./../assets/library-books.png')}
-            imgColourSource={require('./../assets/library-books-col.png')}
+            imgSource={require('@assets/library-books.png')}
+            imgColourSource={require('@assets/library-books-col.png')}
           />
         </View>
       </ImageBackground>

@@ -1,9 +1,9 @@
 import { View, Text, Animated, ActivityIndicator, StyleSheet, ScrollView, TouchableHighlight, TouchableOpacity, Pressable, TouchableWithoutFeedback, Dimensions, Easing } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
-import { Colours } from '../../styles/constants';
+import { Colours } from '@styles/constants';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxStates/store';
+import { RootState } from '@reduxStates/index';
 
 const { height } = Dimensions.get('window');
 

@@ -1,34 +1,23 @@
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from '../../reduxStates/store';
-import { useEffect, useState } from "react";
-import TextCard from "./infoModules/TextCard";
-import { updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages } from '../../reduxStates/slices/bookSlice';
-import { resetLibraryMessages, updateLibrary } from "../../reduxStates/slices/librarySlice";
-import { isScanned, savingBookIsDisabled } from '../../reduxStates/slices/appSlice';
-import {genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon} from './infoModules/Icons';
+import React, { useEffect, useState } from "react";
+import { RootState, useAppDispatch, resetLibraryMessages, updateLibrary, isScanned, savingBookIsDisabled, updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages } from "@reduxStates/index";
+import { genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon, SelectionCard, DateCard, TextCard, Title, Author, Numbers } from '@book/index';
 
-import SelectionCard from './infoModules/SelectionCard';
-import DateCard from './infoModules/DateCard';
 import Header from "../header/Header";
-import { buttonMid, headerInfoContainer } from "../../styles/styles";
-import { Colours } from "../../styles/constants";
+import { buttonMid, headerInfoContainer } from "@styles/styles";
+import { Colours } from "@styles/constants";
 import MainButton from "../button/MainButton";
 import { Ionicons } from "@expo/vector-icons";
-
-import Title from './bookModules/Title';
-import Author from "./bookModules/Author";
-import Numbers from "./bookModules/Numbers";
-import React from "react";
-import LoadingDots from "../scanner/scannerModules/LoadingDots";
+import { LoadingDots } from "@scanner/index";
 
 
-const Book = ({ navigation }: any) => {
+const Book = () => {
   const { book, bookTitleForRowUpdate, bookError, bookMsg } = useSelector((state: RootState) => state.book);
   const { libraryMsg, libraryError } = useSelector((state: RootState) => state.library);
   const { genre, series, world, readBy } = useSelector((state: RootState) => state.pickers);
-  const { navigationSource, scanned } = useSelector((state: RootState) => state.app);
+  const { navigationSource } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
   const [bookIsLoading, setBookIsLoading] = useState(false);
 
@@ -41,8 +30,6 @@ const Book = ({ navigation }: any) => {
     dispatch(setBookIsLoaded(false));
     dispatch(resetBookMessages());
   }
-
-  // useEffect(() => console.log('book is scanned ', scanned, ' loaded ', bookIsLoaded, ' book msg ', bookMsg, ' error ', bookError), [])
 
   useEffect(() => {
     // resetStates();
