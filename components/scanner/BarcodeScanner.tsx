@@ -1,5 +1,5 @@
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert, Dimensions, Platform, StyleSheet } from 'react-native';
 import { useSelector } from "react-redux";
 import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages, isScanned, setNavigationSource, RootState, useAppDispatch } from '@reduxStates/index';
 import { randomBookNotFoundMessage } from '@helpers/constants';
@@ -10,7 +10,8 @@ import React from 'react';
 const Scanner = ({ navigation }: any) => {
   const { scanned } = useSelector((state: RootState) => state.app);
   const { bookIsLoaded } = useSelector((state: RootState) => state.book);
-
+  const { height, width } = Dimensions.get('window');
+  
   const dispatch = useAppDispatch();
 
   const resetStates = () => {
@@ -66,7 +67,17 @@ const Scanner = ({ navigation }: any) => {
 
   return (
     <BarCodeScanner
-      style={StyleSheet.absoluteFillObject}
+      style={Platform.OS === "android"
+      ? {
+          position: "absolute",
+          top: 0,
+          transform: [{ translateX: width / 2 }],
+          right: 0,
+          bottom: 0,
+          width: width * 2.5,
+          height: height * 1.5,
+        }
+      : StyleSheet.absoluteFillObject}
       onBarCodeScanned={scanned ? undefined : handleBarcodeScan}
     />
   );

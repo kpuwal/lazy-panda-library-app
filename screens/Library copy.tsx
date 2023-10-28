@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch } from '@reduxStates/index';
@@ -51,13 +51,13 @@ const Library = forwardRef((_props, ref) => {
     setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
   };
 
-  useImperativeHandle(ref, () => ({
-    scrollToLocation: (params: any) => {
-      if (sectionListRef.current) {
-        sectionListRef.current.scrollToLocation(params);
-      }
-    },
-  }));
+  // useImperativeHandle(ref, () => ({
+  //   scrollToLocation: (params: any) => {
+  //     if (sectionListRef.current) {
+  //       sectionListRef.current.scrollToLocation(params);
+  //     }
+  //   },
+  // }));
 
   // useEffect(() => {
   //   dispatch(resetLibraryMessages());
@@ -74,18 +74,18 @@ const Library = forwardRef((_props, ref) => {
   // }, [currentScrollOffset]);
 
   // Effect to scroll to the top when sorting changes
-  useEffect(() => {
-    if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
-      sectionListRef.current?.scrollToLocation({
-        sectionIndex: 0,
-        itemIndex: 0,
-        viewOffset: 0,
-        viewPosition: 0,
-        animated: true,
-      });
-      setScrollToTop(false);
-    }
-  }, [scrollToTop, sortedLibrary]);
+  // useEffect(() => {
+  //   if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
+  //     sectionListRef.current?.scrollToLocation({
+  //       sectionIndex: 0,
+  //       itemIndex: 0,
+  //       viewOffset: 0,
+  //       viewPosition: 0,
+  //       animated: true,
+  //     });
+  //     setScrollToTop(false);
+  //   }
+  // }, [scrollToTop, sortedLibrary]);
 
   const toggleModal = () => {
     dispatch(resetSelectedFilters());
@@ -327,7 +327,7 @@ const Library = forwardRef((_props, ref) => {
             ref={sectionListRef}
             initialScrollIndex={index}
             sections={sortedLibrary as librarySectionType[]}
-            keyExtractor={(item, index) => item + index}
+            // keyExtractor={(item, index) => item + index}
             renderItem={renderItem}
             renderSectionHeader={renderSectionHeader}
             showsVerticalScrollIndicator={false}
@@ -335,7 +335,6 @@ const Library = forwardRef((_props, ref) => {
             // onScroll={handleScroll}
             refreshing={isManualRefreshing}
             onRefresh={handleManualRefresh}
-            // removeClippedSubviews={true}
           />
           </SafeAreaView>
         ) : (
@@ -346,16 +345,15 @@ const Library = forwardRef((_props, ref) => {
             showsVerticalScrollIndicator={false}
             getItemLayout={getItemLayout}
             initialNumToRender={10}
-            // windowSize={10}
-            // maxToRenderPerBatch={15}
-            // updateCellsBatchingPeriod={30}
-            // removeClippedSubviews={false}
-            // onEndReachedThreshold={0.1}
+            windowSize={10}
+            maxToRenderPerBatch={15}
+            updateCellsBatchingPeriod={30}
+            removeClippedSubviews={false}
+            onEndReachedThreshold={0.1}
             renderItem={renderItem}
             ItemSeparatorComponent={ItemSeparator}
             refreshing={isManualRefreshing}
             onRefresh={handleManualRefresh}
-            // removeClippedSubviews={true}
           />
         )}
       <AlphabetList
@@ -367,7 +365,7 @@ const Library = forwardRef((_props, ref) => {
         visible={modalVisible}
         onClose={handleCloseModal}
       />
-      <LibraryOverlay message={'Loading'} isVisible={isInitialLoading} />
+      <LibraryOverlay isVisible={isInitialLoading} />
     </View>
   );
 });

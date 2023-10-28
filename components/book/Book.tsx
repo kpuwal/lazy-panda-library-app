@@ -10,8 +10,7 @@ import { buttonMid, headerInfoContainer } from "@styles/styles";
 import { Colours } from "@styles/constants";
 import MainButton from "../button/MainButton";
 import { Ionicons } from "@expo/vector-icons";
-import { LoadingDots } from "@scanner/index";
-import { useFocusEffect } from "@react-navigation/native";
+import { LibraryOverlay } from "@components/library";
 
 
 const Book = () => {
@@ -26,41 +25,34 @@ const Book = () => {
     dispatch(copyAndStoreTitle(book.title));
   }, []);
 
-  const resetStates = () => {
-    dispatch(isScanned(false));
-    dispatch(setBookIsLoaded(false));
-    dispatch(resetBookMessages());
-    dispatch(resetLibraryMessages());
-  }
+  // const resetStates = () => {
+  //   dispatch(isScanned(false));
+  //   dispatch(setBookIsLoaded(false));
+  //   dispatch(resetBookMessages());
+  //   dispatch(resetLibraryMessages());
+  // }
 
   useEffect(() => {
-    // resetStates();
     if (libraryMsg !== null) {
-      Alert.alert('Success', libraryMsg);
+      Alert.alert('Success', libraryMsg, [{text: 'OK', onPress: () => dispatch(resetLibraryMessages())}]);
       setBookIsLoading(false);
 
     }
     if (libraryError !== null) {
       setBookIsLoading(false);
-      Alert.alert('Error', libraryError);
+      Alert.alert('Error', libraryError, [{text: 'OK', onPress: () => dispatch(resetLibraryMessages())}]);
     }
     if (bookMsg !== null) {
-      Alert.alert('Success', bookMsg);
+      Alert.alert('Success', bookMsg, [{text: 'OK', onPress: () => dispatch(resetBookMessages())}]);
       setBookIsLoading(false);
 
     }
     if (bookError !== null) {
       setBookIsLoading(false);
-      Alert.alert('Error', bookError);
+      Alert.alert('Error', bookError, [{text: 'OK', onPress: () => dispatch(resetBookMessages())}]);
     }
   }, [libraryMsg, libraryError, bookError, bookMsg]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      resetStates();
-    }, [])
-  );
-  
   const handleSaveBook = () => {
     if (navigationSource === 'Library') {
       dispatch(updateLibrary({book, bookTitleForRowUpdate}));
@@ -173,11 +165,7 @@ const Book = () => {
           <Ionicons name="cloud-upload" size={22} color={Colours.primary} />
         </MainButton>
       </View>
-      {bookIsLoading && (
-        <View style={styles.overlay}>
-          <Text style={{paddingVertical: 20, fontFamily: 'Courier Prime Bold', fontSize: 22}}>{navigationSource === 'Library' ? 'Updating' : 'Saving'}</Text>
-          <LoadingDots colour={'black'} />
-        </View>)}
+      <LibraryOverlay message={navigationSource === 'Library' ? 'Updating' : 'Saving'} isVisible={bookIsLoading} />
     </View>
   )
 }
