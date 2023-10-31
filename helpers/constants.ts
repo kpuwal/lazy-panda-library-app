@@ -35,3 +35,10 @@ export const LANGUAGES = [
 export const randomBookNotFoundMessage = bookNotFoundMessages[Math.floor(Math.random() * bookNotFoundMessages.length)];
 
 export const randomLibraryIsLoadingMessage =  libraryIsLoadingMessages[Math.floor(Math.random() * libraryIsLoadingMessages.length)];
+
+// BookItem and library constants
+export const SPACING = 0.5;
+export const ITEM_HEIGHT = 80;
+export const SECTION_ITEM_HEIGHT = 26;
+export const HEADER_HEIGHT = 150+50;
+

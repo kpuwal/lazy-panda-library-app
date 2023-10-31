@@ -14,7 +14,8 @@ import {
   isScanned, 
   savingBookIsDisabled,
   setCameraPermission,
-  setNavigationSource
+  setNavigationSource,
+  setLibraryActiveButton
 } from './appSlice';
 
 import {
@@ -44,6 +45,7 @@ export {
   savingBookIsDisabled,
   setCameraPermission,
   setNavigationSource,
+  setLibraryActiveButton,
   readLibrary,
   updateLibrary,
   filterLibrary,

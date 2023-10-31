@@ -25,6 +25,8 @@ type SelectedFiltersType = {
 
 export type libraryTypes = {
   library: BookType[],
+  librarySortedByAuthor: librarySectionType[],
+  librarySortedByTitle: librarySectionType[],
   sortedLibrary: librarySectionType[],
   bookTitleForRowUpdate: string,
   libraryIsLoaded: boolean,
@@ -39,6 +41,8 @@ export type libraryTypes = {
 
 const initialState: libraryTypes = {
   library: [],
+  librarySortedByAuthor: [],
+  librarySortedByTitle: [],
   sortedLibrary: [],
   bookTitleForRowUpdate: '',
   libraryIsLoaded: false,
@@ -59,11 +63,14 @@ const initialState: libraryTypes = {
 
 export const readLibrary = createAsyncThunk(
   '/api/library',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.get(`${URL}/api/library`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
+
+      dispatch(sortLibraryByTitle(response.data));
+      dispatch(sortLibraryByAuthor(response.data));
       return response.data;
     } catch(err) {
       return rejectWithValue(err)
@@ -126,12 +133,12 @@ const librarySlice = createSlice({
     },
     sortLibraryByTitle: (state, action) => {
       const sortedByTitle = handleSort(action.payload, 'title');
-      state.sortedLibrary = sortedByTitle.sortedSections;
+      state.librarySortedByTitle = sortedByTitle.sortedSections;
       state.alphabet = sortedByTitle.sectionLetters;
     },
     sortLibraryByAuthor: (state, action) => {
       const sortedByAuthor = handleSort(action.payload, 'author');
-      state.sortedLibrary = sortedByAuthor.sortedSections;
+      state.librarySortedByAuthor = sortedByAuthor.sortedSections;
       state.alphabet = sortedByAuthor.sectionLetters;
     },
     resetLibraryMessages: (state) => {

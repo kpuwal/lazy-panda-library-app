@@ -8,11 +8,23 @@ import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { FilterModal, BookItem, AlphabetList, LibraryLoader, LibraryOverlay } from '@library/index';
+import { FilterModal, BookItem, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList } from '@library/index';
+import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpers/constants';
 
-const SPACING = 0.5;
-const ITEM_HEIGHT = 80;
-const HEADER_HEIGHT = 150+50;
+// const SPACING = 0.5;
+// const ITEM_HEIGHT = 80;
+// const SECTION_ITEM_HEIGHT = 26;
+// const HEADER_HEIGHT = 150+50;
+
+type LibraryViewType = {
+  TITLE: React.ComponentType;
+  AUTHOR: React.ComponentType;
+};
+
+const SortedLibraryBooks: LibraryViewType = {
+  TITLE: TitleList,
+  AUTHOR: AuthorList
+}
 
 const Library = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch();
@@ -20,6 +32,8 @@ const Library = forwardRef((_props, ref) => {
   
   const { height } = Dimensions.get('window');
   const { library, sortedLibrary, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
+
+  const [listType, setListType] = useState('default');
 
   const [modalVisible, setModalVisible] = useState(false);
   const [showSectionList, setShowSectionList] = useState(false);
@@ -29,7 +43,7 @@ const Library = forwardRef((_props, ref) => {
   const [index, setIndex] = useState(0);
 
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.library);
-  const [activeButton, setActiveButton] = useState('default');
+  const [activeButton, setActiveButton] = useState('DEFAULT');
   const [activeList, setActiveList] = useState(false);
   const [currentScrollOffset, setCurrentScrollOffset] = useState(0);
   
@@ -38,11 +52,8 @@ const Library = forwardRef((_props, ref) => {
 
   const [headerHeight, setHeaderHeight] = useState(0);
 
-
-  // const [defaultLibrary, setDefaultLibrary] = useState<BookType[] | librarySectionType[]>(library);
-  // const [booksNumber, setBooksNumber] = useState(library.length);
-
   const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
+
   const renderItem = useCallback(({ item, index }: any) => (
     <BookItem item={item} navigation={navigation} />
   ), []);
@@ -51,50 +62,38 @@ const Library = forwardRef((_props, ref) => {
     setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
   };
 
-  useImperativeHandle(ref, () => ({
-    scrollToLocation: (params: any) => {
-      if (sectionListRef.current) {
-        sectionListRef.current.scrollToLocation(params);
-      }
-    },
-  }));
+  const LibraryBooksList = (SortedLibraryBooks as Record<string, React.ComponentType>)[activeButton] || DefaultList;
 
-  // useEffect(() => {
-  //   dispatch(resetLibraryMessages());
-  //   dispatch(resetBookMessages());
-  // });
-
-  // useEffect(() => {
-  //   dispatch(resetSelectedFilters());
-  // }, [])
-
-  // useEffect(() => {
-  //   // You can now access the current scroll offset in currentScrollOffset state variable.
-  //   console.log('Current Scroll Offset:', currentScrollOffset);
-  // }, [currentScrollOffset]);
+  // useImperativeHandle(ref, () => ({
+  //   scrollToLocation: (params: any) => {
+  //     if (sectionListRef.current) {
+  //       sectionListRef.current.scrollToLocation(params);
+  //     }
+  //   },
+  // }));
 
   // Effect to scroll to the top when sorting changes
-  useEffect(() => {
-    if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
-      sectionListRef.current?.scrollToLocation({
-        sectionIndex: 0,
-        itemIndex: 0,
-        viewOffset: 0,
-        viewPosition: 0,
-        animated: true,
-      });
-      setScrollToTop(false);
-    }
-  }, [scrollToTop, sortedLibrary]);
+  // useEffect(() => {
+  //   if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
+  //     sectionListRef.current?.scrollToLocation({
+  //       sectionIndex: 0,
+  //       itemIndex: 0,
+  //       viewOffset: 0,
+  //       viewPosition: 0,
+  //       animated: true,
+  //     });
+  //     setScrollToTop(false);
+  //   }
+  // }, [scrollToTop, sortedLibrary]);
 
   const toggleModal = () => {
     dispatch(resetSelectedFilters());
     setModalVisible(!modalVisible);
   };
 
-  const getItemLayout = useCallback(((_: any, index: number) => ({
+  const getItemLayout = useCallback(((data: any, index: number) => ({
     length: ITEM_HEIGHT,
-    offset: ITEM_HEIGHT * index,
+    offset: (SECTION_ITEM_HEIGHT + ITEM_HEIGHT + (index * SPACING)),
     index,
   })), []);
 
@@ -112,48 +111,37 @@ const Library = forwardRef((_props, ref) => {
   //   }
   // };
 
-  const ItemSeparator = () => {
-    return <View style={styles.separator} />;
-  };
-
   const handleSortByAuthor = () => {
-    setActiveButton('author');
+    // setActiveButton('author');
+    setActiveButton('AUTHOR');
     setActiveList(true);
-    setShowSectionList(true);
-    dispatch(sortLibraryByAuthor(library));
-    setScrollToTop(true);
   };
 
   const handleSortByTitle = () => {
-    setActiveButton('title');
+    setActiveButton('TITLE');
+    // setActiveButton('title');
     setActiveList(true);
-    setShowSectionList(true);
-    dispatch(sortLibraryByTitle(library));
-    setScrollToTop(true);
   }
 
   const handleSortByDefault = () => {
-    setActiveButton('default');
+    setActiveButton('DEFAULT');
+    // setActiveButton('default');
     setActiveList(false);
-    setShowSectionList(false);
   };
 
   const handleCloseModal = () => {
-    setShowSectionList(false);
     setActiveButton('default');
     setActiveList(false);
     setModalVisible(false);
   }
 
   const handleInitialLoad = () => {
-    // handleRefresh(setIsInitialLoading);
     setIsInitialLoading(true);
     dispatch(readLibrary())
       .then(() => {
         setIsInitialLoading(false);
-        setActiveButton('default');
+        setActiveButton('DEFAULT');
         setActiveList(false);
-        setShowSectionList(false);
       })
       .catch((error) => {
         console.error('Error loading library data:', error);
@@ -161,84 +149,62 @@ const Library = forwardRef((_props, ref) => {
       });
   };
 
-  const handleManualRefresh = () => {
-    // handleRefresh(setIsManualRefreshing);
-    setIsManualRefreshing(true);
-    dispatch(readLibrary())
-      .then(() => {
-        setIsManualRefreshing(false);
-        setActiveButton('default');
-        setActiveList(false);
-        setShowSectionList(false);
-      })
-      .catch((error) => {
-        console.error('Error refreshing library data:', error);
-        setIsManualRefreshing(false);
-      });
-  };
+  // const handleManualRefresh = () => {
+  //   setIsManualRefreshing(true);
+  //   dispatch(readLibrary())
+  //     .then(() => {
+  //       setIsManualRefreshing(false);
+  //       setActiveButton('default');
+  //       setActiveList(false);
+  //       setShowSectionList(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error refreshing library data:', error);
+  //       setIsManualRefreshing(false);
+  //     });
+  // };
 
-  const handleRefresh = ({setrefresh}: any) => {
-    setrefresh(true);
-    dispatch(readLibrary())
-      .then(() => {
-        setrefresh(false);
-        setActiveButton('default');
-        setActiveList(false);
-        setShowSectionList(false);
-      })
-      .catch((error: any) => {
-        console.error('Error refreshing library data:', error);
-        setrefresh(false);
-      });
-
-  }
-
+  // useEffect(() => {
+  //   // Set an initial section when the component mounts
+  //   scrollToSection('1'); // Replace 'A' with your initial section letter.
+  // }, []);
 
   const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
     const sectionIndex = sortedLibrary.findIndex((section: any) => section.title === letter);
-    setIndex(sectionIndex);
-// console.log('sorted', sortedLibrary)
-    // if (sectionIndex !== -1 && sectionListRef.current) {
-    //   const viewOffset = sectionIndex === 0 ? 0 : headerHeight;
-    //   // Scroll to the section with the specified letter
-    //   sectionListRef.current.scrollToLocation({
-    //     sectionIndex,
-    //     itemIndex: 0,
-    //     viewOffset,
-    //     viewPosition: 0,
-    //     animated: true,
-    //   });
+    // setIndex(sectionIndex);
+  
+    if (sectionIndex !== -1 && sectionListRef.current) {
+      const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
+  
+      console.log('Scrolling to section with letter:', letter);
       console.log('Requested section index: ', sectionIndex);
-    // }
+  
+      // Scroll to the section with the specified letter
+      sectionListRef.current.scrollToLocation({
+        sectionIndex,
+        itemIndex: 0,
+        viewOffset,
+        viewPosition: 0,
+        animated: true, // Set to true if you want an animation
+      });
+    }
   };
+  
 
-  useEffect(() => {
-    sectionListRef.current?.scrollToLocation({
-      sectionIndex: index,
-      itemIndex: 0,
-      animated: true,
-      viewOffset: 150,
-      viewPosition: 0
-    })
-  }, [index]);
-
-  const renderSectionHeader = ({ section }: any) => (
-    <Text style={styles.sectionHeader}>{section.title}</Text>
-  );
+  // useEffect(() => {
+  //   sectionListRef.current?.scrollToLocation({
+  //     sectionIndex: index,
+  //     itemIndex: 0,
+  //     animated: true,
+  //     viewOffset: 150,
+  //     viewPosition: 0
+  //   })
+  // }, [index]);
 
   const toUpperCase = () => {
     return selectedFilterHeader.type.charAt(0).toUpperCase() + selectedFilterHeader.type.slice(1);
   }
-
-  // const sectionKeyExtractor = (section: any) => section.key.toString();
-  // const sectionKeyExtractor = (section: any) => {
-  //   if (section && section.title) {
-  //     return section.title.toString(); // Convert title to string if it's not undefined
-  //   }
-  //   return 'Unknown';
-  // };
-
 
   if (!libraryIsLoaded) {
     return (
@@ -285,24 +251,24 @@ const Library = forwardRef((_props, ref) => {
             <Text style={[styles.sortButtonText, {color: 'black', marginBottom: 10,}]}>Sort by:</Text>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
-                onPress={handleSortByDefault}
-                style={[styles.sortButton, activeButton === 'default' ? styles.bgBlack : styles.bgWhite]}>
-                  <Text style={[activeButton === 'default' ? styles.white : styles.black, styles.sortButtonText]}>all</Text>
+                onPress={() => handleSortByDefault()}
+                style={[styles.sortButton, activeButton === 'DEFAULT' ? styles.bgBlack : styles.bgWhite]}>
+                  <Text style={[activeButton === 'DEFAULT' ? styles.white : styles.black, styles.sortButtonText]}>all</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleSortByTitle()}
                 style={[
-                  styles.sortButton, activeButton === 'title' ? 
+                  styles.sortButton, activeButton === 'TITLE' ? 
                     styles.bgBlack :
                     styles.bgWhite
                 ]}
               >
-                <Text style={[activeButton === 'title' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
+                <Text style={[activeButton === 'TITLE' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleSortByAuthor()}
-                style={[styles.sortButton, activeButton === 'author' ? styles.bgBlack : styles.bgWhite]}>
-                <Text style={[activeButton === 'author' ? styles.white : styles.black, styles.sortButtonText]}>author</Text>
+                style={[styles.sortButton, activeButton === 'AUTHOR' ? styles.bgBlack : styles.bgWhite]}>
+                <Text style={[activeButton === 'AUTHOR' ? styles.white : styles.black, styles.sortButtonText]}>author</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -320,44 +286,7 @@ const Library = forwardRef((_props, ref) => {
             </Text>
           </View>) : <View style={styles.filterDisplay} />}
       </View>
-
-      {showSectionList ? (
-        <SafeAreaView>
-          <SectionList
-            ref={sectionListRef}
-            initialScrollIndex={index}
-            sections={sortedLibrary as librarySectionType[]}
-            keyExtractor={(item, index) => item + index}
-            renderItem={renderItem}
-            renderSectionHeader={renderSectionHeader}
-            showsVerticalScrollIndicator={false}
-            getItemLayout={getItemLayout}
-            // onScroll={handleScroll}
-            refreshing={isManualRefreshing}
-            onRefresh={handleManualRefresh}
-            // removeClippedSubviews={true}
-          />
-          </SafeAreaView>
-        ) : (
-          <FlatList
-            data={library as BookType[]}
-            keyExtractor={keyExtractor}
-            contentContainerStyle={styles.flatList}
-            showsVerticalScrollIndicator={false}
-            getItemLayout={getItemLayout}
-            initialNumToRender={10}
-            // windowSize={10}
-            // maxToRenderPerBatch={15}
-            // updateCellsBatchingPeriod={30}
-            // removeClippedSubviews={false}
-            // onEndReachedThreshold={0.1}
-            renderItem={renderItem}
-            ItemSeparatorComponent={ItemSeparator}
-            refreshing={isManualRefreshing}
-            onRefresh={handleManualRefresh}
-            // removeClippedSubviews={true}
-          />
-        )}
+      <LibraryBooksList />
       <AlphabetList
         onLetterPress={scrollToSection}
         floatStyles={{top: 60, right: 0}}
@@ -394,7 +323,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     // padding: SPACING,
-    // paddingTop: 42,
+    // paddingTop: 200,
     // paddingBottom: 142,
   },
   image: {
@@ -453,6 +382,7 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     backgroundColor: 'lightgray',
+    height: SECTION_ITEM_HEIGHT,
     padding: 5,
     fontSize: 16,
     fontWeight: 'bold',

@@ -5,13 +5,15 @@ export type appTypes = {
   scanned: boolean,
   disabled: boolean,
   navigationSource: string,
+  libraryActiveButton: string
 }
 
 const initialState: appTypes = {
   cameraPermission: false,
   scanned: false,
   disabled: true,
-  navigationSource: ''
+  navigationSource: '',
+  libraryActiveButton: 'default'
 };
 
 const appSlice = createSlice({
@@ -27,6 +29,12 @@ const appSlice = createSlice({
     setCameraPermission: (state, action) => {
       state.cameraPermission = action.payload;
     },
+    setLibraryActiveButton: (state, action) => {
+      return {
+        ...state,
+        libraryActiveButton: action.payload
+      };
+    },
     setNavigationSource: (state, action) => {
       return {
         ...state,
@@ -40,7 +48,8 @@ export const {
   isScanned, 
   savingBookIsDisabled,
   setCameraPermission,
-  setNavigationSource
+  setNavigationSource,
+  setLibraryActiveButton
 } = appSlice.actions;
 
 export default appSlice.reducer;
