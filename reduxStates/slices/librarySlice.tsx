@@ -80,13 +80,16 @@ export const readLibrary = createAsyncThunk(
 
 export const filterLibrary = createAsyncThunk(
   '/api/filter-library',
-  async (filter: {type: string, item: string}, { rejectWithValue }) => {
+  async (filter: {type: string, item: string}, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(`${URL}/api/filter-library`,
       { filter }, 
       {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
+
+      dispatch(sortLibraryByTitle(response.data));
+      dispatch(sortLibraryByAuthor(response.data));
       return response.data;
     } catch(err) {
       return rejectWithValue(err)

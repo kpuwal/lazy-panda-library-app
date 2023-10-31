@@ -8,13 +8,8 @@ import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { FilterModal, BookItem, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList } from '@library/index';
+import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, SortLibraryList } from '@library/index';
 import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpers/constants';
-
-// const SPACING = 0.5;
-// const ITEM_HEIGHT = 80;
-// const SECTION_ITEM_HEIGHT = 26;
-// const HEADER_HEIGHT = 150+50;
 
 type LibraryViewType = {
   TITLE: React.ComponentType;
@@ -33,14 +28,11 @@ const Library = forwardRef((_props, ref) => {
   const { height } = Dimensions.get('window');
   const { library, sortedLibrary, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
 
-  const [listType, setListType] = useState('default');
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [showSectionList, setShowSectionList] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(false);
 
   const sectionListRef = useRef<SectionList>(null);
-  const [index, setIndex] = useState(0);
 
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.library);
   const [activeButton, setActiveButton] = useState('DEFAULT');
@@ -52,12 +44,6 @@ const Library = forwardRef((_props, ref) => {
 
   const [headerHeight, setHeaderHeight] = useState(0);
 
-  const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
-
-  const renderItem = useCallback(({ item, index }: any) => (
-    <BookItem item={item} navigation={navigation} />
-  ), []);
-  
   const handleScroll = (event: { nativeEvent: { contentOffset: { y: React.SetStateAction<number>; }; }; }) => {
     setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
   };
@@ -91,12 +77,6 @@ const Library = forwardRef((_props, ref) => {
     setModalVisible(!modalVisible);
   };
 
-  const getItemLayout = useCallback(((data: any, index: number) => ({
-    length: ITEM_HEIGHT,
-    offset: (SECTION_ITEM_HEIGHT + ITEM_HEIGHT + (index * SPACING)),
-    index,
-  })), []);
-
   useFocusEffect(
     React.useCallback(() => {
       handleInitialLoad();
@@ -111,23 +91,23 @@ const Library = forwardRef((_props, ref) => {
   //   }
   // };
 
-  const handleSortByAuthor = () => {
-    // setActiveButton('author');
-    setActiveButton('AUTHOR');
-    setActiveList(true);
-  };
+  // const handleSortByAuthor = () => {
+  //   // setActiveButton('author');
+  //   setActiveButton('AUTHOR');
+  //   setActiveList(true);
+  // };
 
-  const handleSortByTitle = () => {
-    setActiveButton('TITLE');
-    // setActiveButton('title');
-    setActiveList(true);
-  }
+  // const handleSortByTitle = () => {
+  //   setActiveButton('TITLE');
+  //   // setActiveButton('title');
+  //   setActiveList(true);
+  // }
 
-  const handleSortByDefault = () => {
-    setActiveButton('DEFAULT');
-    // setActiveButton('default');
-    setActiveList(false);
-  };
+  // const handleSortByDefault = () => {
+  //   setActiveButton('DEFAULT');
+  //   // setActiveButton('default');
+  //   setActiveList(false);
+  // };
 
   const handleCloseModal = () => {
     setActiveButton('default');
@@ -247,7 +227,7 @@ const Library = forwardRef((_props, ref) => {
               }
           </Pressable>
 
-          <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
+          {/* <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
             <Text style={[styles.sortButtonText, {color: 'black', marginBottom: 10,}]}>Sort by:</Text>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -271,7 +251,8 @@ const Library = forwardRef((_props, ref) => {
                 <Text style={[activeButton === 'AUTHOR' ? styles.white : styles.black, styles.sortButtonText]}>author</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
+          <SortLibraryList />
         </View>
         <View style={styles.booksNumber}> 
           <Text style={[styles.sortButtonText, {paddingTop: 10}]}>
