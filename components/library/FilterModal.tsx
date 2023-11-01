@@ -15,15 +15,17 @@ const windowHeight = Dimensions.get('window').height;
 const modalWidth = windowWidth * 0.90;
 const modalHeight = windowHeight * 0.75;
 
-const FilterModal = ({ visible, onClose }: any) => {
+const FilterModal = ({ onClose }: any) => {
   const picker = useSelector((state: RootState) => state.pickers);
   const dispatch = useAppDispatch();
   const { selectedFilters } = useSelector((state: RootState) => state.library);
+  const { isFilterModalActive } = useSelector((state: RootState) => state.app);
+
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
     // Animate the background opacity when the modal becomes visible
-    if (visible) {
+    if (isFilterModalActive) {
       Animated.timing(fadeAnim, {
         toValue: 1, // Animate to full opacity (1)
         duration: 500, // Animation duration in milliseconds
@@ -33,14 +35,14 @@ const FilterModal = ({ visible, onClose }: any) => {
       // Reset opacity when the modal is not visible
       fadeAnim.setValue(0);
     }
-  }, [visible]);
+  }, [isFilterModalActive]);
 
   const handleFilterUpdate = async () => {
     if (selectedFilters.type !== '') dispatch(filterLibrary(selectedFilters));
     onClose();
   };
 
-  if (!visible) {
+  if (!isFilterModalActive) {
     return null;
   }
 
@@ -48,20 +50,20 @@ const FilterModal = ({ visible, onClose }: any) => {
     <>
       <Animated.View
         style={[styles.modalOverlay, { opacity: fadeAnim }]}
-        pointerEvents={visible ? 'auto' : 'none'} // Enable or disable touch events on the background
+        pointerEvents={isFilterModalActive ? 'auto' : 'none'} // Enable or disable touch events on the background
       />
 
       <Modal
         animationType="slide"
         transparent={true}
-        visible={visible}
+        visible={isFilterModalActive}
         onRequestClose={onClose}
         presentationStyle="overFullScreen"
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.header}>
-              <Header.Icon uri={require('../../assets/filter.gif')} />
+              <Header.Icon uri={require('@assets/filter.gif')} />
               <Text style={styles.headerText}>Filter by:</Text>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>

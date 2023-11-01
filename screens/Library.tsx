@@ -2,13 +2,13 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef,
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch } from '@reduxStates/index';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter } from '@library/index';
+import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter, FilterButton, BooksInfo } from '@library/index';
 import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpers/constants';
 
 type LibraryViewType = {
@@ -23,11 +23,10 @@ const SortedLibraryBooks: LibraryViewType = {
 
 const Library = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
   
   const { height } = Dimensions.get('window');
   const { librarySortedByAuthor, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
-const { libraryListActiveButton } = useSelector((state: RootState) => state.app);
+const { libraryListActiveButton, isAlphabetListActive } = useSelector((state: RootState) => state.app);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(false);
@@ -73,8 +72,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
   // }, [scrollToTop, sortedLibrary]);
 
   const toggleModal = () => {
-    dispatch(resetSelectedFilters());
-    setModalVisible(!modalVisible);
+    dispatch(toggleFilterModal(true));
   };
 
   useFocusEffect(
@@ -110,9 +108,12 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
   // };
 
   const handleCloseModal = () => {
-    setActiveButton('default');
-    setActiveList(false);
-    setModalVisible(false);
+    // setActiveButton('DEFAULT');
+    // setActiveList(false);
+    dispatch(setLibraryActiveListButton('DEFAULT'));
+    dispatch(toggleAlphabetList(false));
+    // setModalVisible(false);
+    dispatch(toggleFilterModal(false));
   }
 
   const handleInitialLoad = () => {
@@ -121,28 +122,13 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
       .then(() => {
         setIsInitialLoading(false);
         setActiveButton('DEFAULT');
-        setActiveList(false);
+        // setActiveList(false);
       })
       .catch((error) => {
         console.error('Error loading library data:', error);
         setIsInitialLoading(false);
       });
   };
-
-  // const handleManualRefresh = () => {
-  //   setIsManualRefreshing(true);
-  //   dispatch(readLibrary())
-  //     .then(() => {
-  //       setIsManualRefreshing(false);
-  //       setActiveButton('default');
-  //       setActiveList(false);
-  //       setShowSectionList(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error refreshing library data:', error);
-  //       setIsManualRefreshing(false);
-  //     });
-  // };
 
   // useEffect(() => {
   //   // Set an initial section when the component mounts
@@ -182,10 +168,6 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
   //   })
   // }, [index]);
 
-  const toUpperCase = () => {
-    return selectedFilterHeader.type.charAt(0).toUpperCase() + selectedFilterHeader.type.slice(1);
-  }
-
   if (!libraryIsLoaded) {
     return (
       <LibraryLoader />
@@ -205,51 +187,17 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
         </Header>
 
         <View style={styles.subheader}>
-          <Pressable
-            onPress={toggleModal}
-            style={styles.subheaderFilter}
-          >
-              {({pressed}) => 
-              <>
-                <MaterialCommunityIcons
-                  name="filter-menu"
-                  size={28} 
-                  color={pressed ? Colours.filter : Colours.secondary}
-                />
-                <Text style={[
-                styles.sortButtonText, 
-                {
-                  color: pressed ? Colours.filter : Colours.secondary
-                }]}>
-                  Filter
-                </Text>
-              </>
-              }
-          </Pressable>
-
+          <FilterButton onPress={toggleModal} />
           <LibraryListSorter />
         </View>
-        <View style={styles.booksNumber}> 
-          <Text style={[styles.sortButtonText, {paddingTop: 10}]}>
-            {booksNumber} books
-          </Text>
-        </View>
-        
-        {libraryIsFiltered ? (
-          <View style={[ styles.filterDisplay]}>
-            <Text style={[styles.sortButtonText, styles.black]}>
-              {toUpperCase()}: {selectedFilterHeader.item}
-            </Text>
-          </View>) : <View style={styles.filterDisplay} />}
+        <BooksInfo />
       </View>
       <LibraryBooksList />
       <AlphabetList
         onLetterPress={scrollToSection}
         floatStyles={{top: 60, right: 0}}
-        isActive={activeList}
       />
       <FilterModal
-        visible={modalVisible}
         onClose={handleCloseModal}
       />
       <LibraryOverlay message={'Loading'} isVisible={isInitialLoading} />

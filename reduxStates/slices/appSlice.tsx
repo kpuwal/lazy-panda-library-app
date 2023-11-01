@@ -5,7 +5,9 @@ export type appTypes = {
   scanned: boolean,
   disabled: boolean,
   navigationSource: string,
-  libraryListActiveButton: string
+  libraryListActiveButton: string,
+  isAlphabetListActive: boolean,
+  isFilterModalActive: boolean,
 }
 
 const initialState: appTypes = {
@@ -13,7 +15,9 @@ const initialState: appTypes = {
   scanned: false,
   disabled: true,
   navigationSource: '',
-  libraryListActiveButton: 'DEFAULT'
+  libraryListActiveButton: 'DEFAULT',
+  isAlphabetListActive: false,
+  isFilterModalActive: false
 };
 
 const appSlice = createSlice({
@@ -35,6 +39,18 @@ const appSlice = createSlice({
         libraryListActiveButton: action.payload
       };
     },
+    toggleAlphabetList: (state, action) => {
+      return {
+        ...state,
+        isAlphabetListActive: action.payload
+      };
+    },
+    toggleFilterModal: (state, action) => {
+      return {
+        ...state,
+        isFilterModalActive: action.payload
+      };
+    },
     setNavigationSource: (state, action) => {
       return {
         ...state,
@@ -49,7 +65,9 @@ export const {
   savingBookIsDisabled,
   setCameraPermission,
   setNavigationSource,
-  setLibraryActiveListButton
+  setLibraryActiveListButton,
+  toggleAlphabetList,
+  toggleFilterModal
 } = appSlice.actions;
 
 export default appSlice.reducer;

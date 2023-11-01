@@ -9,12 +9,13 @@ const { height } = Dimensions.get('window');
 
 interface AlphabetListProps {
   onLetterPress: (letter: string) => void;
-  floatStyles: any,
-  isActive?: boolean
+  floatStyles: any
 }
 
-const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles, isActive }) => {
+const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles }) => {
   const { alphabet } = useSelector((state: RootState) => state.library);
+  const { isAlphabetListActive } = useSelector((state: RootState) => state.app);
+
   const rotateValue = useRef(new Animated.Value(0)).current;
   const [isOpen, setIsOpen] = useState(false);
   const letterScale = useRef(new Animated.Value(0.5)).current;
@@ -30,7 +31,7 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
   }, []);
 
   useEffect(() => {
-    if (isActive) {
+    if (isAlphabetListActive) {
       // setIsOpen(false);
       if (isOpen) {
         // Animate the letters with a spring effect when the menu is opened
@@ -48,12 +49,12 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
         }).start();
       }
     }
-  }, [isOpen, isActive]);
+  }, [isOpen, isAlphabetListActive]);
 
   return (
     <View style={[styles.buttonContainer, floatStyles]}>
       
-      {isActive && <Pressable onPress={() => setIsOpen(!isOpen)}>
+      {isAlphabetListActive && <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View
           style={[
             styles.button,
@@ -68,12 +69,12 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles,
             <MaterialCommunityIcons
               name="sort-alphabetical-ascending"
               size={24}
-              color={isActive ? Colours.secondary : Colours.primary}
+              color={isAlphabetListActive ? Colours.secondary : Colours.primary}
             />
           }
         </View>
       </Pressable>}
-      {isOpen && isActive && (
+      {isOpen && isAlphabetListActive && (
         <ScrollView style={styles.alphabetContainer} showsVerticalScrollIndicator={false}>
           {alphabet.map((letter) => (
             <TouchableOpacity onPress={() => onLetterPress(letter)} key={letter}>

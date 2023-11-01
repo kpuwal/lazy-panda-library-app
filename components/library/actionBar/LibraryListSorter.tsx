@@ -1,4 +1,4 @@
-import { RootState, setLibraryActiveListButton, useAppDispatch } from "@reduxStates/index";
+import { RootState, setLibraryActiveListButton, toggleAlphabetList, useAppDispatch } from "@reduxStates/index";
 import { Colours, Fonts } from "@styles/constants";
 import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
@@ -10,17 +10,18 @@ const LibraryListSorter = () => {
 
   const handleSortByAuthor = () => {
     dispatch(setLibraryActiveListButton('AUTHOR'));
+    dispatch(toggleAlphabetList(true));
     // setActiveList(true);
   };
 
   const handleSortByTitle = () => {
     dispatch(setLibraryActiveListButton('TITLE'));
-    // setActiveList(true);
+    dispatch(toggleAlphabetList(true));
   }
 
   const handleSortByDefault = () => {
     dispatch(setLibraryActiveListButton('DEFAULT'));
-    // setActiveList(false);
+    dispatch(toggleAlphabetList(false));
   };
   return (
     <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>

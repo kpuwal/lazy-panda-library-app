@@ -16,12 +16,12 @@ const libraryIsLoadingMessages = [
 
 export const BACKGROUND = [
   require('./../assets/bg01.jpeg'),
-  require('./../assets/bg02.jpeg'),
   require('./../assets/bg05.jpeg'),
   require('./../assets/bg06.jpeg'),
   require('./../assets/bg07.jpeg'),
   require('./../assets/bg10.jpeg'),
   require('./../assets/bg11.jpeg'),
+  require('./../assets/bg14.jpeg'),
   require('./../assets/bg13.jpeg'),
 ]
 

@@ -1,5 +1,5 @@
 import { Text } from 'react-native';
-import { headerText } from '../../styles/styles';
+import { headerText } from '@styles/styles';
 
 type TitleProps = {
   children: React.ReactNode;

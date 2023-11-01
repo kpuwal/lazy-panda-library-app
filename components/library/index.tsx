@@ -6,3 +6,5 @@ export {default as TitleList} from './list/TitleList';
 export {default as AuthorList} from './list/AuthorList';
 export {default as DefaultList} from './list/DefaultList';
 export {default as LibraryListSorter} from './actionBar/LibraryListSorter';
+export {default as FilterButton} from './actionBar/FilterButton';
+export {default as BooksInfo} from './actionBar/BooksInfo';
