@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { librarySectionType, readLibrary, setLibraryActiveButton, useAppDispatch } from '@reduxStates/index';
+import { librarySectionType, readLibrary, setLibraryActiveListButton, useAppDispatch } from '@reduxStates/index';
 import { useCallback, useState } from 'react';
 import { SectionList } from 'react-native';
 import BookItem from './BookItem';
@@ -38,7 +38,7 @@ const Sections = ({ data }: SectionListTypes) => {
     dispatch(readLibrary())
       .then(() => {
         setIsManualRefreshing(false);
-        dispatch(setLibraryActiveButton('default'));
+        dispatch(setLibraryActiveListButton('default'));
         // setActiveList(false);
         // setShowSectionList(false);
       })

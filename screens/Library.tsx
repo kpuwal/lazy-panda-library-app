@@ -8,7 +8,7 @@ import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, SortLibraryList } from '@library/index';
+import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter } from '@library/index';
 import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpers/constants';
 
 type LibraryViewType = {
@@ -26,8 +26,8 @@ const Library = forwardRef((_props, ref) => {
   const navigation = useNavigation();
   
   const { height } = Dimensions.get('window');
-  const { library, sortedLibrary, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
-
+  const { librarySortedByAuthor, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
+const { libraryListActiveButton } = useSelector((state: RootState) => state.app);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(false);
@@ -48,7 +48,7 @@ const Library = forwardRef((_props, ref) => {
     setCurrentScrollOffset(event.nativeEvent.contentOffset.y);
   };
 
-  const LibraryBooksList = (SortedLibraryBooks as Record<string, React.ComponentType>)[activeButton] || DefaultList;
+  const LibraryBooksList = (SortedLibraryBooks as Record<string, React.ComponentType>)[libraryListActiveButton] || DefaultList;
 
   // useImperativeHandle(ref, () => ({
   //   scrollToLocation: (params: any) => {
@@ -151,9 +151,9 @@ const Library = forwardRef((_props, ref) => {
 
   const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
-    const sectionIndex = sortedLibrary.findIndex((section: any) => section.title === letter);
-    // setIndex(sectionIndex);
-  
+    const sectionIndex = librarySortedByAuthor.findIndex((section: any) => section.title === letter);
+    // // setIndex(sectionIndex);
+
     if (sectionIndex !== -1 && sectionListRef.current) {
       const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
   
@@ -227,32 +227,7 @@ const Library = forwardRef((_props, ref) => {
               }
           </Pressable>
 
-          {/* <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
-            <Text style={[styles.sortButtonText, {color: 'black', marginBottom: 10,}]}>Sort by:</Text>
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                onPress={() => handleSortByDefault()}
-                style={[styles.sortButton, activeButton === 'DEFAULT' ? styles.bgBlack : styles.bgWhite]}>
-                  <Text style={[activeButton === 'DEFAULT' ? styles.white : styles.black, styles.sortButtonText]}>all</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleSortByTitle()}
-                style={[
-                  styles.sortButton, activeButton === 'TITLE' ? 
-                    styles.bgBlack :
-                    styles.bgWhite
-                ]}
-              >
-                <Text style={[activeButton === 'TITLE' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleSortByAuthor()}
-                style={[styles.sortButton, activeButton === 'AUTHOR' ? styles.bgBlack : styles.bgWhite]}>
-                <Text style={[activeButton === 'AUTHOR' ? styles.white : styles.black, styles.sortButtonText]}>author</Text>
-              </TouchableOpacity>
-            </View>
-          </View> */}
-          <SortLibraryList />
+          <LibraryListSorter />
         </View>
         <View style={styles.booksNumber}> 
           <Text style={[styles.sortButtonText, {paddingTop: 10}]}>

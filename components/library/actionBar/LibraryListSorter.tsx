@@ -1,9 +1,10 @@
 import { RootState, setLibraryActiveListButton, useAppDispatch } from "@reduxStates/index";
 import { Colours, Fonts } from "@styles/constants";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
+import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
+import SortButton from "./SortButton";
 
-const SortLibraryList = () => {
+const LibraryListSorter = () => {
   const dispatch = useAppDispatch();
   const { libraryListActiveButton } = useSelector((state: RootState) => state.app);
 
@@ -23,34 +24,31 @@ const SortLibraryList = () => {
   };
   return (
     <View style={[styles.subheaderSort, {flexDirection: 'column', alignItems: 'flex-start'}]}>
-      <Text style={[styles.sortButtonText, {color: 'black', marginBottom: 10,}]}>Sort by:</Text>
+      <Text style={styles.sortButtonText}>
+        Sort by:
+      </Text>
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity
-          onPress={() => handleSortByDefault()}
-          style={[styles.sortButton, libraryListActiveButton === 'DEFAULT' ? styles.bgBlack : styles.bgWhite]}>
-            <Text style={[libraryListActiveButton === 'DEFAULT' ? styles.white : styles.black, styles.sortButtonText]}>all</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleSortByTitle()}
-          style={[
-            styles.sortButton, libraryListActiveButton === 'TITLE' ? 
-              styles.bgBlack :
-              styles.bgWhite
-          ]}
-        >
-          <Text style={[libraryListActiveButton === 'TITLE' ? styles.white : styles.black, styles.sortButtonText]}>title</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleSortByAuthor()}
-          style={[styles.sortButton, libraryListActiveButton === 'AUTHOR' ? styles.bgBlack : styles.bgWhite]}>
-          <Text style={[libraryListActiveButton === 'AUTHOR' ? styles.white : styles.black, styles.sortButtonText]}>author</Text>
-        </TouchableOpacity>
+      <SortButton
+          label="all"
+          active={libraryListActiveButton === "DEFAULT"}
+          onPress={handleSortByDefault}
+        />
+        <SortButton
+          label="title"
+          active={libraryListActiveButton === "TITLE"}
+          onPress={handleSortByTitle}
+        />
+        <SortButton
+          label="author"
+          active={libraryListActiveButton === "AUTHOR"}
+          onPress={handleSortByAuthor}
+        />
       </View>
     </View>
   )
 }
 
-export default SortLibraryList;
+export default LibraryListSorter;
 
 const styles = StyleSheet.create({
   subheaderSort: {
@@ -69,6 +67,8 @@ const styles = StyleSheet.create({
     fontSize: Fonts.small,
     fontWeight: 'bold',
     fontFamily:  'Courier Prime',
+    color: 'black',
+    marginBottom: 10,
   },
   white: {
     color: 'white'

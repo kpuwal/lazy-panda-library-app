@@ -5,4 +5,4 @@ export {default as LibraryOverlay} from './LibraryOverlay';
 export {default as TitleList} from './list/TitleList';
 export {default as AuthorList} from './list/AuthorList';
 export {default as DefaultList} from './list/DefaultList';
-export {default as SortLibraryList} from './actionBar/SortLibraryList';
+export {default as LibraryListSorter} from './actionBar/LibraryListSorter';
