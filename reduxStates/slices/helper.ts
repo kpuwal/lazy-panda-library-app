@@ -21,8 +21,9 @@ export const handleSort = (library: BookType[], sortBy: 'author' | 'title') => {
 
   let sortedLibrary = sortByField(library, fieldName);
 
-  const sections: librarySectionType[] = [];
+  let sections: librarySectionType[] = [];
   const sortSectionLetters: string[] = [];
+  const sortedAuthorSurnames: string[] = [];
 
   if (fieldName === 'author') {
     sortedLibrary.forEach((item: BookType) => {
@@ -43,6 +44,8 @@ export const handleSort = (library: BookType[], sortBy: 'author' | 'title') => {
       if (!surname) {
         surname = firstAuthor[firstAuthor.length - 1];
       }
+
+      sortedAuthorSurnames.push(surname);
   
       const firstLetter = surname.charAt(0).toUpperCase();
       // find the section coresponding to the first letter or create a new one
@@ -54,9 +57,10 @@ export const handleSort = (library: BookType[], sortBy: 'author' | 'title') => {
         sections[sectionIndex].data.push(item);
       }
     });
-  
+  // console.log(sections)
     // sort sections alphabetically based on section title
     sections.sort((a, b) => a.title.localeCompare(b.title));
+    sections = sortDataItemsBySurname(sections)
     sortSectionLetters.sort((a, b) => a.localeCompare(b));  
   } else {
     sortedLibrary.forEach((item: BookType) => {
@@ -72,7 +76,7 @@ export const handleSort = (library: BookType[], sortBy: 'author' | 'title') => {
         sections[sectionIndex].data.push(item);
       }
     });
-  
+
     // Sort sections alphabetically based on the section title
     sections.sort((a, b) => a.title.localeCompare(b.title));
     sortSectionLetters.sort((a, b) => a.localeCompare(b));
@@ -81,3 +85,33 @@ export const handleSort = (library: BookType[], sortBy: 'author' | 'title') => {
    // Return the sorted sections and section letters
   return { sortedSections: sections, sectionLetters: sortSectionLetters };
 };
+
+// Function to sort "data" items within each section based on the surnames of first authors
+function sortDataItemsBySurname(sections: librarySectionType[]) {
+  sections.forEach((section) => {
+    section.data.sort((a, b) => {
+      const surnameA = a.author
+      .split(',')
+      .map((author) => author.trim())
+      .map((authorsList) => {
+        const nameParts = authorsList.split(' ');
+        return nameParts[nameParts.length - 1]; // Get the last part, which is the surname
+      })
+      .map((name) => name.replace('(', ''))[0]; // Remove any parentheses if present
+    
+      const surnameB = b.author
+      .split(',')
+      .map((author) => author.trim())
+      .map((authorsList) => {
+        const nameParts = authorsList.split(' ');
+        return nameParts[nameParts.length - 1]; // Get the last part, which is the surname
+      })
+      .map((name) => name.replace('(', ''))[0]; // Remove any parentheses if present
+
+      const comparison =  surnameA.localeCompare(surnameB);
+      return comparison
+    });
+  });
+
+  return sections;
+}
