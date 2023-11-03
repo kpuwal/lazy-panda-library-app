@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     padding: 5,
     fontFamily: 'Courier Prime',
-    fontWeight: 'bold',
     fontSize: 18,
   },
   dummy: {

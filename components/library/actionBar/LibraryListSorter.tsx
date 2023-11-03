@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   },
   sortButtonText: {
     fontSize: Fonts.small,
-    fontWeight: 'bold',
     fontFamily:  'Courier Prime',
     color: 'black',
     marginBottom: 10,

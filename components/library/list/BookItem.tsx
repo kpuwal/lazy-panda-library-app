@@ -93,13 +93,11 @@ const styles = StyleSheet.create({
   textTitle: {
     color: Colours.secondary,
     fontFamily: 'Courier Prime',
-    fontWeight: 'bold',
     fontSize: 22,
   },
   textAuthor: {
     color: '#808080',
     fontFamily: 'Courier Prime',
-    fontWeight: 'bold',
     fontSize: 16,
   },
 });

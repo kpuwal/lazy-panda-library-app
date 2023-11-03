@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     // paddingTop: 30,
     paddingBottom: 10,
     // paddingHorizontal: 15,
-    height: 180,
+    height: 185,
     // backgroundColor: 'pink'
   },
   editContainer: {
@@ -247,7 +247,6 @@ const styles = StyleSheet.create({
   },
   sortButtonText: {
     fontSize: Fonts.small,
-    fontWeight: 'bold',
     fontFamily:  'Courier Prime',
   },
   // filterButton: {
@@ -296,7 +295,7 @@ const styles = StyleSheet.create({
   subheader: {
     flexDirection: 'row',
     height: 50,
-    marginHorizontal: 15,
+    marginHorizontal: 15
   },
   subheaderFilter: {
     flex: 3,

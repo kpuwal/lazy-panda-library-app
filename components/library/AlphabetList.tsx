@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
   },
   alphabetButtonText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#fff',
     fontFamily:  'Courier Prime',
 

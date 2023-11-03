@@ -1,5 +1,5 @@
 import { Colours, Fonts } from "@styles/constants";
-import { Text, Pressable, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 
 type SortButtonTypes = {
   label: string,
@@ -9,7 +9,7 @@ type SortButtonTypes = {
 
 const SortButton = ({ label, active, onPress }: SortButtonTypes) => {
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={onPress}
       style={[
         styles.sortButton,
@@ -19,7 +19,7 @@ const SortButton = ({ label, active, onPress }: SortButtonTypes) => {
       <Text style={[active ? styles.white : styles.black, styles.sortButtonText]}>
         {label}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   },
   sortButtonText: {
     fontSize: Fonts.small,
-    fontWeight: 'bold',
     fontFamily:  'Courier Prime',
   },
   white: {

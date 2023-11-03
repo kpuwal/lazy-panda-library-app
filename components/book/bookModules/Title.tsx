@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     // fontSize: 17,
     textAlign: 'center',
     fontFamily: 'Courier Prime Bold',
-    fontWeight: 'bold',
     width: '100%',
   },
   icon: {

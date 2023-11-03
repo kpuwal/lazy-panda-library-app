@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     color: Colours.secondary,
     padding: 5,
     fontFamily: 'Courier Prime Bold',
-    fontWeight: 'bold',
     fontSize: 18
   }
 })
