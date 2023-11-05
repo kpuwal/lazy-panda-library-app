@@ -11,7 +11,7 @@ export type pickerTypes = {
   series: pickerType[],
   world: pickerType[],
   readBy: pickerType[],
-  pickerError: string,
+  pickerError?: string,
 }
 
 const pickerDefault = [{label: '', value: ''}];
@@ -45,11 +45,18 @@ export const pickerSlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(fetchPicker.fulfilled, (state, action) => {
-      Object.assign(state, action.payload);
-      state.pickerError = '';
+      // Object.assign(state, action.payload);
+      // state.pickerError = '';
+      return {
+        ...state,
+        ...action.payload
+      };
     })
-    .addCase(fetchPicker.rejected, (state, action) => {
-      state.pickerError = "Error fetching tags from the picker sheet";
+    .addCase(fetchPicker.rejected, (state) => {
+      return {
+        ...state,
+        pickerError: "Error fetching tags from the picker sheet",
+      };
     })
   },
 })

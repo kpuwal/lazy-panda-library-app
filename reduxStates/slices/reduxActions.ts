@@ -17,7 +17,8 @@ import {
   setNavigationSource,
   setLibraryActiveListButton,
   toggleAlphabetList,
-  toggleFilterModal
+  toggleFilterModal,
+  setActiveAlphabetLetter
 } from './appSlice';
 
 import {
@@ -50,6 +51,7 @@ export {
   setLibraryActiveListButton,
   toggleAlphabetList,
   toggleFilterModal,
+  setActiveAlphabetLetter,
   readLibrary,
   updateLibrary,
   filterLibrary,

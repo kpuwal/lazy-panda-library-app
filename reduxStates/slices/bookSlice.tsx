@@ -24,15 +24,14 @@ export type BookType = {
   lastReadByJowie: string,
   lastReadByKasia: string,
   subtitle?: string,
-  isFound?: boolean,
-  key?: string
+  isFound?: boolean
 }
 
 export type bookTypes = {
   book: BookType,
-  bookTitleForRowUpdate: string,
-  bookError: string | null,
-  bookMsg: string | null,
+  bookTitleForRowUpdate?: string,
+  bookError?: string | null,
+  bookMsg?: string | null,
   bookIsLoaded: boolean
 }
 
@@ -52,8 +51,7 @@ const initialState: bookTypes = {
     givenBy: '',
     lastReadByJowie: '',
     lastReadByKasia: '',
-    isFound: false,
-    key: ''
+    isFound: false
   },
   bookTitleForRowUpdate: '',
   bookError: null,
@@ -127,26 +125,37 @@ const bookSlice = createSlice({
       };
     },
     displayBookData: (state, action) => {
-      state.bookIsLoaded = true;
-      const bookData = action.payload;
-      state.book = {
-        ...state.book,
-        ...bookData,
+      return {
+        ...state,
+        book: {
+          ...state.book,
+          ...action.payload,
+        },
+        bookIsLoaded: true
       };
     },
     cleanBook: () => {
       return initialState;
     },
     copyAndStoreTitle: (state, action) => {
-      state.bookTitleForRowUpdate = action.payload;
+      return {
+        ...state,
+        bookTitleForRowUpdate: action.payload
+      }
     },
     setBookIsLoaded: (state, action) => {
-      state.bookIsLoaded = action.payload;
+      return {
+        ...state,
+        bookIsLoaded: action.payload
+      }
     },
     resetBookMessages: (state) => {
-      state.bookMsg = null;
-      state.bookError = null;
-      state.bookIsLoaded = false;
+      return {
+        ...state,
+        bookMsg: null,
+        bookError: null,
+        bookIsLoaded: false
+      }
     },
   },
   extraReducers: (builder) => {
@@ -155,24 +164,34 @@ const bookSlice = createSlice({
       const { isFound, title, author, pageCount, publishedDate, language } = action.payload;
     
       if (isFound) {
-        state.book.title = title || '';
-        state.book.author = author || '';
-        state.book.pageCount = pageCount || '';
-        state.book.publishedDate = publishedDate || '';
-        state.book.language = (language || '').toUpperCase();
+        state.book = {
+          ...state.book,
+          title: title || '',
+          author: author || '',
+          pageCount: pageCount || '',
+          publishedDate: publishedDate || '',
+          language: (language || '').toUpperCase(),
+        };
         state.bookIsLoaded = true;
       }
-    })    
+    })   
     .addCase(fetchBook.rejected, (state, action) => {
-      state.bookError = "Server is not connected";
+      return {
+        ...state,
+        bookError: "Server is not connected"
+      }
     })
     .addCase(saveBook.fulfilled, (state, action) => {
-      state.bookMsg = action.payload;
-      // state.bookIsLoaded = true;
+      return {
+        ...state,
+        bookMsg: action.payload
+      }
     })
     .addCase(saveBook.rejected, (state, action) => {
-      state.bookError = "Error saving the book";
-      // state.bookIsLoaded = true;
+      return {
+        ...state,
+        bookError: "Error saving the book"
+      }
     })
   },
 })

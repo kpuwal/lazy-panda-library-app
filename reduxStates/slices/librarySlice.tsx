@@ -25,9 +25,14 @@ type SelectedFiltersType = {
 
 export type libraryTypes = {
   library: BookType[],
-  librarySortedByAuthor: librarySectionType[],
-  librarySortedByTitle: librarySectionType[],
-  // sortedLibrary: librarySectionType[],
+  librarySortedByAuthor: {
+    data: librarySectionType[],
+    alphabet: string[]
+  },
+  librarySortedByTitle: {
+    data: librarySectionType[],
+    alphabet: string[]
+  },
   bookTitleForRowUpdate: string,
   libraryIsLoaded: boolean,
   libraryIsFiltered: boolean,
@@ -41,9 +46,14 @@ export type libraryTypes = {
 
 const initialState: libraryTypes = {
   library: [],
-  librarySortedByAuthor: [],
-  librarySortedByTitle: [],
-  // sortedLibrary: [],
+  librarySortedByAuthor: {
+    data: [],
+    alphabet: []
+  },
+  librarySortedByTitle: {
+    data: [],
+    alphabet: []
+  },
   bookTitleForRowUpdate: '',
   libraryIsLoaded: false,
   libraryIsFiltered: false,
@@ -131,47 +141,84 @@ const librarySlice = createSlice({
   initialState,
   reducers: {
     setSelectedFilters: (state, action) => {
-      state.selectedFilters = action.payload;
-      state.selectedFilterHeader = action.payload;
+      return {
+        ...state,
+        selectedFilters: action.payload,
+        selectedFilterHeader: action.payload
+      }
     },
     sortLibraryByTitle: (state, action) => {
       const sortedByTitle = handleSort(action.payload, 'title');
-      state.librarySortedByTitle = sortedByTitle.sortedSections;
-      state.alphabet = sortedByTitle.sectionLetters;
+      return {
+        ...state,
+        librarySortedByTitle: {
+          data: sortedByTitle.sortedSections,
+          alphabet: sortedByTitle.sectionLetters
+        }
+      }
     },
     sortLibraryByAuthor: (state, action) => {
       const sortedByAuthor = handleSort(action.payload, 'author');
-      state.librarySortedByAuthor = sortedByAuthor.sortedSections;
-      state.alphabet = sortedByAuthor.sectionLetters;
+      return {
+        ...state,
+        librarySortedByAuthor: {
+          data: sortedByAuthor.sortedSections,
+          alphabet: sortedByAuthor.sectionLetters
+        }
+      }
     },
     resetLibraryMessages: (state) => {
-      state.libraryMsg = null;
-      state.libraryError = null;
+      return {
+        ...state,
+        libraryMsg: null,
+        libraryError: null
+      }
     },
     resetSelectedFilters: (state) => {
-      state.selectedFilters.type = '';
-      state.selectedFilters.item = ''; 
+      return {
+        ...state,
+        selectedFilters: {
+          type: '',
+          item: ''
+        }
+      }
     }
   },
   extraReducers: (builder) => {
     builder
     .addCase(filterLibrary.fulfilled, (state, action) => {
-      state.library = action.payload;
-      state.libraryIsLoaded = true;
-      state.libraryIsFiltered = true;
-      state.booksNumber = state.library.length;
+      const library = action.payload;
+      return {
+        ...state,
+        library,
+        libraryIsLoaded: true,
+        libraryIsFiltered: true,
+        booksNumber: library.length
+      }
+      
     })
     .addCase(updateLibrary.fulfilled, (state, action) => {
-      state.libraryMsg = action.payload;
+      return {
+        ...state,
+        libraryMsg: action.payload
+      }
     })
-    .addCase(updateLibrary.rejected, (state, action) => {
-      state.libraryError = "Error updating the book";
+    .addCase(updateLibrary.rejected, (state) => {
+      return {
+        ...state,
+        libraryError: "Error updating the book"
+      }
     })
     .addCase(readLibrary.fulfilled, (state, action) => {
-      state.library = action.payload;
-      state.booksNumber = state.library.length;
-      state.libraryIsFiltered = false;
-      state.libraryIsLoaded = true;
+      const library = action.payload;
+      return {
+        ...state,
+        library,
+        booksNumber: library.length,
+        libraryIsFiltered: false,
+        libraryIsLoaded: true
+      }
+      
     })
   },
 })

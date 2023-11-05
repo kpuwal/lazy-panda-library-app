@@ -5,7 +5,7 @@ import SectionsList from './Sections';
 const TitleList = () => {
   const { librarySortedByTitle } = useSelector((state: RootState) => state.library);
 
-  return <SectionsList data={librarySortedByTitle} />
+  return <SectionsList data={librarySortedByTitle.data} />
 }
 
 export default TitleList;

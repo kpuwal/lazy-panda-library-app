@@ -8,6 +8,7 @@ export type appTypes = {
   libraryListActiveButton: string,
   isAlphabetListActive: boolean,
   isFilterModalActive: boolean,
+  activeAlphabetLetter: string
 }
 
 const initialState: appTypes = {
@@ -17,7 +18,8 @@ const initialState: appTypes = {
   navigationSource: '',
   libraryListActiveButton: 'DEFAULT',
   isAlphabetListActive: false,
-  isFilterModalActive: false
+  isFilterModalActive: false,
+  activeAlphabetLetter: ''
 };
 
 const appSlice = createSlice({
@@ -25,13 +27,22 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     isScanned: (state, action) => {
-      state.scanned = action.payload; 
+      return {
+        ...state,
+        scanned: action.payload
+      }
     },
     savingBookIsDisabled: (state, action) => {
-      state.disabled = action.payload;
+      return {
+        ...state,
+        disabled: action.payload
+      }
     },
     setCameraPermission: (state, action) => {
-      state.cameraPermission = action.payload;
+      return {
+        ...state,
+        cameraPermission: action.payload
+      }
     },
     setLibraryActiveListButton: (state, action) => {
       return {
@@ -57,6 +68,12 @@ const appSlice = createSlice({
         navigationSource: action.payload,
       };
     },
+    setActiveAlphabetLetter: (state, action) => {
+      return {
+        ...state,
+        activeAlphabetLetter: action.payload
+      }
+    }
   },
 })
 
@@ -67,7 +84,8 @@ export const {
   setNavigationSource,
   setLibraryActiveListButton,
   toggleAlphabetList,
-  toggleFilterModal
+  toggleFilterModal,
+  setActiveAlphabetLetter
 } = appSlice.actions;
 
 export default appSlice.reducer;

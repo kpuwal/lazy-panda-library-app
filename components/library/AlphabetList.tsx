@@ -3,23 +3,24 @@ import { useEffect, useRef, useState } from 'react';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Colours } from '@styles/constants';
 import { useSelector } from 'react-redux';
-import { RootState } from '@reduxStates/index';
+import { RootState, setActiveAlphabetLetter, useAppDispatch } from '@reduxStates/index';
 
 const { height } = Dimensions.get('window');
 
 interface AlphabetListProps {
-  onLetterPress: (letter: string) => void;
   floatStyles: any
 }
 
-const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles }) => {
-  const { alphabet } = useSelector((state: RootState) => state.library);
-  const { isAlphabetListActive } = useSelector((state: RootState) => state.app);
+const AlphabetList = () => {
+  const { librarySortedByAuthor, librarySortedByTitle } = useSelector((state: RootState) => state.library);
+  const { isAlphabetListActive, libraryListActiveButton } = useSelector((state: RootState) => state.app);
 
   const rotateValue = useRef(new Animated.Value(0)).current;
   const [isOpen, setIsOpen] = useState(false);
   const letterScale = useRef(new Animated.Value(0.5)).current;
   const closingAnimation = useRef(new Animated.Value(0)).current;
+  const alphabet = libraryListActiveButton === 'AUTHOR' ? librarySortedByAuthor.alphabet : librarySortedByTitle.alphabet;
+  const dispatch = useAppDispatch();
 
 
   useEffect(() => {
@@ -51,8 +52,12 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles 
     }
   }, [isOpen, isAlphabetListActive]);
 
+  const handleLetterPress = (letter: string) => {
+    dispatch(setActiveAlphabetLetter(letter))
+  }
+
   return (
-    <View style={[styles.buttonContainer, floatStyles]}>
+    <View style={styles.buttonContainer}>
       
       {isAlphabetListActive && <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View
@@ -77,7 +82,7 @@ const AlphabetList: React.FC<AlphabetListProps> = ({ onLetterPress, floatStyles 
       {isOpen && isAlphabetListActive && (
         <ScrollView style={styles.alphabetContainer} showsVerticalScrollIndicator={false}>
           {alphabet.map((letter) => (
-            <TouchableOpacity onPress={() => onLetterPress(letter)} key={letter}>
+            <TouchableOpacity onPress={() => handleLetterPress(letter)} key={letter}>
               <Animated.View
                 style={[
                   styles.alphabetButton,
@@ -103,6 +108,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'flex-end',
     flex: 1,
+    top: 60, right: 0
   },
   button: {
     width: 45,

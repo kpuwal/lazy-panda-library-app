@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef,
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton } from '@reduxStates/index';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
@@ -26,7 +26,7 @@ const Library = forwardRef((_props, ref) => {
   
   const { height } = Dimensions.get('window');
   const { librarySortedByAuthor, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
-const { libraryListActiveButton, isAlphabetListActive } = useSelector((state: RootState) => state.app);
+const { libraryListActiveButton } = useSelector((state: RootState) => state.app);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(false);
@@ -137,7 +137,7 @@ const { libraryListActiveButton, isAlphabetListActive } = useSelector((state: Ro
 
   const scrollToSection = (letter: string) => {
     // Find the section index based on the letter
-    const sectionIndex = librarySortedByAuthor.findIndex((section: any) => section.title === letter);
+    const sectionIndex = librarySortedByAuthor.data.findIndex((section: any) => section.title === letter);
     // // setIndex(sectionIndex);
 
     if (sectionIndex !== -1 && sectionListRef.current) {
@@ -156,7 +156,6 @@ const { libraryListActiveButton, isAlphabetListActive } = useSelector((state: Ro
       });
     }
   };
-  
 
   // useEffect(() => {
   //   sectionListRef.current?.scrollToLocation({
@@ -193,10 +192,7 @@ const { libraryListActiveButton, isAlphabetListActive } = useSelector((state: Ro
         <BooksInfo />
       </View>
       <LibraryBooksList />
-      <AlphabetList
-        onLetterPress={scrollToSection}
-        floatStyles={{top: 60, right: 0}}
-      />
+      <AlphabetList />
       <FilterModal
         onClose={handleCloseModal}
       />
