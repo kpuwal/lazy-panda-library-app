@@ -8,7 +8,7 @@ export type appTypes = {
   libraryListActiveButton: string,
   isAlphabetListActive: boolean,
   isFilterModalActive: boolean,
-  activeAlphabetLetter: string
+  activeAlphabetLetter: string | null
 }
 
 const initialState: appTypes = {
@@ -19,7 +19,7 @@ const initialState: appTypes = {
   libraryListActiveButton: 'DEFAULT',
   isAlphabetListActive: false,
   isFilterModalActive: false,
-  activeAlphabetLetter: ''
+  activeAlphabetLetter: null
 };
 
 const appSlice = createSlice({

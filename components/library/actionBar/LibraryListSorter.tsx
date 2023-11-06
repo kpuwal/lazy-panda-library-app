@@ -11,7 +11,6 @@ const LibraryListSorter = () => {
   const handleSortByAuthor = () => {
     dispatch(setLibraryActiveListButton('AUTHOR'));
     dispatch(toggleAlphabetList(true));
-    // setActiveList(true);
   };
 
   const handleSortByTitle = () => {
@@ -85,3 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colours.secondary
   },
 })
+function isAlphabetListActive(arg0: boolean): any {
+  throw new Error("Function not implemented.");
+}
+

@@ -45,8 +45,6 @@ export const pickerSlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(fetchPicker.fulfilled, (state, action) => {
-      // Object.assign(state, action.payload);
-      // state.pickerError = '';
       return {
         ...state,
         ...action.payload
