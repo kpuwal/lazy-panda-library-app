@@ -8,10 +8,10 @@ const bookNotFoundMessages = [
 
 const libraryIsLoadingMessages = [
   "Take a deep breath and channel your inner panda wisdom while we fetch your books.",
-  "Close your eyes and imagine a bamboo forest. We'll have your books waiting when you open them.",
-  "While you wait, our library pandas are practicing their martial arts. They'll be back with your books soon!",
-  "It's panda meditation time! Let's all zen out while your library loads.",
-  "Did you know pandas spend most of their day relaxing? So can you while we prepare your library.",
+  "Close your eyes and imagine a bamboo forest. We'll have our books waiting when you open them.",
+  "While you wait, our library pandas are practicing their martial arts. They'll be back with our books soon!",
+  "It's panda meditation time! Let's all zen out while our library loads.",
+  "Did you know pandas spend most of their day relaxing? So can you while our library is being prepared.",
 ];
 
 export const BACKGROUND = [
@@ -40,5 +40,5 @@ export const randomLibraryIsLoadingMessage =  libraryIsLoadingMessages[Math.floo
 export const SPACING = 1;
 export const ITEM_HEIGHT = 80;
 export const SECTION_ITEM_HEIGHT = 26;
-export const HEADER_HEIGHT = 185;
+export const HEADER_HEIGHT = 225;
 

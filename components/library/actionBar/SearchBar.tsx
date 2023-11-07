@@ -1,8 +1,7 @@
-import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setSearchQuery, useAppDispatch } from '@reduxStates/index';
+import { Ionicons } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { RootState, readLibrary, setLibraryActiveListButton, setSearchQuery, toggleAlphabetList, useAppDispatch } from '@reduxStates/index';
 import { Colours, Fonts } from '@styles/constants';
 
 const SearchBar = () => {
@@ -10,13 +9,21 @@ const SearchBar = () => {
   const { searchQuery } = useSelector((state: RootState) => state.library);
 
   const handleSearch = (query: string) => {
-    dispatch(setSearchQuery(query));
-    // Implement search functionality here
+
+    if (query !== searchQuery) {
+      dispatch(setLibraryActiveListButton('DEFAULT'));
+      dispatch(toggleAlphabetList(false));
+      if (query !== '') {
+        dispatch(setSearchQuery(query));
+      } else {
+        dispatch(readLibrary());
+        dispatch(setSearchQuery(''));
+      }
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* <MaterialCommunityIcons name="book-search" size={24} color={Colours.secondary} /> */}
       <Ionicons name="search-circle-sharp" size={28} color={Colours.secondary} style={styles.icon} />
       <TextInput
         placeholder="Search..."

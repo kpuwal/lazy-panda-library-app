@@ -102,7 +102,7 @@ const Sections = ({ data }: SectionListTypes) => {
       renderSectionHeader={renderSectionHeader}
       showsVerticalScrollIndicator={false}
       getItemLayout={getItemLayout}
-      // ItemSeparatorComponent={ItemSeparator}
+      ItemSeparatorComponent={ItemSeparator}
       contentContainerStyle={{ paddingBottom: bottomPadding }}
       // onScroll={handleScroll}
       refreshing={isManualRefreshing}

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   alphabetContainer: {
     maxHeight: height * .7, // Add this line to limit the widt
     flexDirection: 'column', 
-    marginTop: 90,
+    marginTop: 110,
     position: 'absolute',
 
   },

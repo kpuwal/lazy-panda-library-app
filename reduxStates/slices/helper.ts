@@ -115,3 +115,12 @@ function sortDataItemsBySurname(sections: librarySectionType[]) {
 
   return sections;
 }
+
+export function searchLibrary(query: string, library: BookType[]) {
+    return library.filter((book) => {
+      const titleMatch = book.title.toLowerCase().includes(query.toLowerCase());
+      const authorMatch = book.author.toLowerCase().includes(query.toLowerCase());
+      
+      return titleMatch || authorMatch;
+    });
+}

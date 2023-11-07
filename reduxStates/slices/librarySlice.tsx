@@ -3,7 +3,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { TOKEN } from '@env';
 import { mainUrl } from '../../server-location';
 import { BookType } from "./bookSlice";
-import { handleSort } from "./helper";
+import { handleSort, searchLibrary } from "./helper";
+import { useAppDispatch } from '@reduxStates/store';
 
 const URL = mainUrl();
 
@@ -143,6 +144,13 @@ const librarySlice = createSlice({
   reducers: {
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
+
+      if (action.payload !=='') {
+        state.library = searchLibrary(action.payload, state.library);
+        state.booksNumber = state.library.length;
+      }
+
+      return state;
     },
     setSelectedFilters: (state, action) => {
       return {
