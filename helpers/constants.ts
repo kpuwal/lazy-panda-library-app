@@ -40,5 +40,5 @@ export const randomLibraryIsLoadingMessage =  libraryIsLoadingMessages[Math.floo
 export const SPACING = 1;
 export const ITEM_HEIGHT = 80;
 export const SECTION_ITEM_HEIGHT = 26;
-export const HEADER_HEIGHT = 205;
+export const HEADER_HEIGHT = 185;
 

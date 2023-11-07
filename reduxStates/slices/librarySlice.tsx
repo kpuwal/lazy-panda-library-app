@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Alert } from 'react-native';
 import { TOKEN } from '@env';
 import { mainUrl } from '../../server-location';
 import { BookType } from "./bookSlice";
@@ -42,6 +41,7 @@ export type libraryTypes = {
   selectedFilterHeader: SelectedFiltersType,
   booksNumber: number,
   libraryMsg: string | null,
+  searchQuery: string
 }
 
 const initialState: libraryTypes = {
@@ -68,7 +68,8 @@ const initialState: libraryTypes = {
     item: ''
   },
   booksNumber: 0,
-  libraryMsg: null
+  libraryMsg: null,
+  searchQuery: ''
 }
 
 export const readLibrary = createAsyncThunk(
@@ -140,6 +141,9 @@ const librarySlice = createSlice({
   name: 'library',
   initialState,
   reducers: {
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+    },
     setSelectedFilters: (state, action) => {
       return {
         ...state,
@@ -228,6 +232,7 @@ export const {
   sortLibraryByAuthor,
   sortLibraryByTitle,
   resetLibraryMessages,
-  resetSelectedFilters
+  resetSelectedFilters,
+  setSearchQuery
 } = librarySlice.actions;
 export default librarySlice.reducer;

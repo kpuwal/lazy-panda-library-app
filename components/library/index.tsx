@@ -8,3 +8,4 @@ export {default as DefaultList} from './list/DefaultList';
 export {default as LibraryListSorter} from './actionBar/LibraryListSorter';
 export {default as FilterButton} from './actionBar/FilterButton';
 export {default as BooksInfo} from './actionBar/BooksInfo';
+export {default as SearchBar} from './actionBar/SearchBar';

@@ -43,33 +43,37 @@ const Home = ({navigation}: any) => {
           style={{ width: 185, height: 107, top: 25, left: '21%', justifyContent: 'center', opacity: 1 }}
         />
         <View style={styles.buttonContainer}>
-          <Pressable
-            onPressIn={() => setLove(!isLove)}
-            onPressOut={() => setLove(false)}
-            style={{ bottom: '69%', right: 55, position: 'absolute', zIndex: 2 }}
-          >
-            <Image
-              source={
-                isLove ?
-                require('@assets/panda_button_love.png') :
-                require('@assets/panda_button.png')}
-              style={{
-                width: 150, height: 100,
-              }}
+          <View style={styles.pandaContainer}>
+            <Pressable
+              onPressIn={() => setLove(!isLove)}
+              onPressOut={() => setLove(false)}
+              style={{position: 'absolute'}}
+            >
+              <Image
+                source={
+                  isLove ?
+                  require('@assets/panda_button_love.png') :
+                  require('@assets/panda_button.png')}
+                style={{
+                  width: 150, height: 100,
+                }}
+              />
+            </Pressable>
+          </View>
+          <View style={styles.homeButtonsContainer}>
+            <HomeButton
+              onPress={() => navigation.navigate('Scanner')}
+              title="Scan a book"
+              imgSource={require('@assets/scan.png')}
+              imgColourSource={require('@assets/scan-col.png')}
             />
-          </Pressable>
-          <HomeButton
-            onPress={() => navigation.navigate('Scanner')}
-            title="Scan a book"
-            imgSource={require('@assets/scan.png')}
-            imgColourSource={require('@assets/scan-col.png')}
-          />
-          <HomeButton
-            onPress={() => navigation.navigate('Library')}
-            title="When in doubt, go to the Library"
-            imgSource={require('@assets/library-books.png')}
-            imgColourSource={require('@assets/library-books-col.png')}
-          />
+            <HomeButton
+              onPress={() => navigation.navigate('Library')}
+              title="When in doubt, go to the Library"
+              imgSource={require('@assets/library-books.png')}
+              imgColourSource={require('@assets/library-books-col.png')}
+            />
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -95,8 +99,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 2,
-    justifyContent: 'center',
     alignItems: 'center'
+  },
+  pandaContainer: {
+    flex: 1,
+    backgroundColor: 'yellow',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    bottom: -5
+  },
+  homeButtonsContainer: {
+    flex: 2
   },
   textContainer: {
     position: 'absolute',

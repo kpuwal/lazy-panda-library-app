@@ -30,7 +30,8 @@ import {
   sortLibraryByTitle,
   resetLibraryMessages,
   resetSelectedFilters,
-  librarySectionType
+  librarySectionType,
+  setSearchQuery
 } from './librarySlice';
 
 import { fetchPicker } from './pickerSlice';
@@ -62,5 +63,6 @@ export {
   resetSelectedFilters,
   fetchPicker,
   librarySectionType,
+  setSearchQuery,
   BookType
 };

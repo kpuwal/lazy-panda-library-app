@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { connect } from 'react-redux';
 import { displayBookData, resetBookMessages, resetLibraryMessages, savingBookIsDisabled, setNavigationSource } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
+import { ITEM_HEIGHT } from '@helpers/constants';
 
 const SPACING = 15;
 
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     padding: SPACING,
-    height: 90,
+    height: ITEM_HEIGHT,
     width: '100%',
   },
   textContainer: {

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { RootState, librarySectionType, readLibrary, setLibraryActiveListButton, toggleAlphabetList, useAppDispatch } from '@reduxStates/index';
+import { BookType, RootState, librarySectionType, readLibrary, setLibraryActiveListButton, toggleAlphabetList, useAppDispatch } from '@reduxStates/index';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Dimensions, SectionList } from 'react-native';
 import BookItem from './BookItem';
@@ -20,7 +20,7 @@ const Sections = ({ data }: SectionListTypes) => {
   const { activeAlphabetLetter } = useSelector((state: RootState) => state.app);
   const [isManualRefreshing, setIsManualRefreshing] = useState(false);
   const lastItemHeight = data[data.length - 1].data.length * (ITEM_HEIGHT + SPACING);
-  const bottomPadding = screenHeight - HEADER_HEIGHT - lastItemHeight - (data.length * SPACING);
+  const bottomPadding = screenHeight - HEADER_HEIGHT - lastItemHeight - (data.length * SPACING / 2);
   const sectionListRef = useRef<SectionList>(null);
 
   const renderItem = useCallback(({ item }: any) => (
@@ -29,16 +29,22 @@ const Sections = ({ data }: SectionListTypes) => {
 
   const keyExtractor = useCallback((_item: any, index: number) => index.toString(), []);
 
-  const getItemLayout = useCallback(((data: any, index: number) => {
-    const totalHeight = (ITEM_HEIGHT + SPACING);
-    const offset = (SECTION_ITEM_HEIGHT + totalHeight * index);
-
+  const getItemLayout = ((data: any, index: number) => {
+    const length = ITEM_HEIGHT;
+    // const offset = (SECTION_ITEM_HEIGHT + totalHeight * index);
+ 
+    // const length = ITEM_HEIGHT;
+    // const offset = ITEM_HEIGHT * (index-2) - SECTION_ITEM_HEIGHT
+// console.log('offset ', offset)
+// console.log('index ', ITEM_HEIGHT)
+// console.log( 'offset: ', offset, ' index: ', index)
     return {
-      length: ITEM_HEIGHT,
-      offset,
+      length,
+      offset: ITEM_HEIGHT * (index - 1),
       index
     }
-  }), []);  
+  });
+
 
   const renderSectionHeader = useCallback(({ section }: any) => (
     <SectionHeader title={section.title} />
@@ -62,12 +68,12 @@ const Sections = ({ data }: SectionListTypes) => {
     const sectionIndex = data.findIndex((section: any) => section.title === activeAlphabetLetter);
 
     if (sectionIndex !== -1 && sectionListRef.current) {
-      const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
-  
+      const viewOffset = sectionIndex === 0 ? 0 : SECTION_ITEM_HEIGHT;
+
       sectionListRef.current.scrollToLocation({
         sectionIndex,
         itemIndex: 0,
-        viewOffset,
+        viewOffset: 0,
         viewPosition: 0,
         animated: true,
       });
@@ -96,7 +102,7 @@ const Sections = ({ data }: SectionListTypes) => {
       renderSectionHeader={renderSectionHeader}
       showsVerticalScrollIndicator={false}
       getItemLayout={getItemLayout}
-      ItemSeparatorComponent={ItemSeparator}
+      // ItemSeparatorComponent={ItemSeparator}
       contentContainerStyle={{ paddingBottom: bottomPadding }}
       // onScroll={handleScroll}
       refreshing={isManualRefreshing}

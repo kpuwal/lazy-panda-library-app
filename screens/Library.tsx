@@ -2,13 +2,13 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef,
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter } from '@reduxStates/index';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter, setSelectedFilters } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter, FilterButton, BooksInfo } from '@library/index';
+import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter, FilterButton, BooksInfo, SearchBar } from '@library/index';
 import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpers/constants';
 
 type LibraryViewType = {
@@ -57,22 +57,9 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
   //   },
   // }));
 
-  // Effect to scroll to the top when sorting changes
-  // useEffect(() => {
-  //   if (scrollToTop && sortedLibrary.length > 0) { // Check if data exists
-  //     sectionListRef.current?.scrollToLocation({
-  //       sectionIndex: 0,
-  //       itemIndex: 0,
-  //       viewOffset: 0,
-  //       viewPosition: 0,
-  //       animated: true,
-  //     });
-  //     setScrollToTop(false);
-  //   }
-  // }, [scrollToTop, sortedLibrary]);
-
   const toggleModal = () => {
     dispatch(toggleFilterModal(true));
+    dispatch(resetSelectedFilters());
   };
 
   useFocusEffect(
@@ -81,38 +68,9 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
     }, [])
   );
 
-  // const scrollToLetter = (letter: string) => {
-  //   const index = library.findIndex((item) => item.author.charAt(0).toUpperCase() === letter);
-    
-  //   if (index !== -1 && flatListRef.current) {
-  //     flatListRef.current.scrollToIndex({ animated: true, index });
-  //   }
-  // };
-
-  // const handleSortByAuthor = () => {
-  //   // setActiveButton('author');
-  //   setActiveButton('AUTHOR');
-  //   setActiveList(true);
-  // };
-
-  // const handleSortByTitle = () => {
-  //   setActiveButton('TITLE');
-  //   // setActiveButton('title');
-  //   setActiveList(true);
-  // }
-
-  // const handleSortByDefault = () => {
-  //   setActiveButton('DEFAULT');
-  //   // setActiveButton('default');
-  //   setActiveList(false);
-  // };
-
   const handleCloseModal = () => {
-    // setActiveButton('DEFAULT');
-    // setActiveList(false);
     dispatch(setLibraryActiveListButton('DEFAULT'));
     dispatch(toggleAlphabetList(false));
-    // setModalVisible(false);
     dispatch(toggleFilterModal(false));
   }
 
@@ -122,50 +80,12 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
       .then(() => {
         setIsInitialLoading(false);
         setActiveButton('DEFAULT');
-        // setActiveList(false);
       })
       .catch((error) => {
         console.error('Error loading library data:', error);
         setIsInitialLoading(false);
       });
   };
-
-  // useEffect(() => {
-  //   // Set an initial section when the component mounts
-  //   scrollToSection('1'); // Replace 'A' with your initial section letter.
-  // }, []);
-
-  const scrollToSection = (letter: string) => {
-    // Find the section index based on the letter
-    const sectionIndex = librarySortedByAuthor.data.findIndex((section: any) => section.title === letter);
-    // // setIndex(sectionIndex);
-
-    if (sectionIndex !== -1 && sectionListRef.current) {
-      const viewOffset = sectionIndex === 0 ? 0 : HEADER_HEIGHT;
-  
-      console.log('Scrolling to section with letter:', letter);
-      console.log('Requested section index: ', sectionIndex);
-  
-      // Scroll to the section with the specified letter
-      sectionListRef.current.scrollToLocation({
-        sectionIndex,
-        itemIndex: 0,
-        viewOffset,
-        viewPosition: 0,
-        animated: true, // Set to true if you want an animation
-      });
-    }
-  };
-
-  // useEffect(() => {
-  //   sectionListRef.current?.scrollToLocation({
-  //     sectionIndex: index,
-  //     itemIndex: 0,
-  //     animated: true,
-  //     viewOffset: 150,
-  //     viewPosition: 0
-  //   })
-  // }, [index]);
 
   if (!libraryIsLoaded) {
     return (
@@ -189,6 +109,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
           <FilterButton onPress={toggleModal} />
           <LibraryListSorter />
         </View>
+        <SearchBar />
         <BooksInfo />
       </View>
       <LibraryBooksList />
@@ -207,11 +128,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
     backgroundColor: Colours.primary,
-    // paddingTop: 30,
     paddingBottom: 10,
-    // paddingHorizontal: 15,
-    height: 185,
-    // backgroundColor: 'pink'
+    height: HEADER_HEIGHT,
   },
   editContainer: {
     height: '100%',
