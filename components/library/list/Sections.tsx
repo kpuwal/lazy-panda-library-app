@@ -79,17 +79,6 @@ const Sections = ({ data }: SectionListTypes) => {
       });
     }
   }, [activeAlphabetLetter]);
-
-  // const handleScroll = () => {
-  //   const sectionIndex = data.findIndex((section: any) => section.title === activeAlphabetLetter);
-  //   sectionListRef.current?.scrollToLocation({
-  //     sectionIndex,
-  //     itemIndex: 0,
-  //     animated: true,
-  //     viewOffset: 150,
-  //     viewPosition: 0
-  //   })
-  // };
   
   return (
     <SectionList
@@ -104,7 +93,6 @@ const Sections = ({ data }: SectionListTypes) => {
       getItemLayout={getItemLayout}
       ItemSeparatorComponent={ItemSeparator}
       contentContainerStyle={{ paddingBottom: bottomPadding }}
-      // onScroll={handleScroll}
       refreshing={isManualRefreshing}
       onRefresh={handleManualRefresh}
     />

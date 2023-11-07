@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   alphabetContainer: {
-    maxHeight: height * .7, // Add this line to limit the widt
+    maxHeight: height * .65, // Add this line to limit the width
     flexDirection: 'column', 
-    marginTop: 110,
+    marginTop: 115,
     position: 'absolute',
 
   },
