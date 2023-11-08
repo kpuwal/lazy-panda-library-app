@@ -38,14 +38,13 @@ const SearchBar = () => {
 const styles = StyleSheet.create({
   container: {
     width: '94%',
-    height: 30,
+    height: 32,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colours.tertiary,
     borderRadius: 8,
-    marginHorizontal: '3%',
-    marginVertical: '2%',
+    marginHorizontal: 10,
     paddingHorizontal: 5
   },
   icon: {

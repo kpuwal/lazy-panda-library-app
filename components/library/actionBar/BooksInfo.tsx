@@ -12,7 +12,7 @@ const BooksInfo = () => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.booksNumber}>
         <Text style={[styles.sortButtonText, { paddingTop: 10 }]}>{booksNumber} books</Text>
       </View>
@@ -26,21 +26,15 @@ const BooksInfo = () => {
       ) : (
         <View style={styles.filterDisplay} />
       )}
-    </>
+    </View>
   );
 };
 
 export default BooksInfo;
 
 const styles = StyleSheet.create({
-  sortButton: {
-    paddingVertical: 2.5,
-    paddingHorizontal: 2.5,
-    margin: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    width: 60,
+  container: {
+    height: 60
   },
   sortButtonText: {
     fontSize: Fonts.small,
@@ -48,10 +42,7 @@ const styles = StyleSheet.create({
   },
   filterDisplay: {
     alignItems: 'flex-start',
-    paddingHorizontal: 15,
-    // paddingTop: 15,
-    // backgroundColor: Colours.secondary,
-    // paddingTop: 10,
+    paddingHorizontal: 15
   },
   booksNumber: {
     paddingHorizontal: 15,

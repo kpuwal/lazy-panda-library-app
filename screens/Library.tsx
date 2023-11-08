@@ -79,7 +79,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
     dispatch(readLibrary())
       .then(() => {
         setIsInitialLoading(false);
-        setActiveButton('DEFAULT');
+        dispatch(setLibraryActiveListButton('DEFAULT'));
       })
       .catch((error) => {
         console.error('Error loading library data:', error);
@@ -92,6 +92,11 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
       <LibraryLoader />
     );
   }
+// header height: 222
+// 1. Header height 20 + margin top 30 + margin bottom 20 = 70
+// 2. Subheader: filter and sorting buttons: height 50 + marginBottom 10 = 60
+// 3. Search bar: 30 + 2
+// 4. Books Info: 60
 
   return (
     <View style={{flex: 1, backgroundColor: Colours.tertiary}}>
@@ -128,8 +133,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'column',
     backgroundColor: Colours.primary,
-    paddingBottom: 10,
-    height: HEADER_HEIGHT,
+    // paddingBottom: 10,
+    height: HEADER_HEIGHT
   },
   editContainer: {
     height: '100%',
@@ -209,7 +214,8 @@ const styles = StyleSheet.create({
   subheader: {
     flexDirection: 'row',
     height: 50,
-    marginHorizontal: 15
+    marginHorizontal: 10,
+    marginBottom: 10
   },
   subheaderFilter: {
     flex: 3,

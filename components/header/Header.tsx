@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View } from 'react-native';
-import { headerContainer } from '../../styles/styles';
+import { headerContainer } from '@styles/styles';
 import Icon from './Icon';
 import Title from './Title';
 import GoBack from './GoBack';

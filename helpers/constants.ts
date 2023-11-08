@@ -38,7 +38,7 @@ export const randomLibraryIsLoadingMessage =  libraryIsLoadingMessages[Math.floo
 
 // BookItem and library constants
 export const SPACING = 1;
-export const ITEM_HEIGHT = 80;
+export const ITEM_HEIGHT = 95;
 export const SECTION_ITEM_HEIGHT = 26;
-export const HEADER_HEIGHT = 225;
+export const HEADER_HEIGHT = 222;
 
