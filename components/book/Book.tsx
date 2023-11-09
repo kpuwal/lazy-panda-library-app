@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Tou
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { RootState, useAppDispatch, resetLibraryMessages, updateLibrary, isScanned, savingBookIsDisabled, updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages } from "@reduxStates/index";
+import { RootState, useAppDispatch, resetLibraryMessages, updateLibrary, isScanned, savingBookIsDisabled, updateBook, saveBook, copyAndStoreTitle, setBookIsLoaded, resetBookMessages, setAlertModal } from "@reduxStates/index";
 import { genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon, SelectionCard, DateCard, TextCard, Title, Author, Numbers } from '@book/index';
 
 import Header from "../header/Header";
@@ -11,6 +11,7 @@ import { Colours } from "@styles/constants";
 import MainButton from "../button/MainButton";
 import { Ionicons } from "@expo/vector-icons";
 import { LibraryOverlay } from "@components/library";
+import AlertModal from "@components/alert/AlertModal";
 
 
 const Book = () => {
@@ -20,36 +21,59 @@ const Book = () => {
   const { navigationSource } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
   const [bookIsLoading, setBookIsLoading] = useState(false);
+  const [modalContent, setModalContent] = useState({title: '', message: '', buttonOneTxt: ''});
+
+  const [isAlertModalVisible, setIsAlertModalVisible] = useState(false);
+
+  const whenCloseAlertModal = () => {
+    dispatch(resetLibraryMessages())
+    dispatch(resetBookMessages())
+  };
 
   useEffect(() => {
     dispatch(copyAndStoreTitle(book.title));
   }, []);
 
-  // const resetStates = () => {
-  //   dispatch(isScanned(false));
-  //   dispatch(setBookIsLoaded(false));
-  //   dispatch(resetBookMessages());
-  //   dispatch(resetLibraryMessages());
-  // }
-
   useEffect(() => {
     if (libraryMsg !== null) {
-      Alert.alert('Success', libraryMsg, [{text: 'OK', onPress: () => dispatch(resetLibraryMessages())}]);
+      setIsAlertModalVisible(true);
+      setModalContent({
+        title: '🐼 Success!',
+        message: libraryMsg,
+        buttonOneTxt: 'Gotcha!'
+      });
       setBookIsLoading(false);
-
     }
     if (libraryError !== null) {
+      // dispatch(setAlertModal(true));
+      setIsAlertModalVisible(true);
+      setModalContent({
+        title: '🐼 Error!',
+        message: libraryError,
+        buttonOneTxt: 'Gotcha!',
+      });
       setBookIsLoading(false);
-      Alert.alert('Error', libraryError, [{text: 'OK', onPress: () => dispatch(resetLibraryMessages())}]);
     }
     if (bookMsg !== null) {
-      Alert.alert('Success', bookMsg, [{text: 'OK', onPress: () => dispatch(resetBookMessages())}]);
+      // dispatch(setAlertModal(true));
+      setIsAlertModalVisible(true);
+      setModalContent({
+        title: '🐼 Success!',
+        message: bookMsg,
+        buttonOneTxt: 'Gotcha!',
+      });
       setBookIsLoading(false);
 
     }
     if (bookError !== null) {
+      // dispatch(setAlertModal(true));
+      setIsAlertModalVisible(true);
+      setModalContent({
+        title: '🐼 Error!',
+        message: bookError,
+        buttonOneTxt: 'Gotcha!',
+      });
       setBookIsLoading(false);
-      Alert.alert('Error', bookError, [{text: 'OK', onPress: () => dispatch(resetBookMessages())}]);
     }
   }, [libraryMsg, libraryError, bookError, bookMsg]);
 
@@ -166,6 +190,13 @@ const Book = () => {
         </MainButton>
       </View>
       <LibraryOverlay message={navigationSource === 'Library' ? 'Updating' : 'Saving'} isVisible={bookIsLoading} />
+      <AlertModal
+        title={modalContent.title}
+        message={modalContent.message}
+        buttonOneTxt={modalContent.buttonOneTxt}
+        buttonOneAction={whenCloseAlertModal}
+        isVisible={isAlertModalVisible}
+      />
     </View>
   )
 }

@@ -1,17 +1,17 @@
 const bookNotFoundMessages = [
-  "🐼 We've searched far and wide, but it's official: this book is a rebel and won't be found on Google Books! 📚🔍💥",
-  "🐼 This book is as elusive as a ninja in the night. It's not in the database and never will be! 📖🥷🚫",
-  "🐼 We've consulted with the panda oracle, and it's clear: this book is on a mission to stay hidden from Google Books forever! 🐼🔮🔒",
-  "🐼 Sorry, but even our tech-savvy pandas couldn't locate this book. It's officially off the grid! 📚🐼💻",
-  "🐼 We've asked every panda in the library, and they agree: this book is a mystery waiting to be solved...or not! 📚🕵️‍♀️🚫",
+  "We've searched far and wide, but it's official: this book is a rebel and won't be found on Google Books! 📚🔍💥\n",
+  "This book is as elusive as a ninja in the night. It's not in the database and never will be! 📖🥷🚫\n",
+  "We've consulted with the panda oracle, and it's clear: this book is on a mission to stay hidden from Google Books forever! 🐼🔮🔒\n",
+  "Sorry, but even our tech-savvy pandas couldn't locate this book. It's officially off the grid! 📚🐼💻\n",
+  "We've asked every panda in the library, and they agree: this book is a mystery waiting to be solved...or not! 📚🕵️‍♀️🚫\n",
 ];
 
 const libraryIsLoadingMessages = [
   "Take a deep breath and channel your inner panda wisdom while we fetch your books.",
-  "Close your eyes and imagine a bamboo forest. We'll have our books waiting when you open them.",
-  "While you wait, our library pandas are practicing their martial arts. They'll be back with our books soon!",
-  "It's panda meditation time! Let's all zen out while our library loads.",
-  "Did you know pandas spend most of their day relaxing? So can you while our library is being prepared.",
+  "Close your eyes and imagine a bamboo forest. We'll have the library waiting when you open them.",
+  "While you wait, our library pandas are practicing their martial arts. They'll be back with your books soon!",
+  "It's panda meditation time! Let's all zen out while the library loads.",
+  "Did you know pandas spend most of their day relaxing? So can you while the library is being prepared.",
 ];
 
 export const BACKGROUND = [

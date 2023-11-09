@@ -36,12 +36,12 @@ export type libraryTypes = {
   bookTitleForRowUpdate: string,
   libraryIsLoaded: boolean,
   libraryIsFiltered: boolean,
-  libraryError: string | null,
   alphabet: string[],
   selectedFilters: SelectedFiltersType,
   selectedFilterHeader: SelectedFiltersType,
   booksNumber: number,
   libraryMsg: string | null,
+  libraryError: string | null,
   searchQuery: string
 }
 

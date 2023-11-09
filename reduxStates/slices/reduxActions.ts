@@ -18,7 +18,8 @@ import {
   setLibraryActiveListButton,
   toggleAlphabetList,
   toggleFilterModal,
-  setActiveAlphabetLetter
+  setActiveAlphabetLetter,
+  setAlertModal
 } from './appSlice';
 
 import {
@@ -53,6 +54,7 @@ export {
   toggleAlphabetList,
   toggleFilterModal,
   setActiveAlphabetLetter,
+  setAlertModal,
   readLibrary,
   updateLibrary,
   filterLibrary,

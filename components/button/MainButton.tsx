@@ -8,7 +8,7 @@ import { Colours } from '../../styles/constants';
 type MainButtonProps = {
   children: ReactNode,
   style?: any,
-  action: (event: GestureResponderEvent) => void
+  action?: (event: GestureResponderEvent) => void
 }
 
 type MainButtonComponent = React.FC<MainButtonProps> & {

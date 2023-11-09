@@ -27,8 +27,8 @@ export default SortButton;
 
 const styles = StyleSheet.create({
   sortButton: {
-    paddingVertical: 2.5,
-    paddingHorizontal: 2.5,
+    paddingVertical: 2,
+    paddingHorizontal: 2,
     margin: 3,
     justifyContent: 'center',
     alignItems: 'center',

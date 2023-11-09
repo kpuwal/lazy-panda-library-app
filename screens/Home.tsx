@@ -47,7 +47,7 @@ const Home = ({navigation}: any) => {
             <Pressable
               onPressIn={() => setLove(!isLove)}
               onPressOut={() => setLove(false)}
-              style={{position: 'absolute'}}
+              style={{position: 'absolute', width: 250, height: 120, justifyContent: 'flex-end', alignItems: 'center'}}
             >
               <Image
                 source={
@@ -55,7 +55,7 @@ const Home = ({navigation}: any) => {
                   require('@assets/panda_button_love.png') :
                   require('@assets/panda_button.png')}
                 style={{
-                  width: 150, height: 100,
+                  width: 150, height: 100 
                 }}
               />
             </Pressable>

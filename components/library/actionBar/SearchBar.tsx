@@ -5,11 +5,10 @@ import { RootState, readLibrary, setLibraryActiveListButton, setSearchQuery, tog
 import { Colours, Fonts } from '@styles/constants';
 
 const SearchBar = () => {
-  const dispatch = useAppDispatch();
   const { searchQuery } = useSelector((state: RootState) => state.library);
+  const dispatch = useAppDispatch();
 
   const handleSearch = (query: string) => {
-
     if (query !== searchQuery) {
       dispatch(setLibraryActiveListButton('DEFAULT'));
       dispatch(toggleAlphabetList(false));

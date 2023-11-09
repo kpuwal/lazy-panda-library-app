@@ -8,6 +8,7 @@ export type appTypes = {
   libraryListActiveButton: string,
   isAlphabetListActive: boolean,
   isFilterModalActive: boolean,
+  isAlertModalActive: boolean,
   activeAlphabetLetter: string | null
 }
 
@@ -19,6 +20,7 @@ const initialState: appTypes = {
   libraryListActiveButton: 'DEFAULT',
   isAlphabetListActive: false,
   isFilterModalActive: false,
+  isAlertModalActive: false,
   activeAlphabetLetter: null
 };
 
@@ -26,6 +28,12 @@ const appSlice = createSlice({
   name: 'book',
   initialState,
   reducers: {
+    setAlertModal: (state, action) => {
+      return {
+        ...state,
+        isAlertModalActive: action.payload
+      }
+    },
     isScanned: (state, action) => {
       return {
         ...state,
@@ -85,7 +93,8 @@ export const {
   setLibraryActiveListButton,
   toggleAlphabetList,
   toggleFilterModal,
-  setActiveAlphabetLetter
+  setActiveAlphabetLetter,
+  setAlertModal
 } = appSlice.actions;
 
 export default appSlice.reducer;

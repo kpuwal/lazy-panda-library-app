@@ -29,9 +29,9 @@ export type BookType = {
 
 export type bookTypes = {
   book: BookType,
-  bookTitleForRowUpdate?: string,
-  bookError?: string | null,
-  bookMsg?: string | null,
+  bookTitleForRowUpdate: string,
+  bookError: string | null,
+  bookMsg: string | null,
   bookIsLoaded: boolean
 }
 

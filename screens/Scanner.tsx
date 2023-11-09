@@ -1,14 +1,32 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { fetchPicker, RootState, useAppDispatch } from '@reduxStates/index';
+import { fetchPicker, isScanned, RootState, setBookIsLoaded, useAppDispatch } from '@reduxStates/index';
 import { BarcodeScanner, ScannerOverlay } from '@scanner/index';
+import { randomBookNotFoundMessage } from '@helpers/constants';
+import AlertModal from '@components/alert/AlertModal';
 
 const Scanner = ({navigation}: any) => {
   const cameraPermission = useSelector(
     (state: RootState) => state.app.cameraPermission);
+  const [isAlertModalVisible, setIsAlertModalVisible] = useState(false);
   const dispatch = useAppDispatch();
+
+  const handleButtonTwoAction = () => {
+    setIsAlertModalVisible(!isAlertModalVisible);
+    navigation.navigate('Book');
+  }
+
+  const handleButtonOneAction = () => {
+    dispatch(isScanned(false));
+    dispatch(setBookIsLoaded(false));
+    setIsAlertModalVisible(!isAlertModalVisible);
+  }
+
+  const handleAlertModalVisibility = () => {
+    setIsAlertModalVisible(!isAlertModalVisible);
+  }
 
   useEffect(() => {
     dispatch(fetchPicker());
@@ -23,8 +41,17 @@ const Scanner = ({navigation}: any) => {
 
   return (
     <>
-      <BarcodeScanner navigation={navigation} />
+      <BarcodeScanner navigation={navigation} openModalAlert={handleAlertModalVisibility} />
       <ScannerOverlay />
+      <AlertModal
+        title="🐼 Error!"
+        message={randomBookNotFoundMessage}
+        buttonOneTxt="Scan Again"
+        buttonOneAction={handleButtonOneAction}
+        buttonTwoTxt="Add Book Manually"
+        buttonTwoAction={handleButtonTwoAction}
+        isVisible={isAlertModalVisible}
+      />
     </>
   )
 }

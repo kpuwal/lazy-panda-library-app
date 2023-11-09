@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { BookType, RootState, librarySectionType, readLibrary, setLibraryActiveListButton, toggleAlphabetList, useAppDispatch } from '@reduxStates/index';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Dimensions, SectionList } from 'react-native';
@@ -7,6 +7,7 @@ import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpe
 import ItemSeparator from './ItemSeparator';
 import SectionHeader from './SectionHeader';
 import { useSelector } from 'react-redux';
+import { RootStackParamList } from '@components/NavigationStack';
 
 
 type SectionListTypes = {
@@ -15,7 +16,7 @@ type SectionListTypes = {
 
 const Sections = ({ data }: SectionListTypes) => {
   const screenHeight = Dimensions.get('window').height;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
   const { activeAlphabetLetter } = useSelector((state: RootState) => state.app);
   const [isManualRefreshing, setIsManualRefreshing] = useState(false);

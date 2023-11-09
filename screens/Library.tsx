@@ -2,14 +2,16 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef,
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter, setSelectedFilters } from '@reduxStates/index';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter, setSelectedFilters, setAlertModal, isScanned, setBookIsLoaded } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer } from '@styles/styles';
 import Header from '@components/header/Header';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter, FilterButton, BooksInfo, SearchBar } from '@library/index';
-import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING } from '@helpers/constants';
+import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING, randomBookNotFoundMessage } from '@helpers/constants';
+import AlertModal from '@components/alert/AlertModal';
+import { RootStackParamList } from '@components/NavigationStack';
 
 type LibraryViewType = {
   TITLE: React.ComponentType;
@@ -23,6 +25,7 @@ const SortedLibraryBooks: LibraryViewType = {
 
 const Library = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   
   const { height } = Dimensions.get('window');
   const { librarySortedByAuthor, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
@@ -56,6 +59,12 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
   //     }
   //   },
   // }));
+
+  const resetStates = () => {
+    dispatch(isScanned(false));
+    dispatch(setBookIsLoaded(false));
+    // dispatch(resetBookMessages());
+  };
 
   const toggleModal = () => {
     dispatch(toggleFilterModal(true));
@@ -92,6 +101,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
       <LibraryLoader />
     );
   }
+
 // header height: 222
 // 1. Header height 20 + margin top 30 + margin bottom 20 = 70
 // 2. Subheader: filter and sorting buttons: height 50 + marginBottom 10 = 60
@@ -119,9 +129,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
       </View>
       <LibraryBooksList />
       <AlphabetList />
-      <FilterModal
-        onClose={handleCloseModal}
-      />
+      <FilterModal onClose={handleCloseModal} />
       <LibraryOverlay message={'Loading'} isVisible={isInitialLoading} />
     </View>
   );
@@ -143,11 +151,6 @@ const styles = StyleSheet.create({
   },
   editTxt: {
     color: 'red'
-  },
-  flatList: {
-    // padding: SPACING,
-    // paddingTop: 200,
-    // paddingBottom: 142,
   },
   image: {
     width: 20,

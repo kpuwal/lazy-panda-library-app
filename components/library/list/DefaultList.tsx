@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { RootState, BookType, readLibrary, useAppDispatch, setLibraryActiveButton } from '@reduxStates/index';
+import { RootState, BookType, readLibrary, useAppDispatch, setLibraryActiveListButton } from '@reduxStates/index';
 import { useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -31,7 +31,7 @@ const DefaultList = () => {
     dispatch(readLibrary())
       .then(() => {
         setIsManualRefreshing(false);
-        dispatch(setLibraryActiveButton('default'));
+        dispatch(setLibraryActiveListButton('DEFAULT'));
         // setActiveList(false);
         // setShowSectionList(false);
       })
