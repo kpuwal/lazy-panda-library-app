@@ -7,8 +7,9 @@ import  Header from '@components//header/Header';
 import { buttonSml } from '@styles/styles';
 import { Ionicons } from '@expo/vector-icons';
 import { Colours } from '@styles/constants';
-import MainButton from '../button/MainButton';
+import PrimaryButton from '@components/button/PrimaryButton';
 import { LANGUAGES } from '@helpers/constants';
+import { buttonText } from '@styles/button';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -129,17 +130,17 @@ const FilterModal = ({ onClose }: any) => {
               />
             </ScrollView>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <MainButton action={onClose} style={buttonSml}>
+              <PrimaryButton action={onClose} customStyle={buttonSml}>
                 <Ionicons name="ios-close" size={20} color="white" />
-                <MainButton.Title>
+                <PrimaryButton.StyledText customStyle={buttonText}>
                   Close
-                </MainButton.Title>
-              </MainButton>
-              <MainButton action={handleFilterUpdate}>
-                <MainButton.Title>
+                </PrimaryButton.StyledText>
+              </PrimaryButton>
+              <PrimaryButton action={handleFilterUpdate}>
+                <PrimaryButton.StyledText customStyle={buttonText}>
                   Apply Filter
-                </MainButton.Title>
-              </MainButton>
+                </PrimaryButton.StyledText>
+              </PrimaryButton>
             </View>
           </View>
         </View>
@@ -147,6 +148,8 @@ const FilterModal = ({ onClose }: any) => {
     </>
   );
 };
+
+export default FilterModal;
 
 const styles = StyleSheet.create({
   modalOverlay: {
@@ -183,5 +186,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Courier Prime Bold',
   },
 });
-
-export default FilterModal;

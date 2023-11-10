@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter, setSelectedFilters, setAlertModal, isScanned, setBookIsLoaded } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '@styles/constants';
-import { headerInfoContainer } from '@styles/styles';
+import { headerInfoContainer, headerText } from '@styles/styles';
 import Header from '@components/header/Header';
 import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, AuthorList, DefaultList, LibraryListSorter, FilterButton, BooksInfo, SearchBar } from '@library/index';
@@ -116,7 +116,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
           <Header.GoBack />
           <View style={headerInfoContainer}>
             <Header.Icon uri={require('../assets/books.gif')} />
-            <Header.Title>Our Library</Header.Title>
+            <Header.StyledText customStyle={headerText}>Our Library</Header.StyledText>
           </View>
         </Header>
 

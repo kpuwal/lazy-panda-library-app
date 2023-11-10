@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { View } from 'react-native';
 import { headerContainer } from '@styles/styles';
 import Icon from './Icon';
-import Title from './Title';
+import StyledText from '@components/StyledText';
 import GoBack from './GoBack';
 
 type HeaderProps = {
@@ -11,7 +11,7 @@ type HeaderProps = {
 
 type HeaderComponent = React.FC<HeaderProps> & {
   Icon: typeof Icon;
-  Title: typeof Title;
+  StyledText: typeof StyledText;
   GoBack: typeof GoBack;
 };
 
@@ -24,7 +24,7 @@ const Header: HeaderComponent = ({ children }) => {
 }
 
 Header.Icon = Icon;
-Header.Title = Title;
+Header.StyledText = StyledText;
 Header.GoBack = GoBack;
 
 export default Header;

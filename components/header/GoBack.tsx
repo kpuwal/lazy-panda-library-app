@@ -1,14 +1,14 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Pressable, View } from "react-native";
-import { headerGoBackButton, headerGoBackContainer } from '../../styles/styles';
-import { Colours } from "../../styles/constants";
+import { headerGoBackButton, headerGoBackContainer } from '@styles/styles';
+import { Colours } from "@styles/constants";
 import { useNavigation } from "@react-navigation/native";
 
 type GoBackProps = {
   styling?: any
 }
 
-const GoBack: React.FC<GoBackProps> = ({styling}) => {
+const GoBack: React.FC<GoBackProps> = ({ styling }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {

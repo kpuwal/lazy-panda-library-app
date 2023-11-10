@@ -6,12 +6,14 @@ import { RootState, useAppDispatch, resetLibraryMessages, updateLibrary, isScann
 import { genreIcon, seriesIcon, worldIcon, readByIcon, boughtGivenOnIcon, givenByIcon, lastReadIcon, SelectionCard, DateCard, TextCard, Title, Author, Numbers } from '@book/index';
 
 import Header from "../header/Header";
-import { buttonMid, headerInfoContainer } from "@styles/styles";
+import { buttonMid, headerInfoContainer, headerText } from "@styles/styles";
 import { Colours } from "@styles/constants";
-import MainButton from "../button/MainButton";
+import PrimaryButton from "@components/button/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { LibraryOverlay } from "@components/library";
 import AlertModal from "@components/alert/AlertModal";
+import { alertMessage, alertTitle } from "@styles/alert";
+import { buttonText } from "@styles/button";
 
 
 const Book = () => {
@@ -21,13 +23,14 @@ const Book = () => {
   const { navigationSource } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
   const [bookIsLoading, setBookIsLoading] = useState(false);
-  const [modalContent, setModalContent] = useState({title: '', message: '', buttonOneTxt: ''});
+  const [modalContent, setModalContent] = useState({title: '', message: ''});
 
   const [isAlertModalVisible, setIsAlertModalVisible] = useState(false);
 
-  const whenCloseAlertModal = () => {
-    dispatch(resetLibraryMessages())
-    dispatch(resetBookMessages())
+  const handleCloseAlertModal = () => {
+    dispatch(resetLibraryMessages());
+    dispatch(resetBookMessages());
+    setIsAlertModalVisible(false);
   };
 
   useEffect(() => {
@@ -39,39 +42,32 @@ const Book = () => {
       setIsAlertModalVisible(true);
       setModalContent({
         title: '🐼 Success!',
-        message: libraryMsg,
-        buttonOneTxt: 'Gotcha!'
+        message: libraryMsg
       });
       setBookIsLoading(false);
     }
     if (libraryError !== null) {
-      // dispatch(setAlertModal(true));
       setIsAlertModalVisible(true);
       setModalContent({
         title: '🐼 Error!',
-        message: libraryError,
-        buttonOneTxt: 'Gotcha!',
+        message: libraryError
       });
       setBookIsLoading(false);
     }
     if (bookMsg !== null) {
-      // dispatch(setAlertModal(true));
       setIsAlertModalVisible(true);
       setModalContent({
         title: '🐼 Success!',
-        message: bookMsg,
-        buttonOneTxt: 'Gotcha!',
+        message: bookMsg
       });
       setBookIsLoading(false);
 
     }
     if (bookError !== null) {
-      // dispatch(setAlertModal(true));
       setIsAlertModalVisible(true);
       setModalContent({
         title: '🐼 Error!',
-        message: bookError,
-        buttonOneTxt: 'Gotcha!',
+        message: bookError
       });
       setBookIsLoading(false);
     }
@@ -81,11 +77,9 @@ const Book = () => {
     if (navigationSource === 'Library') {
       dispatch(updateLibrary({book, bookTitleForRowUpdate}));
       setBookIsLoading(true);
-      // resetStates();
     } else {
       dispatch(saveBook(book));
       setBookIsLoading(true);
-      // resetStates();
     }
     dispatch(savingBookIsDisabled(true));
   }
@@ -100,7 +94,9 @@ const Book = () => {
           <Header.GoBack />
           <View style={headerInfoContainer}>
             <Header.Icon uri={require('../../assets/book-data.gif')} />
-            <Header.Title>Book Data</Header.Title>
+            <Header.StyledText customStyle={headerText}>
+              Book Data
+            </Header.StyledText>
           </View>
         </Header>
         
@@ -184,19 +180,31 @@ const Book = () => {
         justifyContent: 'space-around',
         paddingVertical: 5
       }}>
-        <MainButton action={handleSaveBook} style={buttonMid}>
-          <MainButton.Title>Save To Spreadsheet</MainButton.Title>
+        <PrimaryButton action={handleSaveBook} customStyle={buttonMid}>
+          <PrimaryButton.StyledText customStyle={buttonText}>
+            Save To Spreadsheet
+          </PrimaryButton.StyledText>
           <Ionicons name="cloud-upload" size={22} color={Colours.primary} />
-        </MainButton>
+        </PrimaryButton>
       </View>
-      <LibraryOverlay message={navigationSource === 'Library' ? 'Updating' : 'Saving'} isVisible={bookIsLoading} />
-      <AlertModal
-        title={modalContent.title}
-        message={modalContent.message}
-        buttonOneTxt={modalContent.buttonOneTxt}
-        buttonOneAction={whenCloseAlertModal}
-        isVisible={isAlertModalVisible}
+
+      <LibraryOverlay
+        message={navigationSource === 'Library' ? 'Updating' : 'Saving'} isVisible={bookIsLoading}
       />
+
+      <AlertModal isVisible={isAlertModalVisible}>
+        <AlertModal.StyledText customStyle={alertTitle}>
+          {modalContent.title}
+        </AlertModal.StyledText>
+        <AlertModal.StyledText customStyle={alertMessage}>
+          {modalContent.message}
+        </AlertModal.StyledText>
+        <PrimaryButton action={handleCloseAlertModal}>
+          <PrimaryButton.StyledText customStyle={buttonText}>
+            Gotcha!
+          </PrimaryButton.StyledText>
+        </PrimaryButton>
+      </AlertModal>
     </View>
   )
 }

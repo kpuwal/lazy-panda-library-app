@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { fetchPicker, isScanned, RootState, setBookIsLoaded, useAppDispatch } from '@reduxStates/index';
+import { fetchPicker, isScanned, resetBookMessages, resetLibraryMessages, RootState, setBookIsLoaded, useAppDispatch } from '@reduxStates/index';
 import { BarcodeScanner, ScannerOverlay } from '@scanner/index';
 import { randomBookNotFoundMessage } from '@helpers/constants';
 import AlertModal from '@components/alert/AlertModal';
+import PrimaryButton from '@components/button/PrimaryButton';
+import { alertMessage, alertTitle } from '@styles/alert';
+import { buttonText } from '@styles/button';
 
 const Scanner = ({navigation}: any) => {
   const cameraPermission = useSelector(
@@ -13,15 +16,17 @@ const Scanner = ({navigation}: any) => {
   const [isAlertModalVisible, setIsAlertModalVisible] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleButtonTwoAction = () => {
+  const handleAddBookButton = () => {
     setIsAlertModalVisible(!isAlertModalVisible);
     navigation.navigate('Book');
   }
 
-  const handleButtonOneAction = () => {
+  const handleScanAgainButton = () => {
     dispatch(isScanned(false));
     dispatch(setBookIsLoaded(false));
     setIsAlertModalVisible(!isAlertModalVisible);
+    dispatch(resetLibraryMessages());
+    dispatch(resetBookMessages());
   }
 
   const handleAlertModalVisibility = () => {
@@ -41,17 +46,31 @@ const Scanner = ({navigation}: any) => {
 
   return (
     <>
-      <BarcodeScanner navigation={navigation} openModalAlert={handleAlertModalVisibility} />
-      <ScannerOverlay />
-      <AlertModal
-        title="🐼 Error!"
-        message={randomBookNotFoundMessage}
-        buttonOneTxt="Scan Again"
-        buttonOneAction={handleButtonOneAction}
-        buttonTwoTxt="Add Book Manually"
-        buttonTwoAction={handleButtonTwoAction}
-        isVisible={isAlertModalVisible}
+      <BarcodeScanner 
+        navigation={navigation}
+        openModalAlert={handleAlertModalVisibility}
       />
+
+      <ScannerOverlay />
+
+      <AlertModal isVisible={isAlertModalVisible}>
+        <AlertModal.StyledText customStyle={alertTitle}>
+          🐼 Error!
+        </AlertModal.StyledText>
+        <AlertModal.StyledText customStyle={alertMessage}>
+          {randomBookNotFoundMessage}
+        </AlertModal.StyledText>
+        <PrimaryButton action={handleScanAgainButton}>
+          <PrimaryButton.StyledText customStyle={buttonText}>
+            Scan Again
+          </PrimaryButton.StyledText>
+        </PrimaryButton>
+        <PrimaryButton action={handleAddBookButton}>
+          <PrimaryButton.StyledText customStyle={buttonText}>
+            Add Book Manually
+          </PrimaryButton.StyledText>
+        </PrimaryButton>
+      </AlertModal>
     </>
   )
 }

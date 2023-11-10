@@ -5,11 +5,10 @@ import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages, isScanned, se
 import { randomBookNotFoundMessage } from '@helpers/constants';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useState } from 'react';
-import AlertModal from '@components/alert/AlertModal';
 
 const Scanner = ({ navigation, openModalAlert }: any) => {
   const { scanned } = useSelector((state: RootState) => state.app);
-  const { bookIsLoaded } = useSelector((state: RootState) => state.book);
+  // const { bookIsLoaded } = useSelector((state: RootState) => state.book);
   const { height, width } = Dimensions.get('window');
   
   const dispatch = useAppDispatch();
@@ -20,26 +19,26 @@ const Scanner = ({ navigation, openModalAlert }: any) => {
     dispatch(resetBookMessages());
   };
 
-  const handleBookNotFound = () => {
-      Alert.alert(
-        'Error',
-        randomBookNotFoundMessage,
-        [
-          {
-            text: 'Scan again',
-            onPress: () => {
-              resetStates();
-            },
-          },
-          {
-            text: 'Add book manually',
-            onPress: () => {
-              navigation.navigate('Book');
-            },
-          },
-        ]
-      );
-  };
+  // const handleBookNotFound = () => {
+  //     Alert.alert(
+  //       'Error',
+  //       randomBookNotFoundMessage,
+  //       [
+  //         {
+  //           text: 'Scan again',
+  //           onPress: () => {
+  //             resetStates();
+  //           },
+  //         },
+  //         {
+  //           text: 'Add book manually',
+  //           onPress: () => {
+  //             navigation.navigate('Book');
+  //           },
+  //         },
+  //       ]
+  //     );
+  // };
 
   const handleBarcodeScan = async ({ data }: BarCodeScannerResult) => {
     if (!scanned) {
@@ -51,8 +50,6 @@ const Scanner = ({ navigation, openModalAlert }: any) => {
           dispatch(setNavigationSource('Scanner'));
           navigation.navigate('Book');
         } else {
-          // handleBookNotFound();
-          // dispatch(setAlertModal(true));
           openModalAlert();
         }
       } catch (error) {

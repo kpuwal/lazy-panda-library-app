@@ -1,5 +1,5 @@
 import { Text } from 'react-native';
-import { buttonText } from '../../styles/button';
+import { buttonText } from '@styles/button';
 
 type TitleProps = {
   children: React.ReactNode;

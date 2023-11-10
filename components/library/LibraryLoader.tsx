@@ -26,7 +26,6 @@ const LibraryLoader = () => {
         borderColor: '#C9CBCF',
         borderRadius: 2}}
       >
-        
           <Image 
             source={require('@assets/panda_meditating.png')}
             style={{paddingTop: 10, width: 120, height: 120}}

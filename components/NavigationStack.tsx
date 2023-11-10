@@ -4,11 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../screens/Home';
 import LibraryScreen from '../screens/Library';
 import ScannerScreen from '../screens/Scanner';
-import BookScreen from './book/Book';
+import BookScreen from '@components/book/Book';
 import { useNavigation } from '@react-navigation/native';
 import { Text, Pressable, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colours } from '../styles/constants';
+import { Colours } from '@styles/constants';
 
 export type RootStackParamList = {
   Home: undefined,
