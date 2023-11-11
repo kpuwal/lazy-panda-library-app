@@ -25,6 +25,7 @@ type SelectedFiltersType = {
 
 export type libraryTypes = {
   library: BookType[],
+  libraryCopy: BookType[],
   librarySortedByAuthor: {
     data: librarySectionType[],
     alphabet: string[]
@@ -47,6 +48,7 @@ export type libraryTypes = {
 
 const initialState: libraryTypes = {
   library: [],
+  libraryCopy: [],
   librarySortedByAuthor: {
     data: [],
     alphabet: []
@@ -144,9 +146,8 @@ const librarySlice = createSlice({
   reducers: {
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
-
       if (action.payload !=='') {
-        state.library = searchLibrary(action.payload, state.library);
+        state.library = searchLibrary(action.payload, state.libraryCopy);
         state.booksNumber = state.library.length;
       }
 
@@ -226,6 +227,7 @@ const librarySlice = createSlice({
       return {
         ...state,
         library,
+        libraryCopy: library,
         booksNumber: library.length,
         libraryIsFiltered: false,
         libraryIsLoaded: true

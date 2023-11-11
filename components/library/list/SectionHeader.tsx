@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { SECTION_ITEM_HEIGHT } from '@helpers/constants';
 
 type SectionHeaderTypes = {
@@ -7,17 +7,23 @@ type SectionHeaderTypes = {
 }
 
 const SectionHeader = ({ title }: SectionHeaderTypes) => (
-  <Text style={styles.sectionHeader}>{ title }</Text>
+  <View style={styles.container}>
+    <Text style={styles.sectionHeader}>{ title }</Text>
+  </View>
 );
 
 export default SectionHeader;
 
 const styles = StyleSheet.create({
+  container: {
+    height: SECTION_ITEM_HEIGHT,
+    justifyContent: 'center'
+  },
   sectionHeader: {
     backgroundColor: 'lightgray',
     height: SECTION_ITEM_HEIGHT,
-    padding: 5,
-    fontSize: 16,
-    fontWeight: 'bold',
+    paddingHorizontal: 5,
+    fontSize: 24,
+    fontFamily: 'Courier Prime Bold',
   },
 })

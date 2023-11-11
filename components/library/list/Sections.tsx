@@ -11,7 +11,8 @@ import { RootStackParamList } from '@components/NavigationStack';
 
 
 type SectionListTypes = {
-  data: librarySectionType[],
+  data: librarySectionType[];
+  scrollToTop: () => void;
 }
 
 const Sections = ({ data }: SectionListTypes) => {
@@ -58,11 +59,22 @@ const Sections = ({ data }: SectionListTypes) => {
         setIsManualRefreshing(false);
         dispatch(setLibraryActiveListButton('DEFAULT'));
         dispatch(toggleAlphabetList(false));
+        scrollToTop();
       })
       .catch((error) => {
         console.error('Error refreshing library data:', error);
         setIsManualRefreshing(false);
       });
+  };
+
+  const scrollToTop = () => {
+    if (sectionListRef.current) {
+      sectionListRef.current.scrollToLocation({
+        sectionIndex: 0,
+        itemIndex: 0,
+        animated: true,
+      });
+    }
   };
 
   useEffect(() => {

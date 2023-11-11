@@ -31,9 +31,6 @@ const Library = forwardRef((_props, ref) => {
   const { librarySortedByAuthor, libraryIsLoaded, booksNumber, selectedFilterHeader } = useSelector((state: RootState) => state.library);
 const { libraryListActiveButton } = useSelector((state: RootState) => state.app);
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [scrollToTop, setScrollToTop] = useState(false);
-
   const sectionListRef = useRef<SectionList>(null);
 
   const { selectedFilters, libraryIsFiltered } = useSelector((state: RootState) => state.library);
@@ -81,6 +78,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
     dispatch(setLibraryActiveListButton('DEFAULT'));
     dispatch(toggleAlphabetList(false));
     dispatch(toggleFilterModal(false));
+    scrollToTop();
   }
 
   const handleInitialLoad = () => {
@@ -94,6 +92,16 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
         console.error('Error loading library data:', error);
         setIsInitialLoading(false);
       });
+  };
+
+  const scrollToTop = () => {
+    if (sectionListRef.current) {
+      sectionListRef.current.scrollToLocation({
+        sectionIndex: 0,
+        itemIndex: 0,
+        animated: true,
+      });
+    }
   };
 
   if (!libraryIsLoaded) {

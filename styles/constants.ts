@@ -9,7 +9,7 @@ export const Colours = {
 } as const;
 
 export const Fonts = {
-  small: 16,
+  small: 14,
   medium: 20,
   big: 28,
   family: 'Courier Prime',

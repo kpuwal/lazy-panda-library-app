@@ -23,6 +23,7 @@ export const BACKGROUND = [
   require('./../assets/bg11.jpeg'),
   require('./../assets/bg14.jpeg'),
   require('./../assets/bg13.jpeg'),
+  require('./../assets/bg_02.png'),
 ]
 
 export const LANGUAGES = [

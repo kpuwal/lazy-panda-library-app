@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     flex: 7
   },
   sortButton: {
-    paddingVertical: 2.5,
-    paddingHorizontal: 2.5,
+    paddingVertical: 2,
+    paddingHorizontal: 2,
     margin: 3,
     justifyContent: 'center',
     alignItems: 'center',
