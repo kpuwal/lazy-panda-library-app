@@ -36,6 +36,8 @@ import {
 } from './librarySlice';
 
 import { fetchPicker } from './pickerSlice';
+import { fetchTags } from './tagsSlice';
+
 
 export {
   fetchBook,
@@ -64,6 +66,7 @@ export {
   resetLibraryMessages,
   resetSelectedFilters,
   fetchPicker,
+  fetchTags,
   librarySectionType,
   setSearchQuery,
   BookType

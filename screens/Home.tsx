@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { View, StyleSheet, ImageBackground, Image, Pressable } from 'react-native';
+import { View, StyleSheet, ImageBackground, Image, Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch } from '@reduxStates/index';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
+import { Ionicons } from '@expo/vector-icons';
 
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const Home = ({navigation}: any) => {
 
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
+    dispatch(fetchTags());
     dispatch(cleanBook());
     dispatch(readLibrary())
       .then(() => dispatch(setBookIsLoaded(false)))
@@ -75,6 +77,10 @@ const Home = ({navigation}: any) => {
             />
           </View>
         </View>
+        <Pressable style={{padding: 3, alignItems: 'center'}} onPress={() => navigation.navigate('Settings')}>
+          <Ionicons name="settings-sharp" size={24} color="white" />
+          <Text style={{color: 'white'}}>Settings</Text>
+        </Pressable>
       </ImageBackground>
     </View>
   );

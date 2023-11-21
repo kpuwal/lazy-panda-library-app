@@ -123,7 +123,7 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
         <Header>
           <Header.GoBack />
           <View style={headerInfoContainer}>
-            <Header.Icon uri={require('../assets/books.gif')} />
+            <Header.Icon uri={require('@assets/books.gif')} />
             <Header.StyledText customStyle={headerText}>Our Library</Header.StyledText>
           </View>
         </Header>

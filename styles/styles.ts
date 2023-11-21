@@ -15,6 +15,10 @@ export const buttonMid = {
   width: '90%',
 }
 
+export const buttonLong = {
+  width: '100%'
+}
+
 export const buttonLrg = {
   width: '50%'
 }

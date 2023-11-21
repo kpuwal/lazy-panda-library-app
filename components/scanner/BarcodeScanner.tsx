@@ -1,14 +1,12 @@
+import React from 'react';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
-import { Alert, Dimensions, Platform, StyleSheet } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { useSelector } from "react-redux";
-import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages, isScanned, setNavigationSource, RootState, useAppDispatch, setAlertModal } from '@reduxStates/index';
-import { randomBookNotFoundMessage } from '@helpers/constants';
+import { fetchBook, cleanBook, setBookIsLoaded, resetBookMessages, isScanned, setNavigationSource, RootState, useAppDispatch } from '@reduxStates/index';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useState } from 'react';
 
 const Scanner = ({ navigation, openModalAlert }: any) => {
   const { scanned } = useSelector((state: RootState) => state.app);
-  // const { bookIsLoaded } = useSelector((state: RootState) => state.book);
   const { height, width } = Dimensions.get('window');
   
   const dispatch = useAppDispatch();
@@ -18,27 +16,6 @@ const Scanner = ({ navigation, openModalAlert }: any) => {
     dispatch(setBookIsLoaded(false));
     dispatch(resetBookMessages());
   };
-
-  // const handleBookNotFound = () => {
-  //     Alert.alert(
-  //       'Error',
-  //       randomBookNotFoundMessage,
-  //       [
-  //         {
-  //           text: 'Scan again',
-  //           onPress: () => {
-  //             resetStates();
-  //           },
-  //         },
-  //         {
-  //           text: 'Add book manually',
-  //           onPress: () => {
-  //             navigation.navigate('Book');
-  //           },
-  //         },
-  //       ]
-  //     );
-  // };
 
   const handleBarcodeScan = async ({ data }: BarCodeScannerResult) => {
     if (!scanned) {
