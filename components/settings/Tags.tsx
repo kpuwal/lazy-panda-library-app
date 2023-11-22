@@ -1,43 +1,90 @@
-import { SelectionCard } from "@components/book";
 import Header from "@components/header/Header";
-import { RootState } from "@reduxStates/index";
+import { RootState, addTitle, updateTags, useAppDispatch } from "@reduxStates/index";
 import { Colours } from "@styles/constants";
-import { buttonLong, headerInfoContainer, headerText } from "@styles/styles";
+import { buttonLong, buttonMid, headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
-import { View, ScrollView, StyleSheet } from "react-native"
+import { View, ScrollView, StyleSheet, TextInput, KeyboardAvoidingView, TouchableOpacity, Platform } from "react-native"
 import { useSelector } from "react-redux";
 import Accordion from "./Accordion";
 import PrimaryButton from "@components/button/PrimaryButton";
 import { buttonText } from "@styles/button";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useState } from "react";
+import ImageSelector from "./ImageSelector";
 
 const Tags = () => {
   const { tags } = useSelector((state: RootState) => state.tags);
+  const [newTitle, setNewTitle] = useState('');
+  const dispatch = useAppDispatch();
+
+  const handleAddTitle = () => {
+    dispatch(addTitle({ newTitle }));
+    setNewTitle('');
+  };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colours.primary}}>
-      <StatusBar style="dark" />
-      <Header>
-        <Header.GoBack />
-        <View style={headerInfoContainer}>
-          <Header.Icon uri={require('@assets/tag.gif')} />
-          <Header.StyledText customStyle={headerText}>Tags</Header.StyledText>
-        </View>
-      </Header>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.accordionContainer}>
-          {tags.map((category, index) => (
-              <Accordion key={category.title} category={category} isLastItem={index === tags.length - 1} />
-            ))}
-        </View>
-        <PrimaryButton action={() => console.log('click')} customStyle={buttonLong}>
-          <PrimaryButton.StyledText customStyle={buttonText}>
-            Add Tag Title
-          </PrimaryButton.StyledText>
-          <MaterialCommunityIcons name="tag-plus" size={24} color="white" />
-        </PrimaryButton>
-      </ScrollView>
+    // Remove the extra View around KeyboardAvoidingView
+<View style={{ flex: 1, backgroundColor: Colours.primary }}>
+  <StatusBar style="dark" />
+  <Header>
+    <Header.GoBack />
+    <View style={headerInfoContainer}>
+      <Header.Icon uri={require('@assets/tag.gif')} />
+      <Header.StyledText customStyle={headerText}>Tags</Header.StyledText>
     </View>
+  </Header>
+
+  
+  <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <View style={styles.accordionContainer}>
+      {tags.map((category, index) => (
+        <Accordion key={category.title} category={category} isLastItem={index === tags.length - 1} />
+      ))}
+    </View>
+  
+  
+  
+  <ImageSelector />
+
+ 
+      <View style={styles.newTitleContainer}>
+        <TextInput
+          style={styles.newTitleInput}
+          placeholder="new tag category name"
+          value={newTitle}
+          onChangeText={(text) => setNewTitle(text.toUpperCase())}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={handleAddTitle}>
+          <MaterialIcons name="add-circle" size={30} color={Colours.secondary} />
+        </TouchableOpacity>
+      </View>
+      </ScrollView>
+  </KeyboardAvoidingView>
+
+  <View style={{
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    // flexGrow: 1
+    // Add paddingVertical if needed
+  }}>
+      <PrimaryButton
+      action={() => dispatch(updateTags(tags))}
+      customStyle={buttonMid}
+    >
+      <PrimaryButton.StyledText customStyle={buttonText}>
+        Save Tags
+      </PrimaryButton.StyledText>
+      <MaterialCommunityIcons name="tag-plus" size={24} color="white" />
+    </PrimaryButton>
+  </View>
+</View>
+
   )
 }
 
@@ -47,6 +94,7 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     padding: 16,
+    paddingBottom: 10
   },
   categoryContainer: {
     marginBottom: 16,
@@ -64,5 +112,28 @@ const styles = StyleSheet.create({
     backgroundColor: Colours.quinary,
     padding: 10,
     borderRadius: 15
-  }
+  },
+  newTitleContainer: {
+    flexDirection: 'row',
+    marginTop: 0,
+    alignItems: 'center',
+  },
+  newTitleInput: {
+    flex: 1,
+    // width: '90%',
+    height: 30,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: Colours.secondary,
+    paddingHorizontal: 10,
+  },
+  addButton: {
+    marginLeft: 10,
+    // backgroundColor: Colours.secondary,
+    // padding: 10,
+    // borderRadius: 5,
+  },
+  addButtonText: {
+    color: 'white',
+  },
 })

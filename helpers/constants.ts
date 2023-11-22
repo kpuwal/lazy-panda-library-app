@@ -15,15 +15,15 @@ const libraryIsLoadingMessages = [
 ];
 
 export const BACKGROUND = [
-  require('./../assets/bg01.jpeg'),
-  require('./../assets/bg05.jpeg'),
-  require('./../assets/bg06.jpeg'),
-  require('./../assets/bg07.jpeg'),
-  require('./../assets/bg10.jpeg'),
-  require('./../assets/bg11.jpeg'),
-  require('./../assets/bg14.jpeg'),
-  require('./../assets/bg13.jpeg'),
-  require('./../assets/bg_02.png'),
+  require('@assets/bg01.jpeg'),
+  require('@assets/bg05.jpeg'),
+  require('@assets/bg06.jpeg'),
+  require('@assets/bg07.jpeg'),
+  require('@assets/bg10.jpeg'),
+  require('@assets/bg11.jpeg'),
+  require('@assets/bg14.jpeg'),
+  require('@assets/bg13.jpeg'),
+  require('@assets/bg_02.png'),
 ]
 
 export const LANGUAGES = [
@@ -32,6 +32,21 @@ export const LANGUAGES = [
   {'label': "PL", 'value': 'PL'},
   {'label': "ES", 'value': 'ES'}
 ];
+
+export const CATEGORY_IMAGES = [
+  { id: 'img1', source: require("@assets/series.png") },
+  { id: 'img2', source: require("@assets/world.png") },
+  { id: 'img3', source: require("@assets/handover.png") },
+  { id: 'img4', source: require("@assets/gift-box.png") },
+  { id: 'img5', source: require("@assets/genre.png") },
+  { id: 'img6', source: require("@assets/glasses.png") },
+  { id: 'img7', source: require("@assets/language.png") },
+  { id: 'img8', source: require("@assets/open-book.png") },
+  { id: 'img9', source: require("@assets/reader.png") },
+  { id: 'img10', source: require("@assets/science.png") },
+  { id: 'img11', source: require("@assets/tech.png") },
+  { id: 'img12', source: require("@assets/wizard.png") },
+]
 
 export const randomBookNotFoundMessage = bookNotFoundMessages[Math.floor(Math.random() * bookNotFoundMessages.length)];
 
@@ -42,4 +57,3 @@ export const SPACING = 1;
 export const ITEM_HEIGHT = 95;
 export const SECTION_ITEM_HEIGHT = 26;
 export const HEADER_HEIGHT = 222;
-

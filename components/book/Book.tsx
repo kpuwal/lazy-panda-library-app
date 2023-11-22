@@ -93,7 +93,7 @@ const Book = () => {
         <Header>
           <Header.GoBack />
           <View style={headerInfoContainer}>
-            <Header.Icon uri={require('../../assets/book-data.gif')} />
+            <Header.Icon uri={require('@assets/book-data.gif')} />
             <Header.StyledText customStyle={headerText}>
               Book Data
             </Header.StyledText>

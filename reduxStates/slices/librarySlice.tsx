@@ -111,7 +111,9 @@ export const filterLibrary = createAsyncThunk(
   }
 )
 
-export const updateLibrary = createAsyncThunk('/api/update-library', async ({ book, bookTitleForRowUpdate }: { book: BookType; bookTitleForRowUpdate: string }, { rejectWithValue }) => {
+export const updateLibrary = createAsyncThunk(
+  '/api/update-library',
+  async ({ book, bookTitleForRowUpdate }: { book: BookType; bookTitleForRowUpdate: string }, { rejectWithValue }) => {
   const config = {
       "title": book.title,
       "author": book.author,

@@ -36,7 +36,14 @@ import {
 } from './librarySlice';
 
 import { fetchPicker } from './pickerSlice';
-import { fetchTags } from './tagsSlice';
+import { 
+  fetchTags,
+  addTagUnderTitle,
+  deleteLabelItem,
+  addTitle,
+  deleteTitle,
+  updateTags
+} from './tagsSlice';
 
 
 export {
@@ -67,6 +74,11 @@ export {
   resetSelectedFilters,
   fetchPicker,
   fetchTags,
+  addTagUnderTitle,
+  deleteLabelItem,
+  addTitle,
+  deleteTitle,
+  updateTags,
   librarySectionType,
   setSearchQuery,
   BookType
