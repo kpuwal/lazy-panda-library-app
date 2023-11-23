@@ -2,6 +2,7 @@ import { TouchableOpacity, View, Image, Text, StyleSheet } from "react-native"
 import { FontAwesome } from '@expo/vector-icons';
 import { CATEGORY_IMAGES } from "@helpers/constants";
 import { Colours } from "@styles/constants";
+import { accordionTitle, accordionTitleContainer, accordionTitleImage, accordionTitleImageContainer } from "@styles/accordion";
 
 interface TitleTypes {
   title: string;
@@ -18,13 +19,13 @@ const Title: React.FC<TitleTypes> = ({ title, image, isExpanded, expandAccordion
   };
 
   return (
-    <TouchableOpacity onPress={expandAccordion} style={styles.titleContainer}>
-      <View style={styles.titleImageContainer}>
+    <TouchableOpacity onPress={expandAccordion} style={accordionTitleContainer}>
+      <View style={accordionTitleImageContainer}>
         <Image
           source={getImageSource(image)}
-          style={styles.categoryImage}
+          style={accordionTitleImage}
         />
-        <Text style={styles.categoryTitle}>
+        <Text style={accordionTitle}>
           {title}
         </Text>
       </View>
@@ -34,32 +35,3 @@ const Title: React.FC<TitleTypes> = ({ title, image, isExpanded, expandAccordion
 }
 
 export default Title;
-
-const styles = StyleSheet.create({
-  categoryTitle: {
-    fontSize: 18,
-    fontFamily: 'Courier Prime Bold',
-    // marginBottom: 8,
-    color: Colours.secondary,
-    // textAlign: 'center'
-
-    // textDecorationLine: "underline",
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    // alignItems: 'flex-start',
-    // backgroundColor: 'green',
-    textAlign: 'center'
-  },
-  titleImageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  categoryImage: {
-    width: 25,
-    height: 25,
-    marginRight: 10,
-    // backgroundColor: 'pink'
-  },
-})
