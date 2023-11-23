@@ -15,11 +15,14 @@ import ImageSelector from "./ImageSelector";
 const Tags = () => {
   const { tags } = useSelector((state: RootState) => state.tags);
   const [newTitle, setNewTitle] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const dispatch = useAppDispatch();
 
   const handleAddTitle = () => {
-    dispatch(addTitle({ newTitle }));
+    console.log(selectedImage)
+    dispatch(addTitle({ newTitle, image: selectedImage }));
     setNewTitle('');
+    setSelectedImage('');
   };
 
   return (
@@ -48,7 +51,7 @@ const Tags = () => {
   
   
   
-  <ImageSelector />
+    <ImageSelector selectedImage={selectedImage} onSelectImage={setSelectedImage} />
 
  
       <View style={styles.newTitleContainer}>

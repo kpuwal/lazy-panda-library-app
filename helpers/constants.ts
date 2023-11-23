@@ -41,11 +41,19 @@ export const CATEGORY_IMAGES = [
   { id: 'img5', source: require("@assets/genre.png") },
   { id: 'img6', source: require("@assets/glasses.png") },
   { id: 'img7', source: require("@assets/language.png") },
-  { id: 'img8', source: require("@assets/open-book.png") },
+  { id: 'img8', source: require("@assets/openbook.png") },
   { id: 'img9', source: require("@assets/reader.png") },
   { id: 'img10', source: require("@assets/science.png") },
   { id: 'img11', source: require("@assets/tech.png") },
   { id: 'img12', source: require("@assets/wizard.png") },
+  { id: 'img13', source: require("@assets/knight.png") },
+  { id: 'img14', source: require("@assets/writing.png") },
+  { id: 'img15', source: require("@assets/magician.png") },
+  { id: 'img16', source: require("@assets/science-fiction.png") },
+  { id: 'img17', source: require("@assets/feather.png") },
+  { id: 'img18', source: require("@assets/open-book.png") },
+  { id: 'img19', source: require("@assets/library-books.png") },
+
 ]
 
 export const randomBookNotFoundMessage = bookNotFoundMessages[Math.floor(Math.random() * bookNotFoundMessages.length)];

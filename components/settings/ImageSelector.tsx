@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+// ImageSelector.tsx
+
+import React from "react";
 import { View, Image, Pressable, StyleSheet, ImageSourcePropType, ScrollView, Text } from "react-native";
 import { CATEGORY_IMAGES } from '@helpers/constants';
 import { Colours } from "@styles/constants";
 
-const ImageSelector: React.FC = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+interface ImageSelectorProps {
+  selectedImage: string;
+  onSelectImage: (id: string) => void;
+}
+
+const ImageSelector: React.FC<ImageSelectorProps> = ({ selectedImage, onSelectImage }) => {
 
   const handleImagePress = (imageId: string) => {
-    setSelectedImage(imageId === selectedImage ? null : imageId);
+    console.log(imageId)
+    onSelectImage(imageId !== '' ? imageId : '');
   };
 
   const renderImages = () => {
@@ -27,33 +34,28 @@ const ImageSelector: React.FC = () => {
   };
 
   return (
-    
-     <View style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.headerTxt}>add image to the category (or not)</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View>
           <View style={styles.row}>{renderImages()}</View>
         </View>
       </ScrollView>
-      </View>
-    
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 25,
-    // backgroundColor: 'yellow',
+    marginVertical: 15,
   },
   headerTxt: {
     fontFamily: 'Courier Prime',
     color: Colours.secondary
   },
   row: {
-    // backgroundColor: 'blue',
     flexDirection: "row",
     justifyContent: "space-around",
-    // marginBottom: 10,
   },
   imageContainer: {
     borderWidth: 2,
@@ -64,7 +66,6 @@ const styles = StyleSheet.create({
   image: {
     width: 35,
     height: 35,
-    // borderRadius: 8,
   },
 });
 

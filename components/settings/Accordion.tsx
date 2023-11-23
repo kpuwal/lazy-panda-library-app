@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from "react-native";
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Colours } from "@styles/constants";
 import { addTagUnderTitle, deleteLabelItem, deleteTitle, useAppDispatch } from "@reduxStates/index";
+import { CATEGORY_IMAGES } from "@helpers/constants";
+import Title from "./accordion/Title";
 
 interface Category {
   title: string;
+  image: string;
   labels: string[];
 }
 
@@ -36,6 +39,11 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
     dispatch(deleteTitle({ titleToDelete }));
   }
 
+  const getImageSource = (categoryId: string) => {
+    const selectedImage = CATEGORY_IMAGES.find((image) => image.id === categoryId);
+    return selectedImage ? selectedImage.source : null;
+  };
+
   return (
     <View 
       style={[
@@ -44,10 +52,8 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
         isLastItem && styles.borderBottom
       ]}
     >
-      <TouchableOpacity onPress={handleToggle} style={styles.titleContainer}>
-        <Text style={styles.categoryTitle}>{category.title}</Text>
-        <FontAwesome name={isExpanded ? "caret-up" : "caret-down"} size={18} color={Colours.secondary} />
-      </TouchableOpacity>
+      <Title title={category.title} image={category.image} isExpanded expandAccordion={handleToggle} />
+      
       {isExpanded && (
         <>
           <View style={styles.menuContainer}>
@@ -85,8 +91,6 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
               </TouchableOpacity>
             </View>
           </View>
-
-
         </>
       )}
     </View>
@@ -95,15 +99,17 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 10,
     paddingBottom: 5,
     borderBottomWidth: .5,
   },
   categoryTitle: {
     fontSize: 18,
     fontFamily: 'Courier Prime Bold',
-    marginBottom: 8,
-    color: Colours.secondary
+    // marginBottom: 8,
+    color: Colours.secondary,
+    // textAlign: 'center'
+
     // textDecorationLine: "underline",
   },
   borderBottom: {
@@ -150,7 +156,9 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    // alignItems: 'flex-start',
+    // backgroundColor: 'green',
+    textAlign: 'center'
   },
   label: {
     fontSize: 16,
@@ -181,6 +189,16 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: 'white',
+  },
+  titleImageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  categoryImage: {
+    width: 25,
+    height: 25,
+    marginRight: 10,
+    // backgroundColor: 'pink'
   },
 });
 

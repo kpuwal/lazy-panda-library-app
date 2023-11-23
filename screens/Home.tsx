@@ -2,19 +2,22 @@ import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags } from '@reduxStates/index';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags, RootState } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation}: any) => {
   const dispatch = useAppDispatch();
   const randomIndex = Math.floor(Math.random() * BACKGROUND.length);
   const [randomBackground] = useState(BACKGROUND[randomIndex]);
   const [isLove, setLove] = useState(false);
-
+  const { library } = useSelector((state: RootState) => state.library);
   useEffect(() => {
+    // console.log('my library: ', library)
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       if (status === 'granted') {
@@ -32,6 +35,19 @@ const Home = ({navigation}: any) => {
         dispatch(setBookIsLoaded(false));
       });
   }, [dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const libraryData = await AsyncStorage.getItem('library');
+        console.log('Library data:', libraryData);
+      } catch (error) {
+        console.error('Error reading from AsyncStorage:', error);
+      }
+    };
+
+    fetchData(); // Call the async function immediately
+  }, []);
 
   return (
     <View style={styles.container}>

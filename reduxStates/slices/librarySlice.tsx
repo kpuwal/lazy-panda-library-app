@@ -5,6 +5,7 @@ import { mainUrl } from '../../server-location';
 import { BookType } from "./bookSlice";
 import { handleSort, searchLibrary } from "./helper";
 import { useAppDispatch } from '@reduxStates/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const URL = mainUrl();
 
@@ -75,6 +76,16 @@ const initialState: libraryTypes = {
   searchQuery: ''
 }
 
+const storeData = async (data: any) => {
+  try {
+    const serializedData = JSON.stringify(data);
+    await AsyncStorage.setItem('library', serializedData);
+    console.log('Data stored successfully');
+  } catch (error) {
+    console.error('Error storing data:', error);
+  }
+};
+
 export const readLibrary = createAsyncThunk(
   '/api/library',
   async (_, { rejectWithValue, dispatch }) => {
@@ -85,6 +96,8 @@ export const readLibrary = createAsyncThunk(
 
       dispatch(sortLibraryByTitle(response.data));
       dispatch(sortLibraryByAuthor(response.data));
+
+      // storeData(response.data)
       return response.data;
     } catch(err) {
       return rejectWithValue(err)

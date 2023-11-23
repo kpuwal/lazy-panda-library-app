@@ -6,6 +6,7 @@ const URL = mainUrl();
 
 type TagType = {
   title: string,
+  image: string,
   labels: string[]
 };
 
@@ -53,14 +54,13 @@ export const updateTags = createAsyncThunk(
   }
 );
 
-
 export const tagsSlice = createSlice({
   name: 'tags',
   initialState,
   reducers: {
     addTitle: (state, action) => {
-      const { newTitle } = action.payload;
-      const updatedTags = [...state.tags, { title: newTitle, labels: [] }];
+      const { newTitle, image } = action.payload;
+      const updatedTags = [...state.tags, { title: newTitle, labels: [], image }];
 
       return {
         ...state,
