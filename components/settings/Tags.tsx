@@ -43,28 +43,30 @@ const Tags = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-    <View style={styles.accordionContainer}>
-      {tags.map((category, index) => (
-        <Accordion key={category.title} category={category} isLastItem={index === tags.length - 1} />
-      ))}
-    </View>
-  
-  
-  
-    <ImageSelector selectedImage={selectedImage} onSelectImage={setSelectedImage} />
-
- 
-      <View style={styles.newTitleContainer}>
-        <TextInput
-          style={styles.newTitleInput}
-          placeholder="new tag category name"
-          value={newTitle}
-          onChangeText={(text) => setNewTitle(text.toUpperCase())}
+        <View style={styles.accordionContainer}>
+          {tags.map((category, index) => (
+            <Accordion
+              key={category.title}
+              category={category}
+              isLastItem={index === tags.length - 1}
+            />
+          ))}
+        </View>
+        <ImageSelector
+          selectedImage={selectedImage}
+          onSelectImage={setSelectedImage}
         />
-        <TouchableOpacity style={styles.addButton} onPress={handleAddTitle}>
-          <MaterialIcons name="add-circle" size={30} color={Colours.secondary} />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.newTitleContainer}>
+          <TextInput
+            style={styles.newTitleInput}
+            placeholder="new tag category name"
+            value={newTitle}
+            onChangeText={(text) => setNewTitle(text.toUpperCase())}
+          />
+          <TouchableOpacity style={styles.addButton} onPress={handleAddTitle}>
+            <MaterialIcons name="add-circle" size={30} color={Colours.secondary} />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
   </KeyboardAvoidingView>
 
@@ -72,11 +74,9 @@ const Tags = () => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    // flexGrow: 1
-    // Add paddingVertical if needed
-  }}>
-      <PrimaryButton
+    paddingHorizontal: 10}}
+  >
+    <PrimaryButton
       action={() => dispatch(updateTags(tags))}
       customStyle={buttonMid}
     >

@@ -13,7 +13,6 @@ interface ImageSelectorProps {
 const ImageSelector: React.FC<ImageSelectorProps> = ({ selectedImage, onSelectImage }) => {
 
   const handleImagePress = (imageId: string) => {
-    console.log(imageId)
     onSelectImage(imageId !== '' ? imageId : '');
   };
 

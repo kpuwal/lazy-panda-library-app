@@ -36,18 +36,18 @@ const Home = ({navigation}: any) => {
       });
   }, [dispatch]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const libraryData = await AsyncStorage.getItem('library');
-        console.log('Library data:', libraryData);
-      } catch (error) {
-        console.error('Error reading from AsyncStorage:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const libraryData = await AsyncStorage.getItem('library');
+  //       console.log('Library data:', libraryData);
+  //     } catch (error) {
+  //       console.error('Error reading from AsyncStorage:', error);
+  //     }
+  //   };
 
-    fetchData(); // Call the async function immediately
-  }, []);
+  //   fetchData(); // Call the async function immediately
+  // }, []);
 
   return (
     <View style={styles.container}>
