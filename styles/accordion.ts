@@ -58,7 +58,7 @@ const accordionMenuStyle = StyleSheet.create({
 const accordionLabelsStyle = StyleSheet.create({
   container: {
     marginLeft: 16,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     padding: 15,
     borderRadius: 10,
   }

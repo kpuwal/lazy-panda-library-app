@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from "react-native";
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Colours } from "@styles/constants";
@@ -49,7 +49,7 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
       {isExpanded && (
         <>
           <Menu title={category.title} removeCategory={handleRemoveCategory} />
-          <Content>
+          <Content customStyle={{backgroundColor: category.labels.length === 0 ? 'transparent' : 'white'}}>
             {category.labels.map((label) => (
               <Content.Label
                 customStyle={accordionLabelContainerA}

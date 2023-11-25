@@ -9,7 +9,7 @@ import Accordion from "./Accordion";
 import PrimaryButton from "@components/button/PrimaryButton";
 import { buttonText } from "@styles/button";
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageSelector from "./ImageSelector";
 
 const Tags = () => {
@@ -19,14 +19,12 @@ const Tags = () => {
   const dispatch = useAppDispatch();
 
   const handleAddTitle = () => {
-    console.log(selectedImage)
     dispatch(addTitle({ newTitle, image: selectedImage }));
     setNewTitle('');
     setSelectedImage('');
   };
 
   return (
-    // Remove the extra View around KeyboardAvoidingView
 <View style={{ flex: 1, backgroundColor: Colours.primary }}>
   <StatusBar style="dark" />
   <Header>

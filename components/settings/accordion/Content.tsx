@@ -2,21 +2,19 @@ import { accordionLabelsContainer } from "@styles/accordion";
 import { ReactNode } from "react";
 import { View } from "react-native";
 import Label from "./Label";
-import LabelDelete from "./Delete";
 
 interface ContentProps {
   children: ReactNode;
+  customStyle: any;
 }
 
 type ContentComponent = React.FC<ContentProps> & {
   Label: typeof Label;
-  // LabelDelete: typeof LabelDelete;
-  // LabelInput: typeof LabelInput;
 };
 
-const Content: ContentComponent = ({ children }) => {
+const Content: ContentComponent = ({ children, customStyle }) => {
   return (
-    <View style={accordionLabelsContainer}>
+    <View style={[accordionLabelsContainer, customStyle]}>
       { children }
     </View>
   )

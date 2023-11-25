@@ -53,6 +53,9 @@ export const CATEGORY_IMAGES = [
   { id: 'img17', source: require("@assets/feather.png") },
   { id: 'img18', source: require("@assets/open-book.png") },
   { id: 'img19', source: require("@assets/library-books.png") },
+  { id: 'img20', source: require("@assets/married.png") },
+  { id: 'img21', source: require("@assets/jester.png") },
+
 
 ]
 

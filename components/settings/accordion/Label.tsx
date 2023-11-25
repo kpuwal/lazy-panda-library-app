@@ -16,12 +16,11 @@ type LabelComponents = React.FC<LabelProps> & {
 const Label: LabelComponents = ({ customStyle, label, children }) => {
  return (
  <View style={customStyle}>
-    <Text style={accordionLabelText}>{ label } </Text>
+    <Text style={accordionLabelText}>{label}</Text>
     { children }
  </View>
  )
 }
 
 Label.Delete = Delete;
-
 export default Label;
