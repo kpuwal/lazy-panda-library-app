@@ -1,9 +1,12 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Colours } from '../../../styles/constants';
+import { CATEGORY_IMAGES } from '@helpers/constants';
+import { accordionTitle, accordionTitleImage, accordionTitleImageContainer } from '@styles/accordion';
 
 type SelectionCardTypes = {
-  data: {label: string, value: string}[],
+  // data: string[],
+  data: any,
   active?: string,
   select: any,
   title: string,
@@ -17,14 +20,26 @@ type ItemTypes = {
 }
 
 const SelectionCard = ({data, select, active, title, icon}: SelectionCardTypes) => {
+
+  const getImageSource = (categoryId: string) => {
+    const selectedImage = CATEGORY_IMAGES.find((image) => image.id === categoryId);
+    return selectedImage ? selectedImage.source : null;
+  };
+
   return (
     <>
       <View style={styles.titleContainer}>
-        <View>{icon}</View>
+        {/* <View>{getImageSource(icon)}</View> */}
+        <View style={accordionTitleImageContainer}>
+        <Image
+          source={getImageSource(icon)}
+          style={accordionTitleImage}
+        />
+      </View>
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.container}>
-        {data.map((item, idx) => <Item key={idx} el={item.value} {...{select, active}} />)}
+        {data.map((item: any, idx: any) => <Item key={idx} el={item.value} {...{select, active}} />)}
       </View>
     </>
   )

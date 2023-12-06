@@ -1,5 +1,5 @@
 import Header from "@components/header/Header";
-import { RootState, addTitle, updateTags, useAppDispatch } from "@reduxStates/index";
+import { RootState, addTitle, deleteLabelItem, deleteTitle, updateTags, useAppDispatch } from "@reduxStates/index";
 import { Colours } from "@styles/constants";
 import { buttonLong, buttonMid, headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
@@ -11,18 +11,33 @@ import { buttonText } from "@styles/button";
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import ImageSelector from "./ImageSelector";
+import Accordion2 from "./Accordion2";
+import { accordionLabelContainerA } from "@styles/accordion";
 
 const Tags = () => {
   const { tags } = useSelector((state: RootState) => state.tags);
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useAppDispatch();
+
+  const handleToggleAccordion = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const handleAddTitle = () => {
     dispatch(addTitle({ newTitle, image: selectedImage }));
     setNewTitle('');
     setSelectedImage('');
   };
+
+  const handleRemoveCategory = (titleToDelete: string) => {
+    dispatch(deleteTitle({ titleToDelete }));
+  }
+
+  const handleRemoveTag = (title: string, label: string) => {
+    dispatch(deleteLabelItem({ title, labelToDelete: label }));
+  }
 
   return (
 <View style={{ flex: 1, backgroundColor: Colours.primary }}>

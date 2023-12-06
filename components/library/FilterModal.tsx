@@ -10,6 +10,8 @@ import { Colours } from '@styles/constants';
 import PrimaryButton from '@components/button/PrimaryButton';
 import { LANGUAGES } from '@helpers/constants';
 import { buttonText } from '@styles/button';
+import Accordion from '@components/settings/Accordion';
+import TagsAccordion from './TagsAccordion';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -18,6 +20,7 @@ const modalHeight = windowHeight * 0.75;
 
 const FilterModal = ({ onClose }: any) => {
   const picker = useSelector((state: RootState) => state.pickers);
+  const { tags } = useSelector((state: RootState) => state.tags);
   const dispatch = useAppDispatch();
   const { selectedFilters } = useSelector((state: RootState) => state.library);
   const { isFilterModalActive } = useSelector((state: RootState) => state.app);
@@ -39,6 +42,7 @@ const FilterModal = ({ onClose }: any) => {
   }, [isFilterModalActive]);
 
   const handleFilterUpdate = async () => {
+    console.log('selected filters ', selectedFilters)
     if (selectedFilters.type !== '') dispatch(filterLibrary(selectedFilters));
     onClose();
   };
@@ -68,7 +72,34 @@ const FilterModal = ({ onClose }: any) => {
               <Text style={styles.headerText}>Filter by:</Text>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-              <SelectionCard
+              {/* <View style={styles.accordionContainer}>
+                {tags.map((category, index) => (
+                  <TagsAccordion
+                    key={category.title}
+                    category={category}
+                    isLastItem={index === tags.length - 1}
+                  />
+                ))}
+              </View> */}
+              {tags.map((category, index) => (
+                  <SelectionCard
+                    key={category.title}
+                    title={category.title}
+                    icon={category.image}
+                    data={category.labels}
+                    active={selectedFilters.item}
+                    select={(el: string) => {
+                      dispatch(
+                        setSelectedFilters({
+                          ...selectedFilters,
+                          type: (category.title).toLocaleLowerCase(),
+                          item: el,
+                        })
+                      );
+                    }}
+                  />
+                ))}
+              {/* <SelectionCard
                 title={"Genre:"}
                 icon={genreIcon}
                 data={picker.genre}
@@ -82,8 +113,8 @@ const FilterModal = ({ onClose }: any) => {
                     })
                   );
                 }}
-              />
-              <SelectionCard
+              /> */}
+              {/* <SelectionCard
                 title={"Series:"}
                 icon={seriesIcon}
                 data={picker.series}
@@ -112,7 +143,7 @@ const FilterModal = ({ onClose }: any) => {
                     })
                   );
                 }}
-              />
+              /> */}
               <SelectionCard
                 title={"Language:"}
                 icon={languagesIcon}
@@ -184,5 +215,10 @@ const styles = StyleSheet.create({
     left: 8,
     fontSize: 25,
     fontFamily: 'Courier Prime Bold',
+  },
+  accordionContainer: {
+    backgroundColor: Colours.quinary,
+    padding: 10,
+    borderRadius: 15
   },
 });

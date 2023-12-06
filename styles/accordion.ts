@@ -2,6 +2,11 @@ import { StyleSheet } from 'react-native';
 import { Colours } from './constants';
 
 const accordionStyle = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: Colours.quinary,
+    padding: 10,
+    borderRadius: 15
+  },
   container: {
     marginBottom: 10,
     paddingBottom: 5,
@@ -107,6 +112,7 @@ const accordionNewTagStyle = StyleSheet.create({
 })
 
 // Accordion
+export const accordionMainContainer = accordionStyle.mainContainer;
 export const accordionContainer = accordionStyle.container;
 export const accordionBorderBottom = accordionStyle.borderBottom;
 // Title

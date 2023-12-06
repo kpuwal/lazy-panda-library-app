@@ -3,11 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from "reac
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Colours } from "@styles/constants";
 import { deleteLabelItem, deleteTitle, useAppDispatch } from "@reduxStates/index";
-import Title from "./accordion/Title";
-import Menu from "./accordion/Menu";
-import Content from "./accordion/Content";
-import AddTag from "./accordion/AddTag";
-import { accordionBorderBottom, accordionContainer, accordionLabelContainerA } from "@styles/accordion";
+import Title from "@components/settings/accordion/Title";
+import Content from "@components/settings/accordion/Content";
+import { accordionBorderBottom, accordionContainer, accordionLabelContainerA, accordionLabelContainerB } from "@styles/accordion";
 
 interface Category {
   title: string;
@@ -17,24 +15,22 @@ interface Category {
 
 interface AccordionProps {
   category: Category;
-  isLastItem: boolean
+  isLastItem: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
+const TagsAccordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const handleRemoveTag = (title: string, label: string) => {
-    dispatch(deleteLabelItem({ title, labelToDelete: label }));
-  }
-
-  const handleRemoveCategory = (titleToDelete: string) => {
-    dispatch(deleteTitle({ titleToDelete }));
-  }
+  const handleLabelSelect = (label: string) => {
+    setSelectedLabel(label);
+    // You can perform additional actions here if needed
+  };
 
   return (
     <View 
@@ -44,31 +40,25 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
         isLastItem && accordionBorderBottom
       ]}
     >
-      <Title title={category.title} image={category.image} isExpanded expandAccordion={handleToggle} />
+      <Title title={category.title} image={category.image} isExpanded={isExpanded} expandAccordion={handleToggle} />
 
       {isExpanded && (
         <>
-          <Menu title={category.title} removeCategory={handleRemoveCategory} />
           <Content customStyle={{backgroundColor: category.labels.length === 0 ? 'transparent' : 'white'}}>
             {category.labels.map((label) => (
               <Content.Label
-                customStyle={accordionLabelContainerA}
+                customStyle={accordionLabelContainerB}
                 label={label}
                 key={label}
-              >
-                <Content.Label.Delete
-                  categoryTitle={category.title}
-                  label={label}
-                  removeTag={handleRemoveTag}
-                />
-              </Content.Label>
+                onSelect={() => handleLabelSelect(label)}
+                selected={selectedLabel === label}
+              />
             ))}
           </Content>
-          <AddTag title={category.title} />
         </>
       )}
     </View>
   );
 };
 
-export default Accordion;
+export default TagsAccordion;

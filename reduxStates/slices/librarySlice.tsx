@@ -114,7 +114,7 @@ export const filterLibrary = createAsyncThunk(
       {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
-
+console.log('response ', response.data)
       dispatch(sortLibraryByTitle(response.data));
       dispatch(sortLibraryByAuthor(response.data));
       return response.data;
@@ -169,6 +169,7 @@ const librarySlice = createSlice({
       return state;
     },
     setSelectedFilters: (state, action) => {
+      // console.log('selected filters ', action.payload)
       return {
         ...state,
         selectedFilters: action.payload,
