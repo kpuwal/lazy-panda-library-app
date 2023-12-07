@@ -5,8 +5,7 @@ import { CATEGORY_IMAGES } from '@helpers/constants';
 import { accordionTitle, accordionTitleImage, accordionTitleImageContainer } from '@styles/accordion';
 
 type SelectionCardTypes = {
-  // data: string[],
-  data: any,
+  data: string[],
   active?: string,
   select: any,
   title: string,
@@ -39,7 +38,7 @@ const SelectionCard = ({data, select, active, title, icon}: SelectionCardTypes) 
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.container}>
-        {data.map((item: any, idx: any) => <Item key={idx} el={item.value} {...{select, active}} />)}
+        {data.map((item: any, idx: any) => <Item key={idx} el={item} {...{select, active}} />)}
       </View>
     </>
   )

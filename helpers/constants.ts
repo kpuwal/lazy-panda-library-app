@@ -26,11 +26,15 @@ export const BACKGROUND = [
   require('@assets/bg_02.png'),
 ]
 
+// export const LANGUAGES = [
+//   {'label': "EN", 'value': 'EN'},
+//   {'label': "NL", 'value': 'NL'},
+//   {'label': "PL", 'value': 'PL'},
+//   {'label': "ES", 'value': 'ES'}
+// ];
+
 export const LANGUAGES = [
-  {'label': "EN", 'value': 'EN'},
-  {'label': "NL", 'value': 'NL'},
-  {'label': "PL", 'value': 'PL'},
-  {'label': "ES", 'value': 'ES'}
+  "EN", "NL", "PL", "ES"
 ];
 
 export const CATEGORY_IMAGES = [

@@ -144,9 +144,9 @@ const FilterModal = ({ onClose }: any) => {
                   );
                 }}
               /> */}
-              <SelectionCard
+              {/* <SelectionCard
                 title={"Language:"}
-                icon={languagesIcon}
+                icon={'img7'}
                 data={LANGUAGES}
                 active={selectedFilters.item}
                 select={(el: string) => {
@@ -158,7 +158,7 @@ const FilterModal = ({ onClose }: any) => {
                     })
                   );
                 }}
-              />
+              /> */}
             </ScrollView>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <PrimaryButton action={onClose} customStyle={buttonSml}>
