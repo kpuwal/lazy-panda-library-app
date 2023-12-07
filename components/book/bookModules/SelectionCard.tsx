@@ -7,7 +7,7 @@ import { accordionTitle, accordionTitleImage, accordionTitleImageContainer } fro
 type SelectionCardTypes = {
   data: string[],
   active?: string,
-  select: any,
+  select?: any,
   title: string,
   icon?: any,
 }

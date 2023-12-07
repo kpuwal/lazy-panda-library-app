@@ -19,6 +19,7 @@ import { buttonText } from "@styles/button";
 const Book = () => {
   const { book, bookTitleForRowUpdate, bookError, bookMsg } = useSelector((state: RootState) => state.book);
   const { libraryMsg, libraryError } = useSelector((state: RootState) => state.library);
+  const { tags } = useSelector((state: RootState) => state.tags);
   const { genre, series, world, readBy } = useSelector((state: RootState) => state.pickers);
   const { navigationSource } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ const Book = () => {
 
   useEffect(() => {
     dispatch(copyAndStoreTitle(book.title));
+    // console.log('genre ', book.genre, tags[0].)
   }, []);
 
   useEffect(() => {
@@ -105,7 +107,19 @@ const Book = () => {
             <Title />
             <Author />
             <Numbers />
-            <SelectionCard
+            {tags.map((category, index) => {
+              const activeLabel = category.labels.find(label => label === book.genre || label === book.series || label === book.world || label === book.language )
+              return (
+              <SelectionCard
+                key={category.title}
+                title={category.title}
+                icon={category.image}
+                data={category.labels}
+                active={activeLabel}
+                // select={(el: string) => dispatch(updateBook({category: el}))}
+              />)
+              })}
+            {/* <SelectionCard
               title={"Genre:"}
               icon={genreIcon}
               data={genre}
@@ -132,7 +146,7 @@ const Book = () => {
               data={readBy}
               active={book.readBy}
               select={(el: string) => dispatch(updateBook({readBy: el}))}
-            />
+            /> */}
 
             <TitleHeader
               icon={boughtGivenOnIcon}

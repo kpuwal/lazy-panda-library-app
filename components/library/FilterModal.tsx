@@ -72,15 +72,6 @@ const FilterModal = ({ onClose }: any) => {
               <Text style={styles.headerText}>Filter by:</Text>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-              {/* <View style={styles.accordionContainer}>
-                {tags.map((category, index) => (
-                  <TagsAccordion
-                    key={category.title}
-                    category={category}
-                    isLastItem={index === tags.length - 1}
-                  />
-                ))}
-              </View> */}
               {tags.map((category, index) => (
                   <SelectionCard
                     key={category.title}
@@ -99,66 +90,6 @@ const FilterModal = ({ onClose }: any) => {
                     }}
                   />
                 ))}
-              {/* <SelectionCard
-                title={"Genre:"}
-                icon={genreIcon}
-                data={picker.genre}
-                active={selectedFilters.item}
-                select={(el: string) => {
-                  dispatch(
-                    setSelectedFilters({
-                      ...selectedFilters,
-                      type: 'genre',
-                      item: el,
-                    })
-                  );
-                }}
-              /> */}
-              {/* <SelectionCard
-                title={"Series:"}
-                icon={seriesIcon}
-                data={picker.series}
-                active={selectedFilters.item}
-                select={(el: string) => {
-                  dispatch(
-                    setSelectedFilters({
-                      ...selectedFilters,
-                      type: 'series',
-                      item: el,
-                    })
-                  );
-                }}
-              />
-              <SelectionCard
-                title={"World:"}
-                icon={worldIcon}
-                data={picker.world}
-                active={selectedFilters.item}
-                select={(el: string) => {
-                  dispatch(
-                    setSelectedFilters({
-                      ...selectedFilters,
-                      type: 'world',
-                      item: el,
-                    })
-                  );
-                }}
-              /> */}
-              {/* <SelectionCard
-                title={"Language:"}
-                icon={'img7'}
-                data={LANGUAGES}
-                active={selectedFilters.item}
-                select={(el: string) => {
-                  dispatch(
-                    setSelectedFilters({
-                      ...selectedFilters,
-                      type: 'language',
-                      item: el,
-                    })
-                  );
-                }}
-              /> */}
             </ScrollView>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <PrimaryButton action={onClose} customStyle={buttonSml}>
