@@ -2,7 +2,7 @@ import { accordionLabelText } from "@styles/accordion";
 import { ReactNode, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Delete from "./Delete";
-import { Colours } from "../../../styles/constants";
+import { Colours } from "../../../../styles/constants";
 
 interface LabelProps {
   customStyle: any;

@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from "reac
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Colours } from "@styles/constants";
 import { deleteLabelItem, deleteTitle, useAppDispatch } from "@reduxStates/index";
-import Title from "@components/settings/accordion/Title";
-import Content from "@components/settings/accordion/Content";
+import Title from "@components/settings/tags/accordion/Title";
+import Content from "@components/settings/tags/accordion/Content";
 import { accordionBorderBottom, accordionContainer, accordionLabelContainerA, accordionLabelContainerB } from "@styles/accordion";
 
 interface Category {

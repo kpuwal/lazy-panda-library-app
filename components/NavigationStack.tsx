@@ -6,7 +6,8 @@ import LibraryScreen from '../screens/Library';
 import ScannerScreen from '../screens/Scanner';
 import SettingsScreen from '../screens/Settings';
 import BookScreen from '@components/book/Book';
-import TagsScreen from '@components/settings/Tags';
+import TagsScreen from '@components/settings/tags/Tags';
+import CategoryScreen from './settings/categories/Category';
 import { useNavigation } from '@react-navigation/native';
 import { Text, Pressable, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   Book: undefined,
   Settings: undefined,
   Tags: undefined,
+  Category: undefined;
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -60,6 +62,11 @@ const NavigationStack = () => {
       <Stack.Screen 
         name="Tags" 
         component={TagsScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="Category" 
+        component={CategoryScreen} 
         options={{ headerShown: false }} 
       />
     </Stack.Navigator>

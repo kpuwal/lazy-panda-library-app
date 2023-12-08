@@ -6,7 +6,7 @@ import { Colours } from "@styles/constants";
 import { headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, StyleSheet, Pressable, Image } from "react-native"
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const Settings = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -23,8 +23,19 @@ const Settings = () => {
       </Header>
       <Pressable onPress={() => navigation.navigate('Tags')}>
         <View style={styles.container}>
-          <Ionicons name="ios-pricetags-sharp" style={{paddingRight: 20}} size={28} color={Colours.secondary} />
-          <Text style={styles.textTitle}>Book Tags/Categories</Text>
+          <View style={styles.title}>
+            <Ionicons name="ios-pricetags-sharp" style={{paddingRight: 20}} size={28} color={Colours.secondary} />
+            <Text style={styles.textTitle}>Book Tags</Text>
+          </View>
+          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+        </View>
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('Category')}>
+        <View style={styles.container}>
+          <View style={styles.title}>
+            <MaterialIcons name="category" style={{paddingRight: 20}} size={30} color={Colours.secondary} />
+            <Text style={styles.textTitle}>Library Categories</Text>
+          </View>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </View>
       </Pressable>
@@ -40,10 +51,16 @@ const styles = StyleSheet.create({
     // padding: SPACING,
     height: ITEM_HEIGHT,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: Colours.quinary
+    backgroundColor: Colours.quinary,
+    marginBottom: 5
+  },
+  title: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
   },
   textTitle: {
     color: Colours.secondary,

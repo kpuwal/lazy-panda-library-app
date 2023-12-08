@@ -72,7 +72,7 @@ const Tags = () => {
         <View style={styles.newTitleContainer}>
           <TextInput
             style={styles.newTitleInput}
-            placeholder="new tag category name"
+            placeholder="new tag category title"
             value={newTitle}
             onChangeText={(text) => setNewTitle(text.toUpperCase())}
           />

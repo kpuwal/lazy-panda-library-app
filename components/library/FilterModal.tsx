@@ -10,7 +10,7 @@ import { Colours } from '@styles/constants';
 import PrimaryButton from '@components/button/PrimaryButton';
 import { LANGUAGES } from '@helpers/constants';
 import { buttonText } from '@styles/button';
-import Accordion from '@components/settings/Accordion';
+import Accordion from '@components/settings/tags/Accordion';
 import TagsAccordion from './TagsAccordion';
 
 const windowWidth = Dimensions.get('window').width;
