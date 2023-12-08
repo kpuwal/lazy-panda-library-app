@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef,
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Dimensions, SectionList, Pressable, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter, setSelectedFilters, setAlertModal, isScanned, setBookIsLoaded } from '@reduxStates/index';
+import { librarySectionType, readLibrary, resetSelectedFilters, sortLibraryByAuthor, sortLibraryByTitle, resetLibraryMessages, BookType, resetBookMessages, RootState, useAppDispatch, toggleAlphabetList, toggleFilterModal, setLibraryActiveListButton, setActiveAlphabetLetter, setSelectedFilters, setAlertModal, isScanned, setBookIsLoaded, setLibraryDatafromStorageToState } from '@reduxStates/index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colours, Fonts } from '@styles/constants';
 import { headerInfoContainer, headerText } from '@styles/styles';
@@ -12,6 +12,7 @@ import { FilterModal, AlphabetList, LibraryLoader, LibraryOverlay, TitleList, Au
 import { HEADER_HEIGHT, ITEM_HEIGHT, SECTION_ITEM_HEIGHT, SPACING, randomBookNotFoundMessage } from '@helpers/constants';
 import AlertModal from '@components/alert/AlertModal';
 import { RootStackParamList } from '@components/NavigationStack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type LibraryViewType = {
   TITLE: React.ComponentType;
@@ -68,11 +69,11 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
     dispatch(resetSelectedFilters());
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      handleInitialLoad();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     handleInitialLoad();
+  //   }, [])
+  // );
 
   const handleCloseModal = () => {
     dispatch(setLibraryActiveListButton('DEFAULT'));
@@ -81,18 +82,28 @@ const { libraryListActiveButton } = useSelector((state: RootState) => state.app)
     scrollToTop();
   }
 
-  const handleInitialLoad = () => {
-    setIsInitialLoading(true);
-    dispatch(readLibrary())
-      .then(() => {
-        setIsInitialLoading(false);
-        dispatch(setLibraryActiveListButton('DEFAULT'));
-      })
-      .catch((error) => {
-        console.error('Error loading library data:', error);
-        setIsInitialLoading(false);
-      });
-  };
+  // const handleInitialLoad = () => {
+  //   setIsInitialLoading(true);
+  //   dispatch(readLibrary())
+  //     .then(() => {
+  //       setIsInitialLoading(false);
+  //       dispatch(setLibraryActiveListButton('DEFAULT'));
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error loading library data:', error);
+  //       setIsInitialLoading(false);
+  //     });
+  // };
+
+  // const handleInitialLoad = async () => {
+  //       try {
+  //         const libraryData = await AsyncStorage.getItem('library');
+  //         dispatch(setLibraryDatafromStorageToState(libraryData));
+  //         console.log('Library data:', libraryData);
+  //       } catch (error) {
+  //         console.error('Error reading from AsyncStorage:', error);
+  //       }
+  // };
 
   const scrollToTop = () => {
     if (sectionListRef.current) {

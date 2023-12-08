@@ -86,6 +86,19 @@ const storeData = async (data: any) => {
   }
 };
 
+const sortAndUpdateLibrarySections = (
+  state: libraryTypes,
+  library: BookType[],
+  sortBy: 'title' | 'author'
+) => {
+  const sortedSections = handleSort(library, sortBy);
+  const key = sortBy === 'title' ? 'librarySortedByTitle' : 'librarySortedByAuthor';
+  state[key] = {
+    data: sortedSections.sortedSections,
+    alphabet: sortedSections.sectionLetters,
+  };
+};
+
 export const readLibrary = createAsyncThunk(
   '/api/library',
   async (_, { rejectWithValue, dispatch }) => {
@@ -97,7 +110,7 @@ export const readLibrary = createAsyncThunk(
       dispatch(sortLibraryByTitle(response.data));
       dispatch(sortLibraryByAuthor(response.data));
 
-      // storeData(response.data)
+      storeData(response.data);
       return response.data;
     } catch(err) {
       return rejectWithValue(err)
@@ -114,7 +127,7 @@ export const filterLibrary = createAsyncThunk(
       {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
-console.log('response ', response.data)
+
       dispatch(sortLibraryByTitle(response.data));
       dispatch(sortLibraryByAuthor(response.data));
       return response.data;
@@ -159,6 +172,21 @@ const librarySlice = createSlice({
   name: 'library',
   initialState,
   reducers: {
+    setLibraryDatafromStorageToState: (state, action) => {
+      const library = action.payload;
+      // console.log('library ', library[0])
+      state.library = library;
+      state.libraryCopy = library;
+      state.booksNumber = library.length;
+      state.libraryIsFiltered = false;
+      state.libraryIsLoaded = true;
+
+      // Sort by title and update librarySortedByTitle
+      sortAndUpdateLibrarySections(state, library, 'title');
+
+      // Sort by author and update librarySortedByAuthor
+      sortAndUpdateLibrarySections(state, library, 'author');
+    },
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
       if (action.payload !=='') {
@@ -177,6 +205,7 @@ const librarySlice = createSlice({
       }
     },
     sortLibraryByTitle: (state, action) => {
+      console.log('here')
       const sortedByTitle = handleSort(action.payload, 'title');
       return {
         ...state,
@@ -259,6 +288,7 @@ export const {
   sortLibraryByTitle,
   resetLibraryMessages,
   resetSelectedFilters,
-  setSearchQuery
+  setSearchQuery,
+  setLibraryDatafromStorageToState
 } = librarySlice.actions;
 export default librarySlice.reducer;

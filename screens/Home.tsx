@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags, RootState } from '@reduxStates/index';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags, RootState, setLibraryDatafromStorageToState } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
@@ -15,7 +15,42 @@ const Home = ({navigation}: any) => {
   const randomIndex = Math.floor(Math.random() * BACKGROUND.length);
   const [randomBackground] = useState(BACKGROUND[randomIndex]);
   const [isLove, setLove] = useState(false);
-  const { library } = useSelector((state: RootState) => state.library);
+  const { library, librarySortedByTitle } = useSelector((state: RootState) => state.library);
+ 
+  const handleInitialLoad = async () => {
+        try {
+          const libraryData = await AsyncStorage.getItem('library');
+
+          dispatch(setLibraryDatafromStorageToState(libraryData));
+          // console.log('Library data:', libraryData[0]);
+        } catch (error) {
+          console.error('Error reading from AsyncStorage:', error);
+        }
+    }
+
+    const retrieveData = async () => {
+      try {
+        const storedData = await AsyncStorage.getItem('library');
+    
+        if (storedData !== null) {
+          // Parse the stored data
+          const parsedData = JSON.parse(storedData);
+    
+          // Set the parsed data in your component's state
+          dispatch(setLibraryDatafromStorageToState(parsedData));
+          console.log('Library data:', parsedData[0]);
+          console.log('title data ', librarySortedByTitle.data[0])
+
+    
+          console.log('Data retrieved successfully');
+        } else {
+          console.log('No data found in AsyncStorage');
+        }
+      } catch (error) {
+        console.error('Error retrieving data:', error);
+      }
+    };
+ 
   useEffect(() => {
     // console.log('my library: ', library)
     const getBarCodeScannerPermissions = async () => {
@@ -29,7 +64,7 @@ const Home = ({navigation}: any) => {
     dispatch(fetchPicker());
     dispatch(fetchTags());
     dispatch(cleanBook());
-    dispatch(readLibrary())
+    (retrieveData())
       .then(() => dispatch(setBookIsLoaded(false)))
       .catch(() => {
         dispatch(setBookIsLoaded(false));

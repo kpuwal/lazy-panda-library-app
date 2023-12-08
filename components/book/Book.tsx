@@ -108,7 +108,13 @@ const Book = () => {
             <Author />
             <Numbers />
             {tags.map((category, index) => {
-              const activeLabel = category.labels.find(label => label === book.genre || label === book.series || label === book.world || label === book.language )
+              const activeLabel = category.labels.find(label => label === book.genre || label === book.series || label === book.world || label === book.language );
+              const catgry = category.title;
+
+              function handleSelect(el: string) {
+                dispatch(updateBook({ catgry: el }));
+              }
+
               return (
               <SelectionCard
                 key={category.title}
@@ -116,7 +122,7 @@ const Book = () => {
                 icon={category.image}
                 data={category.labels}
                 active={activeLabel}
-                // select={(el: string) => dispatch(updateBook({category: el}))}
+                select={handleSelect}
               />)
               })}
             {/* <SelectionCard

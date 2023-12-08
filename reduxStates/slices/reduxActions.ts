@@ -32,7 +32,8 @@ import {
   resetLibraryMessages,
   resetSelectedFilters,
   librarySectionType,
-  setSearchQuery
+  setSearchQuery,
+  setLibraryDatafromStorageToState
 } from './librarySlice';
 
 import { fetchPicker } from './pickerSlice';
@@ -81,5 +82,6 @@ export {
   updateTags,
   librarySectionType,
   setSearchQuery,
+  setLibraryDatafromStorageToState,
   BookType
 };
