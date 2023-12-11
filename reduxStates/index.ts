@@ -5,5 +5,6 @@ export { default as librarySlice } from './slices/librarySlice';
 export { default as appSlice } from './slices/appSlice';
 export { default as pickerSlice } from './slices/pickerSlice';
 export { default as tagsSlice } from './slices/tagsSlice';
+export { default as categoriesSlice } from './slices/categoriesSlice';
 export { RootState, useAppDispatch };
 export * from './slices/reduxActions';

@@ -3,24 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from "reac
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Colours } from "@styles/constants";
 import { deleteLabelItem, deleteTitle, useAppDispatch } from "@reduxStates/index";
-import Title from "./accordion/Title";
-import Menu from "./accordion/Menu";
-import Content from "./accordion/Content";
-import AddTag from "./accordion/AddTag";
+import Title from "../tags/accordion/Title";
+import Menu from "../tags/accordion/Menu";
+import Content from "../tags/accordion/Content";
+import AddTag from "../tags/accordion/AddTag";
 import { accordionBorderBottom, accordionContainer, accordionLabelContainerA } from "@styles/accordion";
 
-interface Tags {
-  title: string;
-  image: string;
-  labels: string[];
-}
-
 interface AccordionProps {
-  tags: Tags;
+  category: string;
   isLastItem: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ tags, isLastItem }) => {
+const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -44,27 +38,12 @@ const Accordion: React.FC<AccordionProps> = ({ tags, isLastItem }) => {
         isLastItem && accordionBorderBottom
       ]}
     >
-      <Title title={tags.title} image={tags.image} isExpanded expandAccordion={handleToggle} />
+      <Title title={category} image={'img1'} isExpanded expandAccordion={handleToggle} />
 
       {isExpanded && (
         <>
-          <Menu title={tags.title} removeCategory={handleRemoveCategory} />
-          <Content customStyle={{backgroundColor: tags.labels.length === 0 ? 'transparent' : 'white'}}>
-            {tags.labels.map((label) => (
-              <Content.Label
-                customStyle={accordionLabelContainerA}
-                label={label}
-                key={label}
-              >
-                <Content.Label.Delete
-                  categoryTitle={tags.title}
-                  label={label}
-                  removeTag={handleRemoveTag}
-                />
-              </Content.Label>
-            ))}
-          </Content>
-          <AddTag title={tags.title} />
+          <Menu title={category} removeCategory={handleRemoveCategory} />
+          {/* <AddTag title={tags.title} /> */}
         </>
       )}
     </View>

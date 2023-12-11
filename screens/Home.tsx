@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags, RootState, setLibraryDatafromStorageToState } from '@reduxStates/index';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags, RootState, setLibraryDatafromStorageToState, readCategories } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
@@ -37,11 +37,7 @@ const Home = ({navigation}: any) => {
           const parsedData = JSON.parse(storedData);
     
           // Set the parsed data in your component's state
-          dispatch(setLibraryDatafromStorageToState(parsedData));
-          console.log('Library data:', parsedData[0]);
-          console.log('title data ', librarySortedByTitle.data[0])
-
-    
+          dispatch(setLibraryDatafromStorageToState(parsedData));    
           console.log('Data retrieved successfully');
         } else {
           console.log('No data found in AsyncStorage');
@@ -63,6 +59,7 @@ const Home = ({navigation}: any) => {
     getBarCodeScannerPermissions();
     dispatch(fetchPicker());
     dispatch(fetchTags());
+    dispatch(readCategories());
     dispatch(cleanBook());
     (retrieveData())
       .then(() => dispatch(setBookIsLoaded(false)))

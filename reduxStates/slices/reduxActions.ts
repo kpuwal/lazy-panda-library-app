@@ -46,6 +46,9 @@ import {
   updateTags
 } from './tagsSlice';
 
+import {
+  readCategories
+} from './categoriesSlice';
 
 export {
   fetchBook,
@@ -83,5 +86,6 @@ export {
   librarySectionType,
   setSearchQuery,
   setLibraryDatafromStorageToState,
-  BookType
+  BookType,
+  readCategories
 };

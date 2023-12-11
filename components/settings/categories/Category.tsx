@@ -4,12 +4,16 @@ import { headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity } from "react-native"
 import ImageSelector from "../tags/ImageSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useSelector } from 'react-redux';
+import { RootState } from "@reduxStates/index";
+import Accordion from "./Accordion";
 
 const Category = () => {
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const { categories } = useSelector((state: RootState) => state.categories);
 
   const handleAddTitle = () => {
     console.log('add category title')
@@ -18,13 +22,17 @@ const Category = () => {
     // setSelectedImage('');
   };
 
+  useEffect(() => {
+    console.log('cats ', categories)
+  })
+
   return (
     <View style={{ flex: 1, backgroundColor: Colours.primary }}>
       <StatusBar style="dark" />
       <Header>
         <Header.GoBack />
         <View style={headerInfoContainer}>
-          <Header.Icon uri={require('@assets/tag.gif')} />
+          <Header.Icon uri={require('@assets/category.gif')} />
           <Header.StyledText customStyle={headerText}>Categories</Header.StyledText>
         </View>
       </Header>
@@ -35,7 +43,13 @@ const Category = () => {
     >
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.accordionContainer}>
-         
+        {categories.map((category, index) => (
+            <Accordion
+              key={category}
+              category={category}
+              isLastItem={index === categories.length - 1}
+            />
+          ))}
         </View>
         <ImageSelector
           selectedImage={selectedImage}

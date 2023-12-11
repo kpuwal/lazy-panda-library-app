@@ -8,6 +8,7 @@ import appReducer, { appTypes } from './slices/appSlice';
 import tagsReducer, { tagsTypes } from './slices/tagsSlice';
 import libraryReducer, { libraryTypes } from './slices/librarySlice';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
+import categoriesReducer, { CategoriesTypes } from './slices/categoriesSlice';
 
 export type RootStateType = {
   book: bookTypes,
@@ -15,6 +16,7 @@ export type RootStateType = {
   pickers: pickerTypes;
   app: appTypes;
   tags: tagsTypes;
+  categories: CategoriesTypes;
 };
 
 const rootReducer: Reducer<CombinedState<RootStateType>, any> = combineReducers({
@@ -23,6 +25,7 @@ const rootReducer: Reducer<CombinedState<RootStateType>, any> = combineReducers(
   pickers: pickerReducer,
   app: appReducer,
   tags: tagsReducer,
+  categories: categoriesReducer
 })
 
 const persistConfig = {

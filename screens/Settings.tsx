@@ -6,7 +6,7 @@ import { Colours } from "@styles/constants";
 import { headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, StyleSheet, Pressable, Image } from "react-native"
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Settings = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -33,7 +33,7 @@ const Settings = () => {
       <Pressable onPress={() => navigation.navigate('Category')}>
         <View style={styles.container}>
           <View style={styles.title}>
-            <MaterialIcons name="category" style={{paddingRight: 20}} size={30} color={Colours.secondary} />
+            <MaterialCommunityIcons name="format-list-text" style={{paddingRight: 20}} size={30} color={Colours.secondary} />
             <Text style={styles.textTitle}>Library Categories</Text>
           </View>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />

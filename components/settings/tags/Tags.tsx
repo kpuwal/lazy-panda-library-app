@@ -57,10 +57,10 @@ const Tags = () => {
     >
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.accordionContainer}>
-          {tags.map((category, index) => (
+          {tags.map((tagsCategory, index) => (
             <Accordion
-              key={category.title}
-              category={category}
+              key={tagsCategory.title}
+              tags={tagsCategory}
               isLastItem={index === tags.length - 1}
             />
           ))}
@@ -91,7 +91,7 @@ const Tags = () => {
   >
     <PrimaryButton
       action={() => dispatch(updateTags(tags))}
-      customStyle={buttonMid}
+      customStyle={buttonLong}
     >
       <PrimaryButton.StyledText customStyle={buttonText}>
         Save Tags

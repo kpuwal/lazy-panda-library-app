@@ -25,7 +25,7 @@ const initialState: appTypes = {
 };
 
 const appSlice = createSlice({
-  name: 'book',
+  name: 'app',
   initialState,
   reducers: {
     setAlertModal: (state, action) => {
