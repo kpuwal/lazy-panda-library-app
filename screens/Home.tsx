@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchTags, RootState, setLibraryDatafromStorageToState, readCategories } from '@reduxStates/index';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchData, RootState, setLibraryDatafromStorageToState } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
@@ -57,9 +57,7 @@ const Home = ({navigation}: any) => {
     };
 
     getBarCodeScannerPermissions();
-    dispatch(fetchPicker());
-    dispatch(fetchTags());
-    dispatch(readCategories());
+    dispatch(fetchData()); // tags and categories
     dispatch(cleanBook());
     (retrieveData())
       .then(() => dispatch(setBookIsLoaded(false)))

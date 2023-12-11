@@ -38,17 +38,13 @@ import {
 
 import { fetchPicker } from './pickerSlice';
 import { 
-  fetchTags,
+  fetchData,
   addTagUnderTitle,
   deleteLabelItem,
   addTitle,
   deleteTitle,
   updateTags
-} from './tagsSlice';
-
-import {
-  readCategories
-} from './categoriesSlice';
+} from './settingsSlice';
 
 export {
   fetchBook,
@@ -77,7 +73,7 @@ export {
   resetLibraryMessages,
   resetSelectedFilters,
   fetchPicker,
-  fetchTags,
+  fetchData,
   addTagUnderTitle,
   deleteLabelItem,
   addTitle,
@@ -87,5 +83,4 @@ export {
   setSearchQuery,
   setLibraryDatafromStorageToState,
   BookType,
-  readCategories
 };

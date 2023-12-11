@@ -9,35 +9,20 @@ import Accordion from "./Accordion";
 import PrimaryButton from "@components/button/PrimaryButton";
 import { buttonText } from "@styles/button";
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ImageSelector from "./ImageSelector";
-import Accordion2 from "./Accordion2";
-import { accordionLabelContainerA } from "@styles/accordion";
 
 const Tags = () => {
-  const { tags } = useSelector((state: RootState) => state.tags);
+  const { tags } = useSelector((state: RootState) => state.settings);
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
-  const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useAppDispatch();
-
-  const handleToggleAccordion = () => {
-    setIsExpanded(!isExpanded);
-  };
 
   const handleAddTitle = () => {
     dispatch(addTitle({ newTitle, image: selectedImage }));
     setNewTitle('');
     setSelectedImage('');
   };
-
-  const handleRemoveCategory = (titleToDelete: string) => {
-    dispatch(deleteTitle({ titleToDelete }));
-  }
-
-  const handleRemoveTag = (title: string, label: string) => {
-    dispatch(deleteLabelItem({ title, labelToDelete: label }));
-  }
 
   return (
 <View style={{ flex: 1, backgroundColor: Colours.primary }}>

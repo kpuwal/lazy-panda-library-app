@@ -6,17 +6,16 @@ import bookReducer, { bookTypes } from './slices/bookSlice';
 import pickerReducer, { pickerTypes } from './slices/pickerSlice';
 import appReducer, { appTypes } from './slices/appSlice';
 import tagsReducer, { tagsTypes } from './slices/tagsSlice';
+import settingsReducer, { settingsTypes } from './slices/settingsSlice';
 import libraryReducer, { libraryTypes } from './slices/librarySlice';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
-import categoriesReducer, { CategoriesTypes } from './slices/categoriesSlice';
 
 export type RootStateType = {
   book: bookTypes,
   library: libraryTypes;
   pickers: pickerTypes;
   app: appTypes;
-  tags: tagsTypes;
-  categories: CategoriesTypes;
+  settings: settingsTypes;
 };
 
 const rootReducer: Reducer<CombinedState<RootStateType>, any> = combineReducers({
@@ -24,14 +23,13 @@ const rootReducer: Reducer<CombinedState<RootStateType>, any> = combineReducers(
   library: libraryReducer,
   pickers: pickerReducer,
   app: appReducer,
-  tags: tagsReducer,
-  categories: categoriesReducer
+  settings: settingsReducer,
 })
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['library', 'pickers', 'app', 'book', 'tags'],
+  whitelist: ['library', 'pickers', 'app', 'book', 'settings'],
   stateReconciler: autoMergeLevel2,
 };
 

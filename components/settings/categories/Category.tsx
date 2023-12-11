@@ -13,7 +13,7 @@ import Accordion from "./Accordion";
 const Category = () => {
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
-  const { categories } = useSelector((state: RootState) => state.categories);
+  const { categories } = useSelector((state: RootState) => state.settings);
 
   const handleAddTitle = () => {
     console.log('add category title')
@@ -21,10 +21,6 @@ const Category = () => {
     // setNewTitle('');
     // setSelectedImage('');
   };
-
-  useEffect(() => {
-    console.log('cats ', categories)
-  })
 
   return (
     <View style={{ flex: 1, backgroundColor: Colours.primary }}>
