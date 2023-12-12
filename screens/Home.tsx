@@ -7,7 +7,6 @@ import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation}: any) => {
@@ -15,18 +14,17 @@ const Home = ({navigation}: any) => {
   const randomIndex = Math.floor(Math.random() * BACKGROUND.length);
   const [randomBackground] = useState(BACKGROUND[randomIndex]);
   const [isLove, setLove] = useState(false);
-  const { library, librarySortedByTitle } = useSelector((state: RootState) => state.library);
  
-  const handleInitialLoad = async () => {
-        try {
-          const libraryData = await AsyncStorage.getItem('library');
+  // const handleInitialLoad = async () => {
+  //       try {
+  //         const libraryData = await AsyncStorage.getItem('library');
 
-          dispatch(setLibraryDatafromStorageToState(libraryData));
-          // console.log('Library data:', libraryData[0]);
-        } catch (error) {
-          console.error('Error reading from AsyncStorage:', error);
-        }
-    }
+  //         dispatch(setLibraryDatafromStorageToState(libraryData));
+  //         // console.log('Library data:', libraryData[0]);
+  //       } catch (error) {
+  //         console.error('Error reading from AsyncStorage:', error);
+  //       }
+  //   }
 
     const retrieveData = async () => {
       try {
@@ -48,7 +46,6 @@ const Home = ({navigation}: any) => {
     };
  
   useEffect(() => {
-    // console.log('my library: ', library)
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       if (status === 'granted') {

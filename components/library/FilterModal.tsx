@@ -20,7 +20,7 @@ const modalHeight = windowHeight * 0.75;
 
 const FilterModal = ({ onClose }: any) => {
   const picker = useSelector((state: RootState) => state.pickers);
-  const { tags } = useSelector((state: RootState) => state.tags);
+  const { tags } = useSelector((state: RootState) => state.settings);
   const dispatch = useAppDispatch();
   const { selectedFilters } = useSelector((state: RootState) => state.library);
   const { isFilterModalActive } = useSelector((state: RootState) => state.app);

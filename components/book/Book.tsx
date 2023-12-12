@@ -19,7 +19,7 @@ import { buttonText } from "@styles/button";
 const Book = () => {
   const { book, bookTitleForRowUpdate, bookError, bookMsg } = useSelector((state: RootState) => state.book);
   const { libraryMsg, libraryError } = useSelector((state: RootState) => state.library);
-  const { tags } = useSelector((state: RootState) => state.tags);
+  const { tags } = useSelector((state: RootState) => state.settings);
   const { genre, series, world, readBy } = useSelector((state: RootState) => state.pickers);
   const { navigationSource } = useSelector((state: RootState) => state.app);
   const dispatch = useAppDispatch();
