@@ -21,11 +21,11 @@ const Settings = () => {
           <Header.StyledText customStyle={headerText}>Settings</Header.StyledText>
         </View>
       </Header>
-      <Pressable onPress={() => navigation.navigate('Tags')}>
+      <Pressable onPress={() => navigation.navigate('ScannerData')}>
         <View style={styles.container}>
           <View style={styles.title}>
-            <Ionicons name="ios-pricetags-sharp" style={{paddingRight: 20}} size={28} color={Colours.secondary} />
-            <Text style={styles.textTitle}>Book Tags</Text>
+            <MaterialCommunityIcons name="barcode-scan" style={{paddingRight: 20}} size={30} color={Colours.secondary} />
+            <Text style={styles.textTitle}>Book Scanner Data</Text>
           </View>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </View>
@@ -35,6 +35,15 @@ const Settings = () => {
           <View style={styles.title}>
             <MaterialCommunityIcons name="format-list-text" style={{paddingRight: 20}} size={30} color={Colours.secondary} />
             <Text style={styles.textTitle}>Library Categories</Text>
+          </View>
+          <Ionicons name="chevron-forward-outline" size={24} color="black" />
+        </View>
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('Tags')}>
+        <View style={styles.container}>
+          <View style={styles.title}>
+            <Ionicons name="ios-pricetags-sharp" style={{paddingRight: 20}} size={28} color={Colours.secondary} />
+            <Text style={styles.textTitle}>Book Tags</Text>
           </View>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </View>

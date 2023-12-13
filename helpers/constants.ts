@@ -33,9 +33,9 @@ export const BACKGROUND = [
 //   {'label': "ES", 'value': 'ES'}
 // ];
 
-export const LANGUAGES = [
-  "EN", "NL", "PL", "ES"
-];
+// export const LANGUAGES = [
+//   "EN", "NL", "PL", "ES"
+// ];
 
 export const CATEGORY_IMAGES = [
   { id: 'img1', source: require("@assets/series.png") },
@@ -72,3 +72,18 @@ export const SPACING = 1;
 export const ITEM_HEIGHT = 95;
 export const SECTION_ITEM_HEIGHT = 26;
 export const HEADER_HEIGHT = 222;
+
+export const CONSTANT_BOOK_DATA = [
+  { title: 'Title', value: 'title' + 'subtitle'},
+  { title: 'Author', value: 'authors' }
+]
+
+export const ADDITIONAL_BOOK_DATA = [
+  { title: 'Published Date', value: 'publishedDate' },
+  { title: 'Book Description', value: 'description' },
+  { title: 'ISBN number', value: 'industryIdentifiers' }, // ISBN numbers array
+  { title: 'Thumbnail', value: 'imageLinks' }, // imageLinks: {smallThumbnail: html-link, thumbnail: html-link}
+  { title: 'Page Count', value: 'pageCount' },
+  { title: 'Language', value: 'language' },
+  { title: 'Book Information', value: 'infoLink'}  
+]

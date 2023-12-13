@@ -8,6 +8,7 @@ import SettingsScreen from '../screens/Settings';
 import BookScreen from '@components/book/Book';
 import TagsScreen from '@components/settings/tags/Tags';
 import CategoryScreen from './settings/categories/Category';
+import ScannerDataScreen from './settings/scanner/ScannerDataScreen';
 import { useNavigation } from '@react-navigation/native';
 import { Text, Pressable, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Settings: undefined,
   Tags: undefined,
   Category: undefined;
+  ScannerData: undefined;
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -57,6 +59,11 @@ const NavigationStack = () => {
       <Stack.Screen 
         name="Settings" 
         component={SettingsScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="ScannerData" 
+        component={ScannerDataScreen} 
         options={{ headerShown: false }} 
       />
       <Stack.Screen 

@@ -25,66 +25,66 @@ const Tags = () => {
   };
 
   return (
-<View style={{ flex: 1, backgroundColor: Colours.primary }}>
-  <StatusBar style="dark" />
-  <Header>
-    <Header.GoBack />
-    <View style={headerInfoContainer}>
-      <Header.Icon uri={require('@assets/tag.gif')} />
-      <Header.StyledText customStyle={headerText}>Tags</Header.StyledText>
-    </View>
-  </Header>
-
-  
-  <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.accordionContainer}>
-          {tags.map((tagsCategory, index) => (
-            <Accordion
-              key={tagsCategory.title}
-              tags={tagsCategory}
-              isLastItem={index === tags.length - 1}
-            />
-          ))}
+    <View style={{ flex: 1, backgroundColor: Colours.primary }}>
+      <StatusBar style="dark" />
+      <Header>
+        <Header.GoBack />
+        <View style={headerInfoContainer}>
+          <Header.Icon uri={require('@assets/tag.gif')} />
+          <Header.StyledText customStyle={headerText}>Tags</Header.StyledText>
         </View>
-        <ImageSelector
-          selectedImage={selectedImage}
-          onSelectImage={setSelectedImage}
-        />
-        <View style={styles.newTitleContainer}>
-          <TextInput
-            style={styles.newTitleInput}
-            placeholder="new tag category title"
-            value={newTitle}
-            onChangeText={(text) => setNewTitle(text.toUpperCase())}
+      </Header>
+
+      
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <View style={styles.accordionContainer}>
+            {tags.map((tagsCategory, index) => (
+              <Accordion
+                key={tagsCategory.title}
+                tags={tagsCategory}
+                isLastItem={index === tags.length - 1}
+              />
+            ))}
+          </View>
+          <ImageSelector
+            selectedImage={selectedImage}
+            onSelectImage={setSelectedImage}
           />
-          <TouchableOpacity style={styles.addButton} onPress={handleAddTitle}>
-            <MaterialIcons name="add-circle" size={30} color={Colours.secondary} />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-  </KeyboardAvoidingView>
+          <View style={styles.newTitleContainer}>
+            <TextInput
+              style={styles.newTitleInput}
+              placeholder="new tag category title"
+              value={newTitle}
+              onChangeText={(text) => setNewTitle(text.toUpperCase())}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddTitle}>
+              <MaterialIcons name="add-circle" size={30} color={Colours.secondary} />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
-  <View style={{
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10}}
-  >
-    <PrimaryButton
-      action={() => dispatch(updateTags(tags))}
-      customStyle={buttonLong}
-    >
-      <PrimaryButton.StyledText customStyle={buttonText}>
-        Save Tags
-      </PrimaryButton.StyledText>
-      <MaterialCommunityIcons name="tag-plus" size={24} color="white" />
-    </PrimaryButton>
-  </View>
-</View>
+      <View style={{
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 10}}
+      >
+        <PrimaryButton
+          action={() => dispatch(updateTags(tags))}
+          customStyle={buttonLong}
+        >
+          <PrimaryButton.StyledText customStyle={buttonText}>
+            Save Tags
+          </PrimaryButton.StyledText>
+          <MaterialCommunityIcons name="tag-plus" size={24} color="white" />
+        </PrimaryButton>
+      </View>
+    </View>
 
   )
 }
