@@ -7,8 +7,12 @@ import { CONSTANT_BOOK_DATA, ADDITIONAL_BOOK_DATA } from '@helpers/constants';
 import Accordion from "./Accordion";
 import ImageSelector from "../tags/ImageSelector";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@reduxStates/index";
 
 const ScannerDataScreen = () => {
+  const { bookData } = useSelector((state: RootState) => state.settings);
+
   const DATA = CONSTANT_BOOK_DATA.concat(ADDITIONAL_BOOK_DATA);
   const [selectedImage, setSelectedImage] = useState<string>('');
 
@@ -29,7 +33,7 @@ const ScannerDataScreen = () => {
       >
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.accordionContainer}>
-            {ADDITIONAL_BOOK_DATA.map((item, index) => (
+            {bookData.map((item, index) => (
               <Accordion
                 key={index}
                 data={item}

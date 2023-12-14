@@ -43,7 +43,8 @@ import {
   deleteLabelItem,
   addTitle,
   deleteTitle,
-  updateTags
+  updateTags,
+  updateBookDataStatus
 } from './settingsSlice';
 
 export {
@@ -83,4 +84,5 @@ export {
   setSearchQuery,
   setLibraryDatafromStorageToState,
   BookType,
+  updateBookDataStatus,
 };

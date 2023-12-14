@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { TOKEN } from '@env';
 import { mainUrl } from '../../server-location';
 import axios from 'axios';
-import { tagsTypes } from "./tagsSlice";
+import { ADDITIONAL_BOOK_DATA, CONSTANT_BOOK_DATA } from "@helpers/constants";
 
 const URL = mainUrl();
 
@@ -12,9 +12,22 @@ type TagType = {
   labels: string[]
 };
 
+export type CategoryType = {
+  bookScannerCategories: BookDataType[];
+  userInputCategories: BookDataType[]
+}
+
+type BookDataType = {
+  title: string,
+  value: string,
+  status: boolean,
+  image?: string
+}
+
 export type settingsTypes = {
   tags: TagType[];
-  categories: string[];
+  categories: CategoryType;
+  bookData: BookDataType[];
   tagsError?: string;
   categoriesError: string;
   dataError: string;
@@ -24,7 +37,12 @@ export type settingsTypes = {
 
 const initialState: settingsTypes = {
   tags: [],
-  categories: [],
+  categories: {
+    bookScannerCategories: [],
+    userInputCategories: []
+  },
+  bookData: ADDITIONAL_BOOK_DATA,
+
   tagsError: '',
   categoriesError: '',
   dataError: '',
@@ -52,10 +70,20 @@ export const fetchData = createAsyncThunk(
         const lowercasedTitle = tag.title.toLowerCase();
         return lowercasedTitle.charAt(0).toUpperCase() + lowercasedTitle.slice(1);
       });
-      
-      const remainingCategories = categories.filter((category: string) => !tagTitles.includes(category));
+      const constantDataTitles = CONSTANT_BOOK_DATA.map((data) => data.title);
+      const additionalDataTitles = ADDITIONAL_BOOK_DATA.map((data) => data.title);
 
-      return { tags, categories: remainingCategories };
+      const excludedTitles = [...tagTitles, ...constantDataTitles, ...additionalDataTitles];
+
+      const remainingCategories = categories.filter((category: string) => !excludedTitles.includes(category));
+      
+      const userData: BookDataType[] = remainingCategories.map((title: string) => ({
+        title,
+        value: '',
+        status: false
+      }));
+
+      return { tags, userInputCategories: userData };
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -135,15 +163,30 @@ export const settingsSlice = createSlice({
         tags: updatedTags,
       };
     },
+    updateBookDataStatus: (state, action) => {
+      const { title, status } = action.payload;
+
+      const updatedBookData = state.bookData.map((item) =>
+        item.title === title ? { ...item, status } : item
+      );
+
+      return {
+        ...state,
+        bookData: updatedBookData,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
     .addCase(fetchData.fulfilled, (state, action) => {
-      const { tags, categories } = action.payload;
+      const { tags, userInputCategories } = action.payload;
       return {
         ...state,
         tags,
-        categories
+        categories: {
+          ...state.categories,
+          userInputCategories
+        },
       }
     })
     .addCase(fetchData.rejected, (state) => {
@@ -170,6 +213,7 @@ export const {
   addTagUnderTitle,
   deleteLabelItem,
   addTitle,
-  deleteTitle
+  deleteTitle,
+  updateBookDataStatus
 } = settingsSlice.actions;
 export default settingsSlice.reducer;

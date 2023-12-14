@@ -9,8 +9,14 @@ import Content from "../tags/accordion/Content";
 import AddTag from "../tags/accordion/AddTag";
 import { accordionBorderBottom, accordionContainer, accordionLabelContainerA } from "@styles/accordion";
 
+type BookDataType = {
+  title: string,
+  value?: string,
+  status?: boolean,
+  image?: string
+}
 interface AccordionProps {
-  category: string;
+  category: BookDataType;
   isLastItem: boolean;
 }
 
@@ -38,11 +44,11 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
         isLastItem && accordionBorderBottom
       ]}
     >
-      <Title title={category} image={'img1'} isExpanded expandAccordion={handleToggle} />
+      <Title title={category.title} image={'img1'} isExpanded expandAccordion={handleToggle} />
 
       {isExpanded && (
         <>
-          <Menu title={category} removeCategory={handleRemoveCategory} />
+          <Menu title={category.title} removeCategory={handleRemoveCategory} />
           {/* <AddTag title={tags.title} /> */}
         </>
       )}

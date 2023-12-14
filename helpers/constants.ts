@@ -74,16 +74,18 @@ export const SECTION_ITEM_HEIGHT = 26;
 export const HEADER_HEIGHT = 222;
 
 export const CONSTANT_BOOK_DATA = [
-  { title: 'Title', value: 'title' + 'subtitle'},
-  { title: 'Author', value: 'authors' }
+  { title: 'Title', value: 'title' + 'subtitle', status: true},
+  { title: 'Author', value: 'authors', status: true }
 ]
 
 export const ADDITIONAL_BOOK_DATA = [
-  { title: 'Published Date', value: 'publishedDate' },
-  { title: 'Book Description', value: 'description' },
-  { title: 'ISBN number', value: 'industryIdentifiers' }, // ISBN numbers array
-  { title: 'Thumbnail', value: 'imageLinks' }, // imageLinks: {smallThumbnail: html-link, thumbnail: html-link}
-  { title: 'Page Count', value: 'pageCount' },
-  { title: 'Language', value: 'language' },
-  { title: 'Book Information', value: 'infoLink'}  
+  { title: 'Published Date', value: 'publishedDate', status: false },
+  { title: 'Book Description', value: 'description', status: false },
+  // ISBN numbers array
+  { title: 'ISBN number', value: 'industryIdentifiers', status: false }, 
+  // imageLinks: {smallThumbnail: html-link, thumbnail: html-link}
+  { title: 'Thumbnail', value: 'imageLinks', status: false }, 
+  { title: 'Page Count', value: 'pageCount', status: false },
+  { title: 'Language', value: 'language', status: false },
+  { title: 'Book Information', value: 'infoLink', status: false}  
 ]

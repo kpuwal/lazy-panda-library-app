@@ -2,7 +2,7 @@ import Header from "@components/header/Header";
 import { Colours } from "@styles/constants";
 import { headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity } from "react-native"
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, Text } from "react-native"
 import ImageSelector from "../tags/ImageSelector";
 import { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -13,7 +13,9 @@ import Accordion from "./Accordion";
 const Category = () => {
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
-  const { categories } = useSelector((state: RootState) => state.settings);
+  const { categories, bookData } = useSelector((state: RootState) => state.settings);
+
+  const bookCategories = bookData.filter(item => item.status === true);
 
   const handleAddTitle = () => {
     console.log('add category title')
@@ -38,12 +40,24 @@ const Category = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <Text>Book Scanner Categories:</Text>
         <View style={styles.accordionContainer}>
-        {categories.map((category, index) => (
+          {bookCategories.map((category, index) => (
             <Accordion
-              key={category}
+              key={index}
               category={category}
-              isLastItem={index === categories.length - 1}
+              isLastItem={index === bookCategories.length - 1}
+            />
+          ))}
+        </View>
+
+        <Text>User Input Categories:</Text>
+        <View style={styles.accordionContainer}>
+          {categories.userInputCategories.map((category, index) => (
+            <Accordion
+              key={index}
+              category={category}
+              isLastItem={index === categories.userInputCategories.length - 1}
             />
           ))}
         </View>

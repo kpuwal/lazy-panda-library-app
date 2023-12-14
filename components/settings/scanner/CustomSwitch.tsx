@@ -1,23 +1,22 @@
 import { Colours } from '@styles/constants';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Switch, Text, StyleSheet } from 'react-native';
 
-const CustomSwitch = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
+interface CustomSwitchProps {
+  status: boolean;
+  onToggle: () => void;
+}
 
-  const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-  };
-
+const CustomSwitch: React.FC<CustomSwitchProps> = ({ status, onToggle }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{isEnabled ? 'ON' : 'OFF'}</Text>
+      <Text style={[styles.label, {color: status ? Colours.filter : Colours.tertiary}]}>{status ? 'ON' : 'OFF'}</Text>
       <Switch
         trackColor={{ false: '#767577', true: Colours.filter }}
-        thumbColor={isEnabled ? Colours.primary : Colours.tertiary}
+        thumbColor={status ? Colours.primary : Colours.tertiary}
         ios_backgroundColor={Colours.secondary}
-        onValueChange={toggleSwitch}
-        value={isEnabled}
+        onValueChange={onToggle}
+        value={status}
       />
     </View>
   );
@@ -31,12 +30,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    marginRight: 15,
-    color: Colours.tertiary
+    marginRight: 15
   },
-  text: {
-    marginRight: 0
-  }
 });
 
 export default CustomSwitch;

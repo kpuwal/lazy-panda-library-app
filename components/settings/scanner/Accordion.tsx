@@ -2,40 +2,36 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Colours } from "@styles/constants";
-import { deleteLabelItem, deleteTitle, useAppDispatch } from "@reduxStates/index";
+import { deleteLabelItem, deleteTitle, updateBookDataStatus, useAppDispatch } from "@reduxStates/index";
 import { accordionBorderBottom, accordionContainer, accordionLabelContainerA, accordionTitle } from "@styles/accordion";
 import CustomSwitch from "./CustomSwitch";
 
-interface ScanData {
-  title: string;
-  value: string;
-}
-
 interface AccordionProps {
-  data: ScanData;
+  data: {
+    title: string;
+    value?: string;
+    status: boolean;
+  };
   isLastItem: boolean;
 }
 
 const Accordion: React.FC<AccordionProps> = ({ data, isLastItem }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded);
-  };
+  // const handleToggle = () => {
+  //   setIsExpanded(!isExpanded);
+  // };
 
-  const handleRemoveTag = (title: string, label: string) => {
-    dispatch(deleteLabelItem({ title, labelToDelete: label }));
-  }
+  const handleSwitchToggle = () => {
+// console.log('switch ', data)
 
-  const handleRemoveCategory = (titleToDelete: string) => {
-    dispatch(deleteTitle({ titleToDelete }));
+    dispatch(updateBookDataStatus({title: data.title, status: !data.status}))
+    // data.status = !data.status;
   }
 
   return (
     <View 
       style={[
-        { borderColor: isExpanded ? Colours.quinary : Colours.action },
         styles.accordionContainer,
         isLastItem && accordionBorderBottom
       ]}
@@ -43,7 +39,7 @@ const Accordion: React.FC<AccordionProps> = ({ data, isLastItem }) => {
       <Text style={accordionTitle}>
         {data.title}
       </Text>
-      <CustomSwitch />
+      <CustomSwitch status={data.status} onToggle={handleSwitchToggle} />
     </View>
   );
 };
