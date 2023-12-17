@@ -171,7 +171,7 @@ const librarySlice = createSlice({
   name: 'library',
   initialState,
   reducers: {
-    setLibraryDatafromStorageToState: (state, action) => {
+    hydrateLibraryDataFromStorage: (state, action) => {
       const library = action.payload;
       // console.log('library ', library[0])
       state.library = library;
@@ -288,6 +288,6 @@ export const {
   resetLibraryMessages,
   resetSelectedFilters,
   setSearchQuery,
-  setLibraryDatafromStorageToState
+  hydrateLibraryDataFromStorage
 } = librarySlice.actions;
 export default librarySlice.reducer;

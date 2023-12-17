@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { View, StyleSheet, ImageBackground, Image, Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchData, RootState, setLibraryDatafromStorageToState } from '@reduxStates/index';
+import { fetchPicker, readLibrary, cleanBook, setBookIsLoaded, setCameraPermission, useAppDispatch, fetchData, RootState, hydrateLibraryDataFromStorage } from '@reduxStates/index';
 import { Colours } from '@styles/constants';
 import HomeButton from '@components/main/HomeButton';
 import { BACKGROUND } from '@helpers/constants';
@@ -26,24 +26,24 @@ const Home = ({navigation}: any) => {
   //       }
   //   }
 
-    const retrieveData = async () => {
-      try {
-        const storedData = await AsyncStorage.getItem('library');
+    // const retrieveData = async () => {
+    //   try {
+    //     const storedData = await AsyncStorage.getItem('library');
     
-        if (storedData !== null) {
-          // Parse the stored data
-          const parsedData = JSON.parse(storedData);
+    //     if (storedData !== null) {
+    //       // Parse the stored data
+    //       const parsedData = JSON.parse(storedData);
     
-          // Set the parsed data in your component's state
-          dispatch(setLibraryDatafromStorageToState(parsedData));    
-          console.log('Data retrieved successfully');
-        } else {
-          console.log('No data found in AsyncStorage');
-        }
-      } catch (error) {
-        console.error('Error retrieving data:', error);
-      }
-    };
+    //       // Set the parsed data in your component's state
+    //       dispatch(setLibraryDatafromStorageToState(parsedData));    
+    //       console.log('Data retrieved successfully');
+    //     } else {
+    //       console.log('No data found in AsyncStorage');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error retrieving data:', error);
+    //   }
+    // };
  
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -56,11 +56,11 @@ const Home = ({navigation}: any) => {
     getBarCodeScannerPermissions();
     dispatch(fetchData()); // tags and categories
     dispatch(cleanBook());
-    (retrieveData())
-      .then(() => dispatch(setBookIsLoaded(false)))
-      .catch(() => {
-        dispatch(setBookIsLoaded(false));
-      });
+    // (retrieveData())
+    //   .then(() => dispatch(setBookIsLoaded(false)))
+    //   .catch(() => {
+    //     dispatch(setBookIsLoaded(false));
+    //   });
   }, [dispatch]);
 
   // useEffect(() => {

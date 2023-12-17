@@ -3,6 +3,7 @@ import { TOKEN } from '@env';
 import { mainUrl } from '../../server-location';
 import axios from 'axios';
 import { ADDITIONAL_BOOK_DATA, CONSTANT_BOOK_DATA } from "@helpers/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const URL = mainUrl();
 
@@ -49,6 +50,15 @@ const initialState: settingsTypes = {
   tagsMsg: '',
   categoriesMsg: '',
 }
+const storeData = async (data: any) => {
+  try {
+    const serializedData = JSON.stringify(data);
+    await AsyncStorage.setItem('settings', serializedData);
+    // console.log('Data stored successfully');
+  } catch (error) {
+    console.error('Error storing settings data:', error);
+  }
+};
 
 export const fetchData = createAsyncThunk(
   'data/fetchData',
@@ -83,6 +93,13 @@ export const fetchData = createAsyncThunk(
         status: false
       }));
 
+      // storeData({
+      //   tags,
+      //   categories: {
+      //     userInputCategories: userData
+      //   }
+      // });
+
       return { tags, userInputCategories: userData };
     } catch (err) {
       return rejectWithValue(err);
@@ -111,6 +128,16 @@ export const settingsSlice = createSlice({
   name: 'tags',
   initialState,
   reducers: {
+    hydrateSettingsDataFromStorage: (state, action) => {
+      const data = action.payload;
+    //  console.log('data from async storage for settings ', action.payload)
+      return {
+        ...state,
+        tags: data.tags,
+        categories: data.categories,
+        bookData: data.bookData
+      }
+    },
     addTitle: (state, action) => {
       const { newTitle, image } = action.payload;
       const updatedTags = [...state.tags, { title: newTitle, labels: [], image }];
@@ -170,6 +197,12 @@ export const settingsSlice = createSlice({
         item.title === title ? { ...item, status } : item
       );
 
+      storeData({
+        tags: state.tags,
+        categories: state.categories,
+        bookData: updatedBookData,
+      });
+
       return {
         ...state,
         bookData: updatedBookData,
@@ -180,6 +213,15 @@ export const settingsSlice = createSlice({
     builder
     .addCase(fetchData.fulfilled, (state, action) => {
       const { tags, userInputCategories } = action.payload;
+      storeData({
+        tags,
+        categories: {
+          ...state.categories,
+          userInputCategories
+        },
+        bookData: state.bookData,
+      });
+
       return {
         ...state,
         tags,
@@ -214,6 +256,7 @@ export const {
   deleteLabelItem,
   addTitle,
   deleteTitle,
-  updateBookDataStatus
+  updateBookDataStatus,
+  hydrateSettingsDataFromStorage
 } = settingsSlice.actions;
 export default settingsSlice.reducer;

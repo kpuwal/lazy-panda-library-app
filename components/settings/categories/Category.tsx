@@ -1,18 +1,22 @@
 import Header from "@components/header/Header";
 import { Colours } from "@styles/constants";
-import { headerInfoContainer, headerText } from "@styles/styles";
+import { buttonSml, headerInfoContainer, headerText } from "@styles/styles";
 import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, Text } from "react-native"
 import ImageSelector from "../tags/ImageSelector";
 import { useEffect, useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from 'react-redux';
 import { RootState } from "@reduxStates/index";
 import Accordion from "./Accordion";
+import OverlayModal from "@components/modal/OverlayModal";
+import PrimaryButton from "@components/button/PrimaryButton";
+import { buttonText } from "@styles/button";
 
 const Category = () => {
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [isInfoVisible, setInfoVisible] = useState(false);
   const { categories, bookData } = useSelector((state: RootState) => state.settings);
 
   const bookCategories = bookData.filter(item => item.status === true);
@@ -24,6 +28,14 @@ const Category = () => {
     // setSelectedImage('');
   };
 
+  const handlePress = () => {
+    setInfoVisible(true);
+  };
+
+  const handleClose = () => {
+    setInfoVisible(false);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: Colours.primary }}>
       <StatusBar style="dark" />
@@ -31,7 +43,27 @@ const Category = () => {
         <Header.GoBack />
         <View style={headerInfoContainer}>
           <Header.Icon uri={require('@assets/category.gif')} />
-          <Header.StyledText customStyle={headerText}>Categories</Header.StyledText>
+          <Header.StyledText customStyle={headerText}>
+            Categories
+          </Header.StyledText>
+
+          <TouchableOpacity onPress={handlePress}>
+            <Ionicons style={{paddingLeft: 50}} name="information-circle-outline" size={24} color="black" />
+          </TouchableOpacity>
+
+          <OverlayModal isVisible={isInfoVisible}>
+            <OverlayModal.StyledText customStyle={styles.infoTextStyle}>
+              Add user categories which are headers for columns in spreadsheet file
+            </OverlayModal.StyledText>
+            <View style={{alignItems: 'center'}}>
+              <PrimaryButton action={handleClose} customStyle={buttonSml}>
+                <Ionicons name="ios-close" size={20} color="white" />
+                <PrimaryButton.StyledText customStyle={buttonText}>
+                  Close
+                </PrimaryButton.StyledText>
+              </PrimaryButton>
+            </View>
+          </OverlayModal>
         </View>
       </Header>
       
@@ -40,7 +72,7 @@ const Category = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <Text>Book Scanner Categories:</Text>
+        <Text style={styles.title}>Additional Book Scanner Categories:</Text>
         <View style={styles.accordionContainer}>
           {bookCategories.map((category, index) => (
             <Accordion
@@ -51,7 +83,9 @@ const Category = () => {
           ))}
         </View>
 
-        <Text>User Input Categories:</Text>
+        <Text style={styles.title}>User Input Categories:</Text>
+<View style={styles.categoryContainer}>
+
         <View style={styles.accordionContainer}>
           {categories.userInputCategories.map((category, index) => (
             <Accordion
@@ -76,6 +110,7 @@ const Category = () => {
             <MaterialIcons name="add-circle" size={30} color={Colours.secondary} />
           </TouchableOpacity>
         </View>
+        </View>
       </ScrollView>
   </KeyboardAvoidingView>
     </View>
@@ -90,9 +125,9 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 10
   },
-  categoryContainer: {
-    marginBottom: 16,
-  },
+  // categoryContainer: {
+  //   marginBottom: 16,
+  // },
   categoryTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -130,4 +165,18 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: 'white',
   },
+  title: {
+    fontFamily: 'Courier Prime Bold',
+    fontSize: 16,
+    paddingBottom: 10,
+    paddingTop: 10
+  },
+  categoryContainer: {
+    padding: 10
+  },
+  infoTextStyle: {
+    fontFamily: 'Courier Prime',
+    fontSize: 16,
+    maxWidth: '90%'
+  }
 })

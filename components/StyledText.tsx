@@ -2,7 +2,7 @@ import { StyleProp, Text, TextStyle } from 'react-native';
 
 type StyledTextProps = {
   children: React.ReactNode;
-  customStyle: any
+  customStyle?: any
 };
 
 const StyledText: React.FC<StyledTextProps> = ({ children, customStyle }) => {

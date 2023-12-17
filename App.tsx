@@ -7,6 +7,7 @@ import axios from 'axios';
 import AppNavigator from '@components/NavigationStack';
 import { useFonts } from 'expo-font';
 import { mainUrl } from './server-location';
+import { initializeApp } from '@reduxStates/initialLoad';
 
 const URL = mainUrl();
 SplashScreen.preventAutoHideAsync();
@@ -30,6 +31,7 @@ export default function App() {
     async function prepare() {
       try {
         await getPingMessage();
+        initializeApp(store.dispatch);
       } catch (e) {
         console.warn(e);
       }

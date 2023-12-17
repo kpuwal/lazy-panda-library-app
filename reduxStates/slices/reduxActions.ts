@@ -33,7 +33,7 @@ import {
   resetSelectedFilters,
   librarySectionType,
   setSearchQuery,
-  setLibraryDatafromStorageToState
+  hydrateLibraryDataFromStorage
 } from './librarySlice';
 
 import { fetchPicker } from './pickerSlice';
@@ -44,7 +44,8 @@ import {
   addTitle,
   deleteTitle,
   updateTags,
-  updateBookDataStatus
+  updateBookDataStatus,
+  hydrateSettingsDataFromStorage
 } from './settingsSlice';
 
 export {
@@ -82,7 +83,8 @@ export {
   updateTags,
   librarySectionType,
   setSearchQuery,
-  setLibraryDatafromStorageToState,
+  hydrateLibraryDataFromStorage,
   BookType,
   updateBookDataStatus,
+  hydrateSettingsDataFromStorage
 };

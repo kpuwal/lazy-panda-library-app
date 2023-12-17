@@ -5,7 +5,6 @@ import { CombinedState, Reducer, combineReducers } from '@reduxjs/toolkit';
 import bookReducer, { bookTypes } from './slices/bookSlice';
 import pickerReducer, { pickerTypes } from './slices/pickerSlice';
 import appReducer, { appTypes } from './slices/appSlice';
-import tagsReducer, { tagsTypes } from './slices/tagsSlice';
 import settingsReducer, { settingsTypes } from './slices/settingsSlice';
 import libraryReducer, { libraryTypes } from './slices/librarySlice';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
@@ -29,7 +28,7 @@ const rootReducer: Reducer<CombinedState<RootStateType>, any> = combineReducers(
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['library', 'pickers', 'app', 'book', 'settings'],
+  whitelist: ['library', 'settings'],
   stateReconciler: autoMergeLevel2,
 };
 
