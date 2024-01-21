@@ -5,22 +5,25 @@ import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TouchableOpacity, Text } from "react-native"
 import ImageSelector from "../tags/ImageSelector";
 import { useEffect, useState } from "react";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from 'react-redux';
-import { RootState } from "@reduxStates/index";
-import Accordion from "./Accordion";
+import { RootState, addImageToCategory, useAppDispatch } from "@reduxStates/index";
 import OverlayModal from "@components/modal/OverlayModal";
 import PrimaryButton from "@components/button/PrimaryButton";
 import { buttonText } from "@styles/button";
+import Accordion from "@components/accordion/Accordion";
 
 const Category = () => {
   const [newTitle, setNewTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
+  // const [bookSelectedImage, setBookSelectedImage] = useState<string>('');
+  const dispatch = useAppDispatch();
   const [isInfoVisible, setInfoVisible] = useState(false);
-  const { categories, bookData } = useSelector((state: RootState) => state.settings);
+  const { categories } = useSelector((state: RootState) => state.settings);
 
-  const bookCategories = bookData.filter(item => item.status === true);
-
+  // const bookCategories = bookData.filter(item => item.status === true);
+// console.log('book scanner cat ', bookCategories)
+  
   const handleAddTitle = () => {
     console.log('add category title')
     // dispatch(addTitle({ newTitle, image: selectedImage }));
@@ -35,6 +38,26 @@ const Category = () => {
   const handleClose = () => {
     setInfoVisible(false);
   };
+
+  const handleEditCategory = () => {
+    console.log('edit category')
+  }
+
+  const handleDeleteCategory = () => {
+    console.log('remove title')
+  }
+
+  const handleBookScannerSelectedImage = ({ title, image }: { title: string; image: string }) => {
+    dispatch(addImageToCategory({title , image}))
+    // Do something with title and image in the parent component
+    console.log('Selected Title:', title);
+    console.log('Selected Image:', image);
+  };
+
+  const handleSelectedImage = ({ title, image }: { title: string; image: string }) => {
+    setSelectedImage(image)
+    console.log('handle selected image')
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: Colours.primary }}>
@@ -74,12 +97,14 @@ const Category = () => {
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <Text style={styles.title}>Additional Book Scanner Categories:</Text>
         <View style={styles.accordionContainer}>
-          {bookCategories.map((category, index) => (
+          {categories.bookScannerCategories.map((category, index) => (
             <Accordion
               key={index}
               category={category}
-              isLastItem={index === bookCategories.length - 1}
-            />
+              isLastItem={index === categories.bookScannerCategories.length - 1}
+            >
+              <ImageSelector category={category.title} onSelectImage={handleBookScannerSelectedImage} />
+            </Accordion>
           ))}
         </View>
 
@@ -92,12 +117,29 @@ const Category = () => {
               key={index}
               category={category}
               isLastItem={index === categories.userInputCategories.length - 1}
-            />
+            >
+              <Accordion.Menu>
+                <Accordion.Menu.Button title={category.title} buttonName="Delete" actionOnCategory={handleDeleteCategory}>
+                  <MaterialIcons
+                    name="delete-forever" 
+                    size={20}
+                    color={Colours.secondary}
+                  />
+                </Accordion.Menu.Button>
+                <Accordion.Menu.Button title={category.title} buttonName="Edit" actionOnCategory={handleEditCategory}>
+                  <FontAwesome
+                    name="edit"
+                    size={18}
+                    color={Colours.secondary}
+                  />
+                </Accordion.Menu.Button>
+              </Accordion.Menu>
+            </Accordion>
           ))}
         </View>
         <ImageSelector
-          selectedImage={selectedImage}
-          onSelectImage={setSelectedImage}
+          // selectedImage={selectedImage}
+          onSelectImage={handleSelectedImage}
         />
         <View style={styles.newTitleContainer}>
           <TextInput

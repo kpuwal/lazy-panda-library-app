@@ -130,11 +130,15 @@ export const settingsSlice = createSlice({
   reducers: {
     hydrateSettingsDataFromStorage: (state, action) => {
       const data = action.payload;
-    //  console.log('data from async storage for settings ', action.payload)
+     console.log('data from async storage for settings ', action.payload)
+     const bookCategories = data.bookData.filter((item: BookDataType) => item.status === true);
       return {
         ...state,
         tags: data.tags,
-        categories: data.categories,
+        categories: {
+          ...data.categories,
+          bookScannerCategories: bookCategories
+        },
         bookData: data.bookData
       }
     },
@@ -147,6 +151,21 @@ export const settingsSlice = createSlice({
         tags: updatedTags,
       };
     },
+    addImageToCategory: (state, action) => {
+      const { title, image } = action.payload;
+      
+      const updatedBookData = state.categories.bookScannerCategories.map((category) =>
+        category.title === title ? { ...category, image: image !== '' ? image : null } : category
+      );
+
+      return {
+        ...state,
+        categories: {
+          ...state.categories,
+          bookScannerCategories: updatedBookData,
+        }
+      };
+    },    
     deleteTitle: (state, action) => {
       const { titleToDelete } = action.payload;
       const updatedTags = state.tags.filter((category) => category.title !== titleToDelete);
@@ -197,14 +216,23 @@ export const settingsSlice = createSlice({
         item.title === title ? { ...item, status } : item
       );
 
+      const bookCategories = updatedBookData.filter((item: BookDataType) => item.status === true);
+
       storeData({
         tags: state.tags,
-        categories: state.categories,
+        categories: {
+          ...state.categories,
+          bookScannerCategories: bookCategories,
+        },
         bookData: updatedBookData,
       });
 
       return {
         ...state,
+        categories: {
+          ...state.categories,
+          bookScannerCategories: bookCategories,
+        },
         bookData: updatedBookData,
       };
     },
@@ -257,6 +285,7 @@ export const {
   addTitle,
   deleteTitle,
   updateBookDataStatus,
-  hydrateSettingsDataFromStorage
+  hydrateSettingsDataFromStorage,
+  addImageToCategory
 } = settingsSlice.actions;
 export default settingsSlice.reducer;

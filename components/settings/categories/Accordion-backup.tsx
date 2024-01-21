@@ -44,7 +44,7 @@ const Accordion: React.FC<AccordionProps> = ({ category, isLastItem }) => {
         isLastItem && accordionBorderBottom
       ]}
     >
-      <Title title={category.title} image={'img1'} isExpanded expandAccordion={handleToggle} />
+      <Title title={category.title} image={null} isExpanded expandAccordion={handleToggle} />
 
       {isExpanded && (
         <>

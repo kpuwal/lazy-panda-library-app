@@ -45,7 +45,8 @@ import {
   deleteTitle,
   updateTags,
   updateBookDataStatus,
-  hydrateSettingsDataFromStorage
+  hydrateSettingsDataFromStorage,
+  addImageToCategory
 } from './settingsSlice';
 
 export {
@@ -86,5 +87,6 @@ export {
   hydrateLibraryDataFromStorage,
   BookType,
   updateBookDataStatus,
-  hydrateSettingsDataFromStorage
+  hydrateSettingsDataFromStorage,
+  addImageToCategory
 };

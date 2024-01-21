@@ -1,20 +1,20 @@
-// ImageSelector.tsx
-
-import React from "react";
+import React, { useState } from "react";
 import { View, Image, Pressable, StyleSheet, ImageSourcePropType, ScrollView, Text } from "react-native";
 import { CATEGORY_IMAGES } from '@helpers/constants';
 import { Colours } from "@styles/constants";
 
 interface ImageSelectorProps {
-  selectedImage: string;
-  onSelectImage: (id: string) => void;
+  onSelectImage: (data: { title: string; image: string }) => void;
+  category?: string;
 }
 
-const ImageSelector: React.FC<ImageSelectorProps> = ({ selectedImage, onSelectImage }) => {
+const ImageSelector: React.FC<ImageSelectorProps> = ({ category, onSelectImage }) => {
+  const [selectedImage, setSelectedImage] = useState<string>('');
 
   const handleImagePress = (imageId: string) => {
     const newSelectedImage = imageId !== selectedImage ? imageId : '';
-    onSelectImage(newSelectedImage);
+    setSelectedImage(newSelectedImage);
+    onSelectImage({ title: category || '', image: newSelectedImage });
   };
 
   const renderImages = () => {

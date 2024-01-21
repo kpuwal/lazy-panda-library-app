@@ -12,6 +12,7 @@ interface TitleTypes {
 }
 
 const Title: React.FC<TitleTypes> = ({ title, image, isExpanded, expandAccordion }) => {
+
   const getImageSource = (categoryId: string | null) => {
     if (!categoryId) {
       return null;
